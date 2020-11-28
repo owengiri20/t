@@ -2,6 +2,7 @@ import { Button, Container, Typography } from "@material-ui/core"
 import { DirectionsBike, Height } from "@material-ui/icons"
 import React from "react"
 import { useHistory } from "react-router-dom"
+import { FinishCard, getResult } from "./finish"
 import { useStyles } from "./style"
 
 // disable scroll wheel
@@ -83,12 +84,6 @@ export const Typer = (props: Props) => {
 		if (!start) return
 		if (seconds > 0) {
 			setTimeout(() => setSeconds(seconds - 1), 1000)
-
-			// if (seconds < 55) {
-			// 	clearTimeout(ss(() => {}))
-			// 	setSeconds(60)
-			// 	setStart(false)
-			// }
 		} else {
 			setFinish(true)
 		}
@@ -144,8 +139,6 @@ export const Typer = (props: Props) => {
 		const subWord = currWord.word.substr(0, charIdx)
 		const subWord2 = word.substr(0, charIdx + 1)
 
-		console.log(word === "")
-
 		if (word === "") {
 			setC("#d7d9ff")
 			return
@@ -178,7 +171,6 @@ export const Typer = (props: Props) => {
 			if (idx === props.words.length) {
 				return
 			}
-			// setCount(count + 1)
 			if (word === "") return
 			setWord("")
 			setIdx(idx + 1)
@@ -201,8 +193,6 @@ export const Typer = (props: Props) => {
 		}
 	}
 
-	const calcWPM = () => (correctWords / 60) * 60
-
 	const getColour = (status: "correct" | "incorrect" | "eh") => {
 		if (status === "correct") return "green"
 		if (status === "incorrect") return "red"
@@ -215,36 +205,6 @@ export const Typer = (props: Props) => {
 
 	const onCurrChar = (currIdx: number) => {
 		return charIdx === currIdx
-	}
-
-	const getResult = (wpm: number) => {
-		let label = ""
-		if (wpm < 30) {
-			label = "shit"
-		}
-		if (wpm >= 30 && wpm < 50) {
-			label = "not bad"
-		}
-		if (wpm >= 50 && wpm < 70) {
-			label = "above average"
-		}
-		if (wpm >= 70 && wpm < 90) {
-			label = "quick boi"
-		}
-
-		if (wpm >= 90 && wpm < 110) {
-			label = "you're pretty good"
-		}
-
-		if (wpm >= 110 && wpm < 130) {
-			label = "suuuuper fast"
-		}
-
-		if (wpm >= 130) {
-			label = "stop cheating"
-		}
-
-		return <Typography variant="h5">result: {label}</Typography>
 	}
 
 	// useffect to handle scroll height of text display
@@ -291,13 +251,12 @@ export const Typer = (props: Props) => {
 									>
 										{w.word.split("").map((l, idx) => {
 											const onChar = onCurrWord(i) && onCurrChar(idx)
+											const onEnd = onCurrWord(i + 1) && onCurrChar(idx + 1)
+
 											return (
 												<span key={l + idx}>
-													{onChar && (
-														<span id="yoyo" style={{ height: "200px", backgroundColor: "black" }} className={"blinkMe"}>
-															<div style={{ display: "inline-block", height: "35px", width: "3px", backgroundColor: "black" }}></div>
-														</span>
-													)}
+													{/* {onChar && <Blinky />}
+													{onEnd && <Blinky />} */}
 													<span>{l}</span>
 												</span>
 											)
@@ -320,23 +279,11 @@ export const Typer = (props: Props) => {
 						placeholder={idx === 0 ? "Start Typing!" : ""}
 					></textarea>
 					<Button onClick={handleRestart}>Reset</Button>
+					<Button onClick={handleRestart}>Modes</Button>
 					<Button onClick={handleRestart}>Settings</Button>
 				</>
 			) : (
-				<div>
-					<Typography variant="h4">finish</Typography>
-					<Typography variant="h4">wpm: {calcWPM()} (not so accurate at the moment) </Typography>
-					<Typography variant="h4">correct words: {correctWords}</Typography>
-					<Typography variant="h4">wrong words: {wrongWords}</Typography>
-
-					<hr />
-
-					{getResult(calcWPM())}
-
-					<Button variant="contained" color="primary" onClick={handleRestart}>
-						Restart
-					</Button>
-				</div>
+				<FinishCard correctWords={correctWords} incorrectWords={wrongWords} handleRestart={handleRestart} />
 			)}
 		</Container>
 	)
@@ -357,4 +304,12 @@ export const TyperWrapper = (props: Props) => {
 	const [theme, setTheme] = React.useState<"dark" | "light">("light")
 
 	return <Typer setTheme={setTheme} theme={theme} scrollHeight={scrollHeight} setScrollHeight={setScrollHeight} words={words} setWords={setWords} />
+}
+
+const Blinky = () => {
+	return (
+		<span style={{ height: "200px", backgroundColor: "black" }} className={"blinkMe"}>
+			<div style={{ display: "inline-block", height: "35px", width: "3px", backgroundColor: "black" }}></div>
+		</span>
+	)
 }

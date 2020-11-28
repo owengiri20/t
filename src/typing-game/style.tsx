@@ -20,7 +20,6 @@ export const useStyles = makeStyles({
 		border: "0 !important",
 		outline: "none",
 		resize: "none",
-		// opacity: 0,
 	},
 	line: {
 		height: "2px",
@@ -35,5 +34,12 @@ export const useStyles = makeStyles({
 	timerText: {
 		fontSize: "80px",
 		opacity: ".4",
+	},
+	finishCard: {
+		maxWidth: "500px",
+		margin: "auto",
+	},
+	StarRatingBox: {
+		textAlign: "center",
 	},
 })
