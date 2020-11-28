@@ -1,6 +1,5 @@
-import { Button, Typography } from "@material-ui/core"
+import { Button, Container, makeStyles, Paper, Typography } from "@material-ui/core"
 import React from "react"
-import { useStyles } from "./style"
 
 // icons
 import StarRoundedIcon from "@material-ui/icons/StarRounded"
@@ -53,22 +52,74 @@ interface FinishCardProps {
 	correctWords: number
 	incorrectWords: number
 	handleRestart: () => void
+	wordCount: number
 }
 
+export const finishStyles = makeStyles({
+	top: {
+		width: "50%",
+	},
+	bottom: {
+		display: "flex",
+		justifyContent: "center",
+	},
+	finishCard: {
+		maxWidth: "1000px",
+		margin: "auto",
+	},
+	statusText: {
+		display: "block",
+		marginLeft: "5px",
+	},
+	statusCard: {
+		display: "flex",
+	},
+	StarRatingBox: {
+		textAlign: "center",
+	},
+	card: {
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+		margin: "10px",
+		padding: "10px",
+		transition: ".2s ease",
+	},
+})
+
 export const FinishCard = (props: FinishCardProps) => {
-	const { correctWords, incorrectWords, handleRestart } = props
-	const classes = useStyles()
+	const { correctWords, incorrectWords, handleRestart, wordCount } = props
+	const classes = finishStyles()
 
 	const calcWPM = () => (correctWords / 60) * 60
 
+	const calcAccuraccy = () => ((correctWords / wordCount) * 100).toFixed(2)
+
 	return (
 		<div className={classes.finishCard}>
-			{<StarRating result={getResult(calcWPM())} />}
-			<Typography variant="h4">WPM: {calcWPM()}</Typography>
-			<Typography variant="h4">Acurracy: {calcWPM()}</Typography>
+			<Container className={classes.top}>
+				<Paper>{<StarRating result={getResult(calcWPM())} />}</Paper>
+			</Container>
+			<Container className={classes.bottom}>
+				<Paper className={classes.card}>
+					<Typography variant="h6">Acurracy: {calcAccuraccy()}%</Typography>
+				</Paper>
 
-			<Typography variant="h4">Correct words: {correctWords}</Typography>
-			<Typography variant="h4">Incorrect words: {incorrectWords}</Typography>
+				<Paper className={classes.card}>
+					<Typography variant="h6">WPM: {calcWPM()}</Typography>
+				</Paper>
+				<Paper className={`${classes.card} ${classes.card}`}>
+					<Typography className={classes.statusText} variant="h6">
+						Correct words: {correctWords}
+					</Typography>
+					<Typography className={classes.statusText} variant="h6">
+						|
+					</Typography>
+					<Typography className={classes.statusText} variant="h6">
+						Incorrect words: {incorrectWords}
+					</Typography>
+				</Paper>
+			</Container>
 
 			<hr />
 
@@ -84,7 +135,7 @@ interface StarRatingProps {
 }
 export const StarRating = (props: StarRatingProps) => {
 	const { result } = props
-	const classes = useStyles()
+	const classes = finishStyles()
 
 	return (
 		<div className={classes.StarRatingBox}>

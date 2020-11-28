@@ -181,6 +181,7 @@ export const Typer = (props: Props) => {
 				handleStatus(false)
 			}
 
+			setCount(count + 1)
 			return
 		}
 	}
@@ -283,7 +284,7 @@ export const Typer = (props: Props) => {
 					<Button onClick={handleRestart}>Settings</Button>
 				</>
 			) : (
-				<FinishCard correctWords={correctWords} incorrectWords={wrongWords} handleRestart={handleRestart} />
+				<FinishCard wordCount={count} correctWords={correctWords} incorrectWords={wrongWords} handleRestart={handleRestart} />
 			)}
 		</Container>
 	)
