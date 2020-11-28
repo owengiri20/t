@@ -48,7 +48,10 @@ const shuffle = (arr: string[]) => {
 
 // generate list of words of json file
 const genWords = (): TestWord[] => {
-	const words: string[] = shuffle(j.split("|"))
+	const words: string[] = shuffle([...j.split("|"), ...j.split("|")])
+
+	console.log(words.length)
+
 	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
 	const testWords: TestWord[] = words.map((w, i) => {
 		let c = false
