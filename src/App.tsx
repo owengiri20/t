@@ -17,7 +17,6 @@ function App() {
 				<Container maxWidth={"xl"} style={{ marginTop: "20px" }}>
 					<Switch>
 						<Route path="/" component={Typer} exact />
-						{/* <Route path="/typer" component={Typer} exact /> */}
 					</Switch>
 				</Container>
 			</AppWrapper>

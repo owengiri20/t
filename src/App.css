@@ -21,3 +21,13 @@ a {
 	background-color: transparent;
 	color: #9be6ab;
 }
+
+.blinkMe {
+	animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+	50% {
+		opacity: 0;
+	}
+}

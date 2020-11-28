@@ -115,7 +115,7 @@ export const AppWrapper = (props: AppWrapperProps) => {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" noWrap>
-						Material UI Is Ok
+						T
 					</Typography>
 				</Toolbar>
 			</AppBar>
@@ -141,14 +141,14 @@ export const AppWrapper = (props: AppWrapperProps) => {
 					</Link>
 				</List>
 				<Divider />
-				<List>
+				{/* <List>
 					<Link to={"/todo"}>
 						<ListItem button key={""}>
 							<ListItemIcon>{<ListAltIcon />}</ListItemIcon>
 							<ListItemText primary={"Todo"} />
 						</ListItem>
 					</Link>
-				</List>
+				</List> */}
 			</Drawer>
 			<main
 				className={clsx(classes.content, {

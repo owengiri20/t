@@ -1,5 +1,5 @@
 import { Button, Container, Typography } from "@material-ui/core"
-import { DirectionsBike } from "@material-ui/icons"
+import { DirectionsBike, Height } from "@material-ui/icons"
 import React from "react"
 import { useHistory } from "react-router-dom"
 import { useStyles } from "./style"
@@ -163,6 +163,10 @@ export const Typer = (props: Props) => {
 	}, [word])
 
 	const handleKeyPress = (key: any) => {
+		if (key.code === "Space" && word === "") {
+			return
+		}
+
 		const currWord = props.words[idx]
 
 		if (!start) {
@@ -205,7 +209,13 @@ export const Typer = (props: Props) => {
 		if (status === "eh") return "#373737"
 	}
 
-	const onCurrWord = (currIdx: number) => idx === currIdx
+	const onCurrWord = (currIdx: number) => {
+		return idx === currIdx
+	}
+
+	const onCurrChar = (currIdx: number) => {
+		return charIdx === currIdx
+	}
 
 	const getResult = (wpm: number) => {
 		let label = ""
@@ -272,15 +282,28 @@ export const Typer = (props: Props) => {
 									<span
 										style={{
 											padding: "5px",
-											// backgroundColor: onCurrWord(i) ? "#d7d9ff" : "",
 											backgroundColor: onCurrWord(i) ? c : "",
-
 											color: getColour(w.status),
 											fontSize: "35px",
 											fontWeight: onCurrWord(i) ? "bold" : "unset",
 										}}
 										key={i}
-									>{` ${w.word} `}</span>
+									>
+										{w.word.split("").map((l, idx) => {
+											const onChar = onCurrWord(i) && onCurrChar(idx)
+											return (
+												<span key={l + idx}>
+													{onChar && (
+														<span id="yoyo" style={{ height: "200px", backgroundColor: "black" }} className={"blinkMe"}>
+															<div style={{ display: "inline-block", height: "35px", width: "3px", backgroundColor: "black" }}></div>
+														</span>
+													)}
+													<span>{l}</span>
+												</span>
+											)
+										})}
+										{/* {` ${w.word} `} */}
+									</span>
 									{w.cut && <br />}
 								</React.Fragment>
 							))}
@@ -296,8 +319,8 @@ export const Typer = (props: Props) => {
 						onChange={(e) => setWord(e.target.value.trim())}
 						placeholder={idx === 0 ? "Start Typing!" : ""}
 					></textarea>
-					{/* <div style={{ height: "50px", width: "50px", background: c }}></div> */}
 					<Button onClick={handleRestart}>Reset</Button>
+					<Button onClick={handleRestart}>Settings</Button>
 				</>
 			) : (
 				<div>
