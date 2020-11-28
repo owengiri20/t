@@ -66,7 +66,6 @@ const genWords = (): TestWord[] => {
 
 export const Typer = (props: Props) => {
 	const classes = useStyles()
-	const history = useHistory()
 
 	const [count, setCount] = React.useState(0)
 
