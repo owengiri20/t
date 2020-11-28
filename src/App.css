@@ -1,0 +1,23 @@
+* {
+	font-family: "Montserrat", sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: unset;
+}
+
+#textDisplay::-webkit-scrollbar-track {
+	-webkit-box-shadow: transparent;
+	background-color: transparent;
+}
+
+#textDisplay::-webkit-scrollbar {
+	width: 6px;
+	background-color: transparent;
+}
+
+#textDisplay::-webkit-scrollbar-thumb {
+	background-color: transparent;
+	/* color: #373737; */
+}
