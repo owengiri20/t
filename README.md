@@ -1,3 +1,9 @@
-site here: [click here boi](https://material-ui-is-ok.netlify.app/)
+site here: [click here!](https://typotest.netlify.app/)
+still a work in progress
 
-rest of the read me coming soon ish
+**_TODOs_**
+
+- calculate WPM more accurately
+- modes section
+- settings
+- dark mode
