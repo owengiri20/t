@@ -1,4 +1,5 @@
 import { Button, Container, Typography } from "@material-ui/core"
+import { DirectionsBike } from "@material-ui/icons"
 import React from "react"
 import { useHistory } from "react-router-dom"
 import { useStyles } from "./style"
@@ -63,6 +64,8 @@ export const Typer = (props: Props) => {
 	const classes = useStyles()
 	const history = useHistory()
 
+	const [count, setCount] = React.useState(0)
+
 	const [idx, setIdx] = React.useState(0)
 	const [charIdx, setCharIdx] = React.useState(0)
 
@@ -73,6 +76,8 @@ export const Typer = (props: Props) => {
 
 	const [correctWords, setCorrectWords] = React.useState(0)
 	const [wrongWords, setWrongWords] = React.useState(0)
+
+	const [c, setC] = React.useState<string>("black")
 
 	React.useEffect(() => {
 		if (!start) return
@@ -89,6 +94,7 @@ export const Typer = (props: Props) => {
 		}
 	})
 
+	// sets words status "incorrect" or "correct"
 	const handleStatus = (correct: boolean) => {
 		if (correct) {
 			setCorrectWords(correctWords + 1)
@@ -133,14 +139,42 @@ export const Typer = (props: Props) => {
 		// setSeconds(60)
 	}
 
+	const checkSubWord = () => {
+		const currWord = props.words[idx]
+		const subWord = currWord.word.substr(0, charIdx)
+		const subWord2 = word.substr(0, charIdx + 1)
+
+		console.log(word === "")
+
+		if (word === "") {
+			setC("#d7d9ff")
+			return
+		}
+		if (subWord === subWord2) {
+			setC("#9be6ab")
+			return
+		} else {
+			setC("#f26262")
+		}
+	}
+
+	React.useEffect(() => {
+		checkSubWord()
+	}, [word])
+
 	const handleKeyPress = (key: any) => {
 		const currWord = props.words[idx]
+
 		if (!start) {
 			setStart(true)
 		}
 		setCharIdx(charIdx + 1)
 
 		if (key.code === "Space") {
+			if (idx === props.words.length) {
+				return
+			}
+			// setCount(count + 1)
 			if (word === "") return
 			setWord("")
 			setIdx(idx + 1)
@@ -217,7 +251,7 @@ export const Typer = (props: Props) => {
 		// handle scroll
 		if (textDisplay && prevWord.cut) {
 			textDisplay.scrollTop = props.scrollHeight
-			props.setScrollHeight(props.scrollHeight + 70)
+			props.setScrollHeight(props.scrollHeight + 61)
 		}
 	}, [idx])
 
@@ -230,6 +264,7 @@ export const Typer = (props: Props) => {
 							{seconds}
 						</Typography>
 					</div>
+
 					<div className={classes.typingArea} id={DISPLAY_ID}>
 						<Typography variant="subtitle1">
 							{props.words.map((w, i) => (
@@ -237,7 +272,9 @@ export const Typer = (props: Props) => {
 									<span
 										style={{
 											padding: "5px",
-											backgroundColor: onCurrWord(i) ? "#d7d9ff" : "",
+											// backgroundColor: onCurrWord(i) ? "#d7d9ff" : "",
+											backgroundColor: onCurrWord(i) ? c : "",
+
 											color: getColour(w.status),
 											fontSize: "35px",
 											fontWeight: onCurrWord(i) ? "bold" : "unset",
@@ -259,6 +296,7 @@ export const Typer = (props: Props) => {
 						onChange={(e) => setWord(e.target.value.trim())}
 						placeholder={idx === 0 ? "Start Typing!" : ""}
 					></textarea>
+					{/* <div style={{ height: "50px", width: "50px", background: c }}></div> */}
 					<Button onClick={handleRestart}>Reset</Button>
 				</>
 			) : (

@@ -6,7 +6,7 @@ export const useStyles = makeStyles({
 		margin: "20px 0",
 		paddingBottom: "15px",
 		padding: "10px",
-		maxHeight: "200px",
+		maxHeight: "250px",
 		overflowY: "auto",
 		fontSize: "20px",
 		textAlign: "center",
