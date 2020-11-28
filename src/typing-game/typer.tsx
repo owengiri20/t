@@ -13,7 +13,7 @@ window.addEventListener(
 	},
 	{ passive: false },
 )
-const j = require("./words.json")
+const j = require("./naruto.json")
 
 interface TestWord {
 	word: string
