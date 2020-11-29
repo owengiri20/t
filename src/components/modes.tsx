@@ -11,6 +11,10 @@ const useStyles = makeStyles({
 	modalContainer: {
 		// height: "100%",
 		display: "flex",
+		outline: "none !important",
+		"&:focus": {
+			outline: "none !important",
+		},
 	},
 	modalBody: {
 		background: "white",
@@ -18,7 +22,7 @@ const useStyles = makeStyles({
 		margin: "auto",
 		width: "90%",
 		display: "flex",
-		border: "1px solid black",
+		// border: "1px solid black",
 	},
 	modalBodyInner: {
 		width: "100%",
@@ -38,13 +42,17 @@ export const ModesModal = (props: ModesModalProps) => {
 	const { isOpen, setIsOpen } = props
 	return (
 		<Modal
+			style={{
+				outline: "none",
+			}}
+			disableAutoFocus={true}
 			className={classes.modalContainer}
 			open={isOpen}
 			onClose={() => setIsOpen(false)}
 			aria-labelledby="simple-modal-title"
 			aria-describedby="simple-modal-description"
 		>
-			<Container className={classes.modalBody}>
+			<Container id="ddffffffffffffffffff" className={classes.modalBody}>
 				<SimpleTabs />
 			</Container>
 		</Modal>

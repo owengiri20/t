@@ -15,7 +15,7 @@ export const TabPanel = (props: TabPanelProps) => {
 	const { children, value, index, ...other } = props
 
 	return (
-		<div style={{ height: "100%", width: "100%" }} role="tabpanel" hidden={value !== index} aria-labelledby={`simple-tab-${index}`} {...other}>
+		<div id="motherfucker" style={{ height: "80%", width: "100%" }} role="tabpanel" hidden={value !== index} aria-labelledby={`simple-tab-${index}`} {...other}>
 			{value === index && (
 				<Box height="100%" p={3}>
 					{children}
@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 	root: {
 		flexGrow: 1,
 		backgroundColor: theme.palette.background.paper,
-		// height: "100%",
 	},
 	modalContainer: {
 		// height: "100%",
@@ -58,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 		// border: "1px solid black",
 	},
 	modeCard: {
-		height: "30%",
+		height: "40%",
 		width: "30%",
 		margin: "10px",
 		display: "flex",
@@ -79,7 +78,7 @@ export default function SimpleTabs() {
 	}
 
 	return (
-		<div className={classes.root}>
+		<div id="aaaaaaaaa" className={classes.root}>
 			<Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
 				<Tab label="Easy" {...a11yProps(0)} />
 				<Tab label="Medium" {...a11yProps(1)} />
