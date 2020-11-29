@@ -9,7 +9,7 @@ interface ModesModalProps {
 
 const useStyles = makeStyles({
 	modalContainer: {
-		height: "100%",
+		// height: "100%",
 		display: "flex",
 	},
 	modalBody: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 	},
 	modalBodyInner: {
 		width: "100%",
-		height: "90%",
+		// height: "90%",
 		display: "flex",
 		margin: "15px",
 	},
@@ -46,12 +46,6 @@ export const ModesModal = (props: ModesModalProps) => {
 		>
 			<Container className={classes.modalBody}>
 				<SimpleTabs />
-
-				{/* <Container className={classes.modalBodyInner}>
-					<Paper className={classes.modeCard}>f</Paper>
-					<Paper className={classes.modeCard}>f</Paper>
-					<Paper className={classes.modeCard}>f</Paper>
-				</Container> */}
 			</Container>
 		</Modal>
 	)

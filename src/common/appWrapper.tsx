@@ -115,7 +115,7 @@ export const AppWrapper = (props: AppWrapperProps) => {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" noWrap>
-						T
+						TT
 					</Typography>
 				</Toolbar>
 			</AppBar>

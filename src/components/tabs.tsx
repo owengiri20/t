@@ -1,10 +1,9 @@
-import React from "react"
-import { makeStyles, Theme } from "@material-ui/core/styles"
-import AppBar from "@material-ui/core/AppBar"
-import Tabs from "@material-ui/core/Tabs"
-import Tab from "@material-ui/core/Tab"
-import Typography from "@material-ui/core/Typography"
+import { Container, Paper, Typography } from "@material-ui/core"
 import Box from "@material-ui/core/Box"
+import { makeStyles, Theme } from "@material-ui/core/styles"
+import Tab from "@material-ui/core/Tab"
+import Tabs from "@material-ui/core/Tabs"
+import React from "react"
 
 interface TabPanelProps {
 	children?: React.ReactNode
@@ -16,10 +15,10 @@ export const TabPanel = (props: TabPanelProps) => {
 	const { children, value, index, ...other } = props
 
 	return (
-		<div role="tabpanel" hidden={value !== index} id={`simple-tabpanel-${index}`} aria-labelledby={`simple-tab-${index}`} {...other}>
+		<div style={{ height: "100%", width: "100%" }} role="tabpanel" hidden={value !== index} aria-labelledby={`simple-tab-${index}`} {...other}>
 			{value === index && (
-				<Box p={3}>
-					<Typography>{children}</Typography>
+				<Box height="100%" p={3}>
+					{children}
 				</Box>
 			)}
 		</div>
@@ -37,6 +36,37 @@ const useStyles = makeStyles((theme: Theme) => ({
 	root: {
 		flexGrow: 1,
 		backgroundColor: theme.palette.background.paper,
+		// height: "100%",
+	},
+	modalContainer: {
+		// height: "100%",
+		display: "flex",
+	},
+	// modalBody: {
+	// 	background: "white",
+	// 	height: "50%",
+	// 	margin: "auto",
+	// 	width: "90%",
+	// 	display: "flex",
+	// 	border: "1px solid black",
+	// },
+	modalBodyInner: {
+		width: "100%",
+		height: "90%",
+		display: "flex",
+		margin: "15px",
+		// border: "1px solid black",
+	},
+	modeCard: {
+		height: "30%",
+		width: "30%",
+		margin: "10px",
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	panel: {
+		// height: "100%",
 	},
 }))
 
@@ -57,16 +87,26 @@ export default function SimpleTabs() {
 				<Tab label="Other" {...a11yProps(3)} />
 			</Tabs>
 			<TabPanel value={value} index={0}>
-				Easy
+				<Container className={classes.modalBodyInner}>
+					<Paper className={classes.modeCard}>Easy Random</Paper>
+					<Paper className={classes.modeCard}>4 letter words</Paper>
+					<Paper className={classes.modeCard}>3 letter words</Paper>
+				</Container>
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				Medium
-			</TabPanel>
-			<TabPanel value={value} index={3}>
-				Hard
+				<Container className={classes.modalBodyInner}>
+					<Paper className={classes.modeCard}>Medium Random</Paper>
+				</Container>
 			</TabPanel>
 			<TabPanel value={value} index={2}>
-				Other
+				<Container className={classes.modalBodyInner}>
+					<Paper className={classes.modeCard}>Hard Random</Paper>
+				</Container>
+			</TabPanel>
+			<TabPanel value={value} index={3}>
+				<Container className={classes.modalBodyInner}>
+					<Typography variant={"h5"}>Comming soon</Typography>
+				</Container>
 			</TabPanel>
 		</div>
 	)
