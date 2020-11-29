@@ -4,17 +4,17 @@ import React from "react"
 import { Route, Switch } from "react-router-dom"
 import "./App.css"
 import { AppWrapper } from "./common/appWrapper"
-import { Home } from "./common/pages/home"
-import { TyperWrapper as Typer } from "./typing-game/typer"
+import { TyperWrapper as Typer } from "./game/typer"
 
 const theme = createMuiTheme({
 	palette: {},
 })
-function App() {
+
+const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<AppWrapper>
-				<Container maxWidth={"xl"} style={{ marginTop: "20px" }}>
+				<Container maxWidth={"lg"} style={{ marginTop: "20px" }}>
 					<Switch>
 						<Route path="/" component={Typer} exact />
 					</Switch>

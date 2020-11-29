@@ -1,8 +1,6 @@
 import { Button, Container, Typography } from "@material-ui/core"
-import { DirectionsBike, Height } from "@material-ui/icons"
 import React from "react"
-import { useHistory } from "react-router-dom"
-import { FinishCard, getResult } from "./finish"
+import { FinishCard } from "./finish"
 import { useStyles } from "./style"
 
 // disable scroll wheel
@@ -13,6 +11,8 @@ window.addEventListener(
 	},
 	{ passive: false },
 )
+
+// json word files // todo move to new file
 const j = require("./naruto.json")
 
 interface TestWord {
@@ -20,12 +20,14 @@ interface TestWord {
 	status: "correct" | "incorrect" | "eh"
 	cut: boolean
 }
+
 // id of text display
 const DISPLAY_ID = "textDisplay"
 
 // creates an array of every "nth" number
 const everyNth = (arr: number[], nth: number) => arr.filter((_, i) => i % nth === nth - 1)
 
+// shuffle/randomizes string array
 const shuffle = (arr: string[]) => {
 	let currentIndex = arr.length,
 		temporaryValue,
@@ -49,9 +51,6 @@ const shuffle = (arr: string[]) => {
 // generate list of words of json file
 const genWords = (): TestWord[] => {
 	const words: string[] = shuffle([...j.split("|"), ...j.split("|")])
-
-	console.log(words.length)
-
 	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
 	const testWords: TestWord[] = words.map((w, i) => {
 		let c = false
@@ -65,23 +64,33 @@ const genWords = (): TestWord[] => {
 }
 
 export const Typer = (props: Props) => {
+	// styles
 	const classes = useStyles()
 
+	// word count
 	const [count, setCount] = React.useState(0)
 
-	const [idx, setIdx] = React.useState(0)
+	// current word index
+	const [wordIdx, setWordIdx] = React.useState(0)
 	const [charIdx, setCharIdx] = React.useState(0)
 
+	// word being typed in the text area
 	const [word, setWord] = React.useState<string>("")
+
+	// finish/start game states
 	const [finish, setFinish] = React.useState(false)
 	const [start, setStart] = React.useState(false)
+
+	// timer seconds state
 	const [seconds, setSeconds] = React.useState(60)
 
+	// correct/incorrect words count
 	const [correctWords, setCorrectWords] = React.useState(0)
-	const [wrongWords, setWrongWords] = React.useState(0)
+	const [incorrectWords, setIncorrectWords] = React.useState(0)
 
 	const [c, setC] = React.useState<string>("black")
 
+	// update ticker seconds
 	React.useEffect(() => {
 		if (!start) return
 		if (seconds > 0) {
@@ -93,11 +102,12 @@ export const Typer = (props: Props) => {
 
 	// sets words status "incorrect" or "correct"
 	const handleStatus = (correct: boolean) => {
+		// correct ...
 		if (correct) {
 			setCorrectWords(correctWords + 1)
 			props.setWords(
 				props.words.map((w, i) => {
-					if (i === idx) {
+					if (i === wordIdx) {
 						return {
 							...w,
 							status: "correct",
@@ -107,10 +117,11 @@ export const Typer = (props: Props) => {
 				}),
 			)
 		} else {
-			setWrongWords(wrongWords + 1)
+			// incorrect ...
+			setIncorrectWords(incorrectWords + 1)
 			props.setWords(
 				props.words.map((w, i) => {
-					if (i === idx) {
+					if (i === wordIdx) {
 						return {
 							...w,
 							status: "incorrect",
@@ -122,6 +133,7 @@ export const Typer = (props: Props) => {
 		}
 	}
 
+	// handles restart
 	const handleRestart = () => {
 		window.location.reload()
 		// history.action.
@@ -136,8 +148,9 @@ export const Typer = (props: Props) => {
 		// setSeconds(60)
 	}
 
+	// checks partial word is correct/incorrect
 	const checkSubWord = () => {
-		const currWord = props.words[idx]
+		const currWord = props.words[wordIdx]
 		const subWord = currWord.word.substr(0, charIdx)
 		const subWord2 = word.substr(0, charIdx + 1)
 
@@ -153,36 +166,56 @@ export const Typer = (props: Props) => {
 		}
 	}
 
+	// checks sub/partial word on word change
 	React.useEffect(() => {
 		checkSubWord()
 	}, [word])
 
 	const handleKeyPress = (key: any) => {
+		// hit space && word empty
 		if (key.code === "Space" && word === "") {
 			return
 		}
 
-		const currWord = props.words[idx]
+		// get current word
+		const currWord = props.words[wordIdx]
 
+		// set start
 		if (!start) {
 			setStart(true)
 		}
+
+		// increment char idx
 		setCharIdx(charIdx + 1)
 
+		// hit space
 		if (key.code === "Space") {
-			if (idx === props.words.length) {
+			// last word in json file
+			if (wordIdx === props.words.length) {
 				return
 			}
+
+			// word empty
 			if (word === "") return
+
+			// empties text area
 			setWord("")
-			setIdx(idx + 1)
+
+			// increment wordIdx
+			setWordIdx(wordIdx + 1)
+
+			// set charIdx to 0
 			setCharIdx(0)
+
+			// spelled correctly
 			if (currWord.word === word) {
 				handleStatus(true)
 			} else {
+				// spelled incorrectly
 				handleStatus(false)
 			}
 
+			// increment count
 			setCount(count + 1)
 			return
 		}
@@ -203,7 +236,7 @@ export const Typer = (props: Props) => {
 	}
 
 	const onCurrWord = (currIdx: number) => {
-		return idx === currIdx
+		return wordIdx === currIdx
 	}
 
 	const onCurrChar = (currIdx: number) => {
@@ -213,10 +246,10 @@ export const Typer = (props: Props) => {
 	// useffect to handle scroll height of text display
 	React.useEffect(() => {
 		// if first word
-		if (idx === 0) return
+		if (wordIdx === 0) return
 
 		// get prevous word
-		const prevWord = props.words[idx - 1]
+		const prevWord = props.words[wordIdx - 1]
 
 		// get textDisplay div
 		let textDisplay = document.getElementById(DISPLAY_ID)
@@ -226,10 +259,11 @@ export const Typer = (props: Props) => {
 			textDisplay.scrollTop = props.scrollHeight
 			props.setScrollHeight(props.scrollHeight + 61)
 		}
-	}, [idx])
+	}, [wordIdx])
 
+	// render
 	return (
-		<Container style={{}}>
+		<Container>
 			{!finish ? (
 				<>
 					<div className={classes.timer}>
@@ -279,14 +313,14 @@ export const Typer = (props: Props) => {
 						onKeyDown={handleBackSpace}
 						value={word}
 						onChange={(e) => setWord(e.target.value.trim())}
-						placeholder={idx === 0 ? "Start Typing!" : ""}
+						placeholder={wordIdx === 0 ? "Start Typing!" : ""}
 					></textarea>
 					<Button onClick={handleRestart}>Reset</Button>
 					<Button onClick={handleRestart}>Modes</Button>
 					<Button onClick={handleRestart}>Settings</Button>
 				</>
 			) : (
-				<FinishCard wordCount={count} correctWords={correctWords} incorrectWords={wrongWords} handleRestart={handleRestart} />
+				<FinishCard wordCount={count} correctWords={correctWords} incorrectWords={incorrectWords} handleRestart={handleRestart} />
 			)}
 		</Container>
 	)
