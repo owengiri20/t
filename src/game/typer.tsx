@@ -1,5 +1,6 @@
 import { Button, Container, Typography } from "@material-ui/core"
 import React from "react"
+import { NotImplementedModal } from "../common/notImplemented"
 import { FinishCard } from "./finish"
 import { useStyles } from "./style"
 
@@ -12,7 +13,7 @@ window.addEventListener(
 	{ passive: false },
 )
 
-// json word files // todo move to new file
+// json word files // todo move to new file ALSO lazy load
 const j = require("./naruto.json")
 
 interface TestWord {
@@ -88,7 +89,11 @@ export const Typer = (props: Props) => {
 	const [correctWords, setCorrectWords] = React.useState(0)
 	const [incorrectWords, setIncorrectWords] = React.useState(0)
 
+	// background colour of word
 	const [c, setC] = React.useState<string>("black")
+
+	// modal states
+	const [isOpen, setIsOpen] = React.useState(false)
 
 	// update ticker seconds
 	React.useEffect(() => {
@@ -146,6 +151,11 @@ export const Typer = (props: Props) => {
 		// setWrongWords(0)
 		// setCorrectWords(0)
 		// setSeconds(60)
+	}
+
+	// handles restart
+	const handleNotImplemented = () => {
+		setIsOpen(true)
 	}
 
 	// checks partial word is correct/incorrect
@@ -263,66 +273,69 @@ export const Typer = (props: Props) => {
 
 	// render
 	return (
-		<Container>
-			{!finish ? (
-				<>
-					<div className={classes.timer}>
-						<Typography className={classes.timerText} variant="h3">
-							{seconds}
-						</Typography>
-					</div>
+		<React.Fragment>
+			<Container>
+				{!finish ? (
+					<>
+						<div className={classes.timer}>
+							<Typography className={classes.timerText} variant="h3">
+								{seconds}
+							</Typography>
+						</div>
 
-					<div className={classes.typingArea} id={DISPLAY_ID}>
-						<Typography variant="subtitle1">
-							{props.words.map((w, i) => (
-								<React.Fragment key={i}>
-									<span
-										style={{
-											padding: "5px",
-											backgroundColor: onCurrWord(i) ? c : "",
-											color: getColour(w.status),
-											fontSize: "35px",
-											fontWeight: onCurrWord(i) ? "bold" : "unset",
-										}}
-										key={i}
-									>
-										{w.word.split("").map((l, idx) => {
-											const onChar = onCurrWord(i) && onCurrChar(idx)
-											const onEnd = onCurrWord(i + 1) && onCurrChar(idx + 1)
+						<div className={classes.typingArea} id={DISPLAY_ID}>
+							<Typography variant="subtitle1">
+								{props.words.map((w, i) => (
+									<React.Fragment key={i}>
+										<span
+											style={{
+												padding: "5px",
+												backgroundColor: onCurrWord(i) ? c : "",
+												color: getColour(w.status),
+												fontSize: "35px",
+												fontWeight: onCurrWord(i) ? "bold" : "unset",
+											}}
+											key={i}
+										>
+											{w.word.split("").map((l, idx) => {
+												const onChar = onCurrWord(i) && onCurrChar(idx)
+												const onEnd = onCurrWord(i + 1) && onCurrChar(idx + 1)
 
-											return (
-												<span key={l + idx}>
-													{/* {onChar && <Blinky />}
+												return (
+													<span key={l + idx}>
+														{/* {onChar && <Blinky />}
 													{onEnd && <Blinky />} */}
-													<span>{l}</span>
-												</span>
-											)
-										})}
-										{/* {` ${w.word} `} */}
-									</span>
-									{w.cut && <br />}
-								</React.Fragment>
-							))}
-						</Typography>
-					</div>
-					<div className={classes.line}></div>
-					<textarea
-						className={classes.textAreaStyles}
-						autoFocus
-						onKeyPress={handleKeyPress}
-						onKeyDown={handleBackSpace}
-						value={word}
-						onChange={(e) => setWord(e.target.value.trim())}
-						placeholder={wordIdx === 0 ? "Start Typing!" : ""}
-					></textarea>
-					<Button onClick={handleRestart}>Reset</Button>
-					<Button onClick={handleRestart}>Modes</Button>
-					<Button onClick={handleRestart}>Settings</Button>
-				</>
-			) : (
-				<FinishCard wordCount={count} correctWords={correctWords} incorrectWords={incorrectWords} handleRestart={handleRestart} />
-			)}
-		</Container>
+														<span>{l}</span>
+													</span>
+												)
+											})}
+											{/* {` ${w.word} `} */}
+										</span>
+										{w.cut && <br />}
+									</React.Fragment>
+								))}
+							</Typography>
+						</div>
+						<div className={classes.line}></div>
+						<textarea
+							className={classes.textAreaStyles}
+							autoFocus
+							onKeyPress={handleKeyPress}
+							onKeyDown={handleBackSpace}
+							value={word}
+							onChange={(e) => setWord(e.target.value.trim())}
+							placeholder={wordIdx === 0 ? "Start Typing!" : ""}
+						></textarea>
+						<Button onClick={handleRestart}>Reset</Button>
+						<Button onClick={handleNotImplemented}>Modes</Button>
+						<Button onClick={handleNotImplemented}>Settings</Button>
+					</>
+				) : (
+					<FinishCard wordCount={count} correctWords={correctWords} incorrectWords={incorrectWords} handleRestart={handleRestart} />
+				)}
+			</Container>
+			{isOpen && <NotImplementedModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+		</React.Fragment>
 	)
 }
 
