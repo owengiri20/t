@@ -1,6 +1,7 @@
 import { Button, Container, Typography } from "@material-ui/core"
 import React from "react"
 import { NotImplementedModal } from "../common/notImplemented"
+import { ModesModal } from "../components/modes"
 import { FinishCard } from "./finish"
 import { useStyles } from "./style"
 
@@ -94,6 +95,7 @@ export const Typer = (props: Props) => {
 
 	// modal states
 	const [isOpen, setIsOpen] = React.useState(false)
+	const [modesOpen, setModesOpen] = React.useState(false)
 
 	// update ticker seconds
 	React.useEffect(() => {
@@ -327,7 +329,7 @@ export const Typer = (props: Props) => {
 							placeholder={wordIdx === 0 ? "Start Typing!" : ""}
 						></textarea>
 						<Button onClick={handleRestart}>Reset</Button>
-						<Button onClick={handleNotImplemented}>Modes</Button>
+						<Button onClick={() => setModesOpen(true)}>Modes</Button>
 						<Button onClick={handleNotImplemented}>Settings</Button>
 					</>
 				) : (
@@ -335,6 +337,7 @@ export const Typer = (props: Props) => {
 				)}
 			</Container>
 			{isOpen && <NotImplementedModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+			{modesOpen && <ModesModal isOpen={modesOpen} setIsOpen={setModesOpen} />}
 		</React.Fragment>
 	)
 }
