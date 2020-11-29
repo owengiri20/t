@@ -13,7 +13,7 @@ window.addEventListener(
 	{ passive: false },
 )
 
-// json word files // todo move to new file ALSO lazy load
+// json word files // todo move to new file ALSO lazy loadl
 const j = require("./naruto.json")
 
 interface TestWord {
