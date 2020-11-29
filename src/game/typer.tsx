@@ -2,6 +2,7 @@ import { Button, Container, Typography } from "@material-ui/core"
 import React from "react"
 import { NotImplementedModal } from "../common/notImplemented"
 import { ModesModal } from "../components/modes"
+import { data } from "../data/_data"
 import { FinishCard } from "./finish"
 import { useStyles } from "./style"
 
@@ -15,7 +16,6 @@ window.addEventListener(
 )
 
 // json word files // todo move to new file ALSO lazy loadl
-const j = require("./naruto.json")
 
 interface TestWord {
 	word: string
@@ -52,7 +52,8 @@ const shuffle = (arr: string[]) => {
 
 // generate list of words of json file
 const genWords = (): TestWord[] => {
-	const words: string[] = shuffle([...j.split("|"), ...j.split("|")])
+	const words: string[] = shuffle([...data.words.split("|"), ...data.words.split("|")])
+
 	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
 	const testWords: TestWord[] = words.map((w, i) => {
 		let c = false
