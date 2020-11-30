@@ -279,13 +279,10 @@ export const Typer = (props: Props) => {
 
 												return (
 													<span key={l + idx}>
-														{/* {onChar && <Blinky />}
-													{onEnd && <Blinky />} */}
 														<span>{l}</span>
 													</span>
 												)
 											})}
-											{/* {` ${w.word} `} */}
 										</span>
 										{w.cut && <br />}
 									</React.Fragment>
@@ -334,12 +331,4 @@ export const TyperWrapper = (props: Props) => {
 		return <Typography variant="h3">uh oh something went wrong</Typography>
 	}
 	return <Typer setTheme={setTheme} theme={theme} scrollHeight={scrollHeight} setScrollHeight={setScrollHeight} words={words} setWords={setWords} />
-}
-
-const Blinky = () => {
-	return (
-		<span style={{ height: "200px", backgroundColor: "black" }} className={"blinkMe"}>
-			<div style={{ display: "inline-block", height: "35px", width: "3px", backgroundColor: "black" }}></div>
-		</span>
-	)
 }
