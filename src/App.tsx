@@ -5,6 +5,8 @@ import { Route, Switch } from "react-router-dom"
 import "./App.css"
 import { AppWrapper } from "./common/appWrapper"
 import { TyperWrapper as Typer } from "./game/typer"
+import { ModesContainer } from "./state/modes"
+import { WordsContainer } from "./state/words"
 
 const theme = createMuiTheme({
 	palette: {},
@@ -13,13 +15,17 @@ const theme = createMuiTheme({
 const App = () => {
 	return (
 		<ThemeProvider theme={theme}>
-			<AppWrapper>
-				<Container maxWidth={"lg"} style={{ marginTop: "20px" }}>
-					<Switch>
-						<Route path="/" component={Typer} exact />
-					</Switch>
-				</Container>
-			</AppWrapper>
+			<WordsContainer.Provider>
+				<ModesContainer.Provider>
+					<AppWrapper>
+						<Container maxWidth={"lg"} style={{ marginTop: "20px" }}>
+							<Switch>
+								<Route path="/" component={Typer} exact />
+							</Switch>
+						</Container>
+					</AppWrapper>
+				</ModesContainer.Provider>
+			</WordsContainer.Provider>
 		</ThemeProvider>
 	)
 }

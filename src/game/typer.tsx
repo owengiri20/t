@@ -2,7 +2,9 @@ import { Button, Container, Typography } from "@material-ui/core"
 import React from "react"
 import { NotImplementedModal } from "../common/notImplemented"
 import { ModesModal } from "../components/modes"
-import { data } from "../data/_data"
+import { TestWord } from "../data/_data"
+import { ModesContainer } from "../state/modes"
+import { WordsContainer } from "../state/words"
 import { FinishCard } from "./finish"
 import { useStyles } from "./style"
 
@@ -17,56 +19,28 @@ window.addEventListener(
 
 // json word files // todo move to new file ALSO lazy loadl
 
-interface TestWord {
-	word: string
-	status: "correct" | "incorrect" | "eh"
-	cut: boolean
-}
-
 // id of text display
 const DISPLAY_ID = "textDisplay"
 
-// creates an array of every "nth" number
-const everyNth = (arr: number[], nth: number) => arr.filter((_, i) => i % nth === nth - 1)
-
-// shuffle/randomizes string array
-const shuffle = (arr: string[]) => {
-	let currentIndex = arr.length,
-		temporaryValue,
-		randomIndex
-
-	// While there remain elements to shuffle...
-	while (0 !== currentIndex) {
-		// Pick a remaining element...
-		randomIndex = Math.floor(Math.random() * currentIndex)
-		currentIndex -= 1
-
-		// And swap it with the current element.
-		temporaryValue = arr[currentIndex]
-		arr[currentIndex] = arr[randomIndex]
-		arr[randomIndex] = temporaryValue
-	}
-
-	return arr
-}
-
 // generate list of words of json file
-const genWords = (): TestWord[] => {
-	const words: string[] = shuffle([...data.words.split("|"), ...data.words.split("|")])
+// const genWords = (): TestWord[] => {
+// 	const words: string[] = shuffle([...data.words.split("|"), ...data.words.split("|")])
 
-	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
-	const testWords: TestWord[] = words.map((w, i) => {
-		let c = false
-		if (cutOffs.includes(i)) {
-			c = true
-		}
-		return { word: w, status: "eh", cut: c }
-	})
+// 	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
+// 	const testWords: TestWord[] = words.map((w, i) => {
+// 		let c = false
+// 		if (cutOffs.includes(i)) {
+// 			c = true
+// 		}
+// 		return { word: w, status: "eh", cut: c }
+// 	})
 
-	return testWords
-}
+// 	return testWords
+// }
 
 export const Typer = (props: Props) => {
+	// containers
+	const { modesModalOpen, setModesModalOpen } = ModesContainer.useContainer()
 	// styles
 	const classes = useStyles()
 
@@ -96,7 +70,6 @@ export const Typer = (props: Props) => {
 
 	// modal states
 	const [isOpen, setIsOpen] = React.useState(false)
-	const [modesOpen, setModesOpen] = React.useState(false)
 
 	// update ticker seconds
 	React.useEffect(() => {
@@ -330,7 +303,7 @@ export const Typer = (props: Props) => {
 							placeholder={wordIdx === 0 ? "Start Typing!" : ""}
 						></textarea>
 						<Button onClick={handleRestart}>Reset</Button>
-						<Button onClick={() => setModesOpen(true)}>Modes</Button>
+						<Button onClick={() => setModesModalOpen(true)}>Modes</Button>
 						<Button onClick={handleNotImplemented}>Settings</Button>
 					</>
 				) : (
@@ -338,7 +311,7 @@ export const Typer = (props: Props) => {
 				)}
 			</Container>
 			{isOpen && <NotImplementedModal isOpen={isOpen} setIsOpen={setIsOpen} />}
-			{modesOpen && <ModesModal isOpen={modesOpen} setIsOpen={setModesOpen} />}
+			{modesModalOpen && <ModesModal />}
 		</React.Fragment>
 	)
 }
@@ -353,10 +326,13 @@ interface Props {
 }
 export const TyperWrapper = (props: Props) => {
 	const {} = props
-	const [words, setWords] = React.useState(genWords())
+	const { words, setWords } = WordsContainer.useContainer()
 	const [scrollHeight, setScrollHeight] = React.useState(0)
 	const [theme, setTheme] = React.useState<"dark" | "light">("light")
 
+	if (words == null) {
+		return <Typography variant="h3">uh oh something went wrong</Typography>
+	}
 	return <Typer setTheme={setTheme} theme={theme} scrollHeight={scrollHeight} setScrollHeight={setScrollHeight} words={words} setWords={setWords} />
 }
 

@@ -7,3 +7,4 @@ still a work in progress
 - modes section
 - settings
 - dark mode
+- starting/landing screen

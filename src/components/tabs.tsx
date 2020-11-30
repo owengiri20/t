@@ -4,6 +4,9 @@ import { makeStyles, Theme } from "@material-ui/core/styles"
 import Tab from "@material-ui/core/Tab"
 import Tabs from "@material-ui/core/Tabs"
 import React from "react"
+import { genWords } from "../data/_data"
+import { ModesContainer } from "../state/modes"
+import { WordsContainer } from "../state/words"
 
 interface TabPanelProps {
 	children?: React.ReactNode
@@ -69,9 +72,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 	},
 }))
 
-export default function SimpleTabs() {
+export const SimpleTabs = () => {
 	const classes = useStyles()
 	const [value, setValue] = React.useState(0)
+
+	// Words Container
+	const { words, setWords } = WordsContainer.useContainer()
+	const { modesModalOpen, setModesModalOpen } = ModesContainer.useContainer()
 
 	const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
 		setValue(newValue)
@@ -87,9 +94,15 @@ export default function SimpleTabs() {
 			</Tabs>
 			<TabPanel value={value} index={0}>
 				<Container className={classes.modalBodyInner}>
-					<Paper className={classes.modeCard}>Easy Random</Paper>
-					<Paper className={classes.modeCard}>4 letter words</Paper>
-					<Paper className={classes.modeCard}>3 letter words</Paper>
+					<Paper
+						onClick={() => {
+							setWords(genWords("words"))
+							setModesModalOpen(false)
+						}}
+						className={classes.modeCard}
+					>
+						Easy Random
+					</Paper>
 				</Container>
 			</TabPanel>
 			<TabPanel value={value} index={1}>

@@ -1,11 +1,9 @@
 import { Container, makeStyles, Modal, Paper } from "@material-ui/core"
 import React from "react"
-import SimpleTabs, { TabPanel } from "./tabs"
+import { ModesContainer } from "../state/modes"
+import { SimpleTabs, TabPanel } from "./tabs"
 
-interface ModesModalProps {
-	isOpen: boolean
-	setIsOpen: (b: boolean) => void
-}
+interface ModesModalProps {}
 
 const useStyles = makeStyles({
 	modalContainer: {
@@ -39,7 +37,7 @@ const useStyles = makeStyles({
 
 export const ModesModal = (props: ModesModalProps) => {
 	const classes = useStyles()
-	const { isOpen, setIsOpen } = props
+	const { modesModalOpen, setModesModalOpen } = ModesContainer.useContainer()
 	return (
 		<Modal
 			style={{
@@ -47,8 +45,8 @@ export const ModesModal = (props: ModesModalProps) => {
 			}}
 			disableAutoFocus={true}
 			className={classes.modalContainer}
-			open={isOpen}
-			onClose={() => setIsOpen(false)}
+			open={modesModalOpen}
+			onClose={() => setModesModalOpen(false)}
 			aria-labelledby="simple-modal-title"
 			aria-describedby="simple-modal-description"
 		>
