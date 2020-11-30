@@ -17,6 +17,7 @@ import MenuIcon from "@material-ui/icons/Menu"
 import clsx from "clsx"
 import React from "react"
 import { Link } from "react-router-dom"
+import { ModesContainer } from "../state/modes"
 
 const drawerWidth = 240
 
@@ -83,6 +84,8 @@ interface AppWrapperProps {
 	children: JSX.Element
 }
 export const AppWrapper = (props: AppWrapperProps) => {
+	// containers
+	const { mode } = ModesContainer.useContainer()
 	const classes = useStyles()
 	const theme = useTheme()
 	const [open, setOpen] = React.useState(false)
@@ -115,7 +118,7 @@ export const AppWrapper = (props: AppWrapperProps) => {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" noWrap>
-						TT
+						TT {mode}
 					</Typography>
 				</Toolbar>
 			</AppBar>
@@ -141,14 +144,6 @@ export const AppWrapper = (props: AppWrapperProps) => {
 					</Link>
 				</List>
 				<Divider />
-				{/* <List>
-					<Link to={"/todo"}>
-						<ListItem button key={""}>
-							<ListItemIcon>{<ListAltIcon />}</ListItemIcon>
-							<ListItemText primary={"Todo"} />
-						</ListItem>
-					</Link>
-				</List> */}
 			</Drawer>
 			<main
 				className={clsx(classes.content, {

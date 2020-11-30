@@ -78,7 +78,7 @@ export const SimpleTabs = () => {
 
 	// Words Container
 	const { words, setWords } = WordsContainer.useContainer()
-	const { modesModalOpen, setModesModalOpen } = ModesContainer.useContainer()
+	const { modesModalOpen, setModesModalOpen, setMode} = ModesContainer.useContainer()
 
 	const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
 		setValue(newValue)
@@ -98,6 +98,7 @@ export const SimpleTabs = () => {
 						onClick={() => {
 							setWords(genWords("words"))
 							setModesModalOpen(false)
+							setMode("Easy")
 						}}
 						className={classes.modeCard}
 					>
