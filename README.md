@@ -1,4 +1,4 @@
-site here: [click here!](https://typotest.netlify.app/)
+site here: [click here!](https://tt-typingtest.netlify.app/)
 still a work in progress
 
 **_TODOs_**
