@@ -5,6 +5,7 @@ import { Route, Switch } from "react-router-dom"
 import "./App.css"
 import { AppWrapper } from "./common/appWrapper"
 import { TyperWrapper as Typer } from "./game/typer"
+import { Home } from "./pages/home"
 import { ModesContainer } from "./state/modes"
 import { WordsContainer } from "./state/words"
 
@@ -20,7 +21,8 @@ const App = () => {
 					<AppWrapper>
 						<Container maxWidth={"lg"} style={{ marginTop: "20px" }}>
 							<Switch>
-								<Route path="/" component={Typer} exact />
+								<Route path="/test" component={Typer} exact />
+								<Route path="/" component={Home} exact />
 							</Switch>
 						</Container>
 					</AppWrapper>

@@ -1,6 +1,5 @@
 import React from "react"
 import { createContainer } from "unstated-next"
-import { genWords } from "../data/_data"
 
 const useModes = () => {
 	// modal
@@ -15,4 +14,4 @@ const useModes = () => {
 	}
 }
 
-export let ModesContainer = createContainer(useModes)
+export const ModesContainer = createContainer(useModes)

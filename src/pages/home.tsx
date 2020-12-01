@@ -79,7 +79,7 @@ interface ProjectItem {
 const projs: ProjectItem[] = [
 	{
 		name: "typing game",
-		link: "/typer",
+		link: "/test",
 		src: "",
 	},
 ]

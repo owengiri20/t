@@ -2,7 +2,7 @@ import { Button, Container, Typography } from "@material-ui/core"
 import React from "react"
 import { NotImplementedModal } from "../common/notImplemented"
 import { ModesModal } from "../components/modes"
-import { TestWord } from "../data/_data"
+import { genWords, TestWord } from "../data/_data"
 import { ModesContainer } from "../state/modes"
 import { WordsContainer } from "../state/words"
 import { FinishCard } from "./finish"
@@ -17,30 +17,15 @@ window.addEventListener(
 	{ passive: false },
 )
 
-// json word files // todo move to new file ALSO lazy loadl
+export type Character = "correct" | "incorrect"
 
 // id of text display
 const DISPLAY_ID = "textDisplay"
 
-// generate list of words of json file
-// const genWords = (): TestWord[] => {
-// 	const words: string[] = shuffle([...data.words.split("|"), ...data.words.split("|")])
-
-// 	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
-// 	const testWords: TestWord[] = words.map((w, i) => {
-// 		let c = false
-// 		if (cutOffs.includes(i)) {
-// 			c = true
-// 		}
-// 		return { word: w, status: "eh", cut: c }
-// 	})
-
-// 	return testWords
-// }
-
 export const Typer = (props: Props) => {
 	// containers
 	const { modesModalOpen, setModesModalOpen } = ModesContainer.useContainer()
+
 	// styles
 	const classes = useStyles()
 
@@ -50,6 +35,8 @@ export const Typer = (props: Props) => {
 	// current word index
 	const [wordIdx, setWordIdx] = React.useState(0)
 	const [charIdx, setCharIdx] = React.useState(0)
+
+	const [chars, setChars] = React.useState<Character[]>([])
 
 	// word being typed in the text area
 	const [word, setWord] = React.useState<string>("")
@@ -144,10 +131,15 @@ export const Typer = (props: Props) => {
 			setC("#d7d9ff")
 			return
 		}
+
+		// correct
 		if (subWord === subWord2) {
 			setC("#9be6ab")
+			setChars([...chars, "correct"])
 			return
 		} else {
+			// incorrect
+			setChars([...chars, "incorrect"])
 			setC("#f26262")
 		}
 	}
@@ -155,6 +147,14 @@ export const Typer = (props: Props) => {
 	// checks sub/partial word on word change
 	React.useEffect(() => {
 		checkSubWord()
+		console.log("log index", wordIdx)
+
+		if (wordIdx === props.words.length - 1) {
+			const newWords = genWords("words") || []
+			props.setWords([...props.words, ...newWords])
+		}
+
+		console.log("logger", props.words.length)
 	}, [word])
 
 	const handleKeyPress = (key: any) => {
@@ -225,10 +225,6 @@ export const Typer = (props: Props) => {
 		return wordIdx === currIdx
 	}
 
-	const onCurrChar = (currIdx: number) => {
-		return charIdx === currIdx
-	}
-
 	// useffect to handle scroll height of text display
 	React.useEffect(() => {
 		// if first word
@@ -274,9 +270,6 @@ export const Typer = (props: Props) => {
 											key={i}
 										>
 											{w.word.split("").map((l, idx) => {
-												const onChar = onCurrWord(i) && onCurrChar(idx)
-												const onEnd = onCurrWord(i + 1) && onCurrChar(idx + 1)
-
 												return (
 													<span key={l + idx}>
 														<span>{l}</span>
@@ -304,7 +297,7 @@ export const Typer = (props: Props) => {
 						<Button onClick={handleNotImplemented}>Settings</Button>
 					</>
 				) : (
-					<FinishCard wordCount={count} correctWords={correctWords} incorrectWords={incorrectWords} handleRestart={handleRestart} />
+					<FinishCard chars={chars} wordCount={count} correctWords={correctWords} incorrectWords={incorrectWords} handleRestart={handleRestart} />
 				)}
 			</Container>
 			{isOpen && <NotImplementedModal isOpen={isOpen} setIsOpen={setIsOpen} />}

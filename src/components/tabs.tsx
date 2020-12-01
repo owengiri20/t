@@ -44,20 +44,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 		// height: "100%",
 		display: "flex",
 	},
-	// modalBody: {
-	// 	background: "white",
-	// 	height: "50%",
-	// 	margin: "auto",
-	// 	width: "90%",
-	// 	display: "flex",
-	// 	border: "1px solid black",
-	// },
+
 	modalBodyInner: {
 		width: "100%",
 		height: "90%",
 		display: "flex",
 		margin: "15px",
-		// border: "1px solid black",
 	},
 	modeCard: {
 		height: "40%",
@@ -78,7 +70,7 @@ export const SimpleTabs = () => {
 
 	// Words Container
 	const { words, setWords } = WordsContainer.useContainer()
-	const { modesModalOpen, setModesModalOpen, setMode} = ModesContainer.useContainer()
+	const { modesModalOpen, setModesModalOpen, setMode } = ModesContainer.useContainer()
 
 	const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
 		setValue(newValue)

@@ -11,6 +11,7 @@ import avarage from "../icons/svg/026-smile.svg"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
 import ninja from "../icons/png/ninja.png"
+import { Character } from "./typer"
 // import tooGood from "../icons/svg/032-neutral.svg"
 
 interface Result {
@@ -51,7 +52,7 @@ export const getResult = (wpm: number): Result => {
 		graphic = ninja
 	}
 
-	if (wpm >= 110 && wpm < 130) {
+	if (wpm >= 110) {
 		rating = "too damn good"
 		stars = 5
 		graphic = ninja
@@ -73,6 +74,7 @@ interface FinishCardProps {
 	incorrectWords: number
 	handleRestart: () => void
 	wordCount: number
+	chars: Character[]
 }
 
 export const finishStyles = makeStyles({
@@ -112,10 +114,17 @@ export const finishStyles = makeStyles({
 })
 
 export const FinishCard = (props: FinishCardProps) => {
-	const { correctWords, incorrectWords, handleRestart, wordCount } = props
+	const { correctWords, incorrectWords, handleRestart, wordCount, chars } = props
 	const classes = finishStyles()
 
-	const calcWPM = () => (correctWords / 60) * 60
+	const calcWPM = () => {
+		const correctCharsTotal = chars.filter((c) => c === "correct").length
+		const incorrectCharsTotal = chars.filter((c) => c === "incorrect").length
+
+		const fuck = (correctCharsTotal - incorrectCharsTotal) / 5
+
+		return fuck
+	}
 
 	const calcAccuraccy = () => {
 		const output = (correctWords / wordCount) * 100
@@ -136,7 +145,7 @@ export const FinishCard = (props: FinishCardProps) => {
 				</Paper>
 
 				<Paper className={classes.card}>
-					<Typography variant="h6">WPM: {calcWPM()}</Typography>
+					<Typography variant="h6">WPM: {calcWPM().toFixed(2)}</Typography>
 				</Paper>
 				<Paper className={`${classes.card} ${classes.card}`}>
 					<Typography className={classes.statusText} variant="h6">
@@ -150,7 +159,6 @@ export const FinishCard = (props: FinishCardProps) => {
 					</Typography>
 				</Paper>
 			</Container>
-
 			<hr />
 
 			<Button variant="contained" color="primary" onClick={handleRestart}>

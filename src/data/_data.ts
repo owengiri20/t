@@ -45,12 +45,9 @@ export const genWords = (key: string): TestWord[] | null => {
 	const pickedTest = data[key]
 	if (!pickedTest) {
 		console.log("wtf man")
-		console.log("wtf man")
-		console.log("wtf man")
-		console.log("wtf man")
 		return null
 	}
-	const words: string[] = shuffle([...pickedTest.split("|"), ...pickedTest.split("|")])
+	const words: string[] = shuffle([...pickedTest.split("|")])
 
 	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
 	const testWords: TestWord[] = words.map((w, i) => {
@@ -61,5 +58,9 @@ export const genWords = (key: string): TestWord[] | null => {
 		return { word: w, status: "eh", cut: c }
 	})
 
-	return testWords
+	const shortened = testWords.slice(0, 5)
+
+	console.log("words length ------", shortened.length)
+
+	return shortened
 }
