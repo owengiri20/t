@@ -114,16 +114,22 @@ export const finishStyles = makeStyles({
 })
 
 export const FinishCard = (props: FinishCardProps) => {
-	const { correctWords, incorrectWords, handleRestart, wordCount, chars } = props
+	const { correctWords, handleRestart, wordCount, chars } = props
 	const classes = finishStyles()
 
 	const calcWPM = () => {
-		const correctCharsTotal = chars.filter((c) => c === "correct").length
 		const incorrectCharsTotal = chars.filter((c) => c === "incorrect").length
+		return (chars.length - incorrectCharsTotal) / 5
+	}
 
-		const fuck = (correctCharsTotal - incorrectCharsTotal) / 5
+	const calcCorrectIncorrect = () => {
+		const correctWords = Math.ceil(chars.filter((c) => c === "correct").length / 5)
+		const incorrectWords = Math.ceil(chars.filter((c) => c === "incorrect").length / 5)
 
-		return fuck
+		return {
+			correctWords,
+			incorrectWords,
+		}
 	}
 
 	const calcAccuraccy = () => {
@@ -147,15 +153,16 @@ export const FinishCard = (props: FinishCardProps) => {
 				<Paper className={classes.card}>
 					<Typography variant="h6">WPM: {calcWPM().toFixed(2)}</Typography>
 				</Paper>
+
 				<Paper className={`${classes.card} ${classes.card}`}>
 					<Typography className={classes.statusText} variant="h6">
-						Correct words: {correctWords}
+						Correct words: {calcCorrectIncorrect().correctWords}
 					</Typography>
 					<Typography className={classes.statusText} variant="h6">
 						|
 					</Typography>
 					<Typography className={classes.statusText} variant="h6">
-						Incorrect words: {incorrectWords}
+						Incorrect words: {calcCorrectIncorrect().incorrectWords}
 					</Typography>
 				</Paper>
 			</Container>

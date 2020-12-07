@@ -57,10 +57,6 @@ export const genWords = (key: string): TestWord[] | null => {
 		}
 		return { word: w, status: "eh", cut: c }
 	})
-
-	const shortened = testWords.slice(0, 5)
-
-	console.log("words length ------", shortened.length)
-
+	const shortened = testWords.slice(0, 50)
 	return shortened
 }

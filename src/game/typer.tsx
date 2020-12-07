@@ -149,7 +149,7 @@ export const Typer = (props: Props) => {
 		checkSubWord()
 		console.log("log index", wordIdx)
 
-		if (wordIdx === props.words.length - 1) {
+		if (wordIdx === props.words.length - 30) {
 			const newWords = genWords("words") || []
 			props.setWords([...props.words, ...newWords])
 		}
