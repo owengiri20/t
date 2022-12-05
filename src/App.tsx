@@ -4,7 +4,7 @@ import React from "react"
 import { Route, Switch } from "react-router-dom"
 import "./App.css"
 import { AppWrapper } from "./common/appWrapper"
-import { TyperWrapper as Typer } from "./game/typer"
+import { Game  } from "./game"
 
 const theme = createMuiTheme({
 	palette: {},
@@ -15,7 +15,7 @@ function App() {
 			<AppWrapper>
 				<Container maxWidth={"xl"} style={{ marginTop: "20px" }}>
 					<Switch>
-						<Route path="/" component={Typer} exact />
+						<Route path="/" component={Game} exact />
 					</Switch>
 				</Container>
 			</AppWrapper>

@@ -1,181 +1,287 @@
-import { Button, Container, makeStyles, Paper, Typography } from "@material-ui/core"
+import { Button, Container, Typography } from "@material-ui/core"
 import React from "react"
+import { FinishCard } from "./finish"
+import { useStyles } from "./style"
 
-// icons
-import StarRoundedIcon from "@material-ui/icons/StarRounded"
-import StarBorderRoundedIcon from "@material-ui/icons/StarBorderRounded"
+// disable scroll wheel
+window.addEventListener(
+	"wheel",
+	function (e) {
+		e.preventDefault()
+	},
+	{ passive: false },
+)
+const wordsJSON = require("./words.json")
 
-// images
-import meh from "../icons/svg/032-neutral.svg"
-import avarage from "../icons/svg/026-smile.svg"
-import good from "../icons/svg/002-grin.svg"
-import pro from "../icons/svg/014-sunglasses.svg"
-import ninja from "../icons/png/ninja.png"
-
-interface Result {
-	rating: RatingType
-	stars: number
-	graphic: string
+interface TestWord {
+	word: string
+	status: "correct" | "incorrect" | "eh"
+	cut: boolean
 }
-type RatingType = "meh" | "average" | "good" | "pro" | "ninja" | "too damn good"
-export const getResult = (wpm: number): Result => {
-	let stars = 0
-	let rating: RatingType = "meh"
-	let graphic = meh
+// id of text display
+const DISPLAY_ID = "textDisplay"
 
-	if (wpm < 30) {
-		rating = "meh"
-		stars = 1
-		graphic = meh
-	}
-	if (wpm >= 30 && wpm < 50) {
-		rating = "average"
-		stars = 3
-		graphic = avarage
-	}
-	if (wpm >= 50 && wpm < 70) {
-		rating = "good"
-		stars = 4
-		graphic = good
-	}
-	if (wpm >= 70 && wpm < 90) {
-		rating = "pro"
-		stars = 5
-		graphic = pro
+// creates an array of every "nth" number
+const everyNth = (arr: number[], nth: number) => arr.filter((_, i) => i % nth === nth - 1)
+
+const shuffle = (arr: string[]) => {
+	let currentIndex = arr.length,
+		temporaryValue,
+		randomIndex
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex)
+		currentIndex -= 1
+
+		// And swap it with the current element.
+		temporaryValue = arr[currentIndex]
+		arr[currentIndex] = arr[randomIndex]
+		arr[randomIndex] = temporaryValue
 	}
 
-	if (wpm >= 90 && wpm < 110) {
-		rating = "ninja"
-		stars = 5
-		graphic = ninja
-	}
-
-	if (wpm >= 110 && wpm < 130) {
-		rating = "too damn good"
-		stars = 5
-		graphic = ninja
-	}
-
-	return {
-		stars,
-		rating,
-		graphic,
-	}
+	return arr
 }
 
-const cap = (s: string) => {
-	return s.charAt(0).toUpperCase() + s.slice(1)
-}
+// generate list of words of json file
+const genWords = (): TestWord[] => {
+	const words: string[] = shuffle([...wordsJSON.split("|"), ...wordsJSON.split("|")])
 
-interface FinishCardProps {
-	correctWords: number
-	incorrectWords: number
-	handleRestart: () => void
-	wordCount: number
-}
+	console.log(words.length)
 
-export const finishStyles = makeStyles({
-	top: {
-		width: "50%",
-	},
-	bottom: {
-		display: "flex",
-		justifyContent: "center",
-	},
-	finishCard: {
-		maxWidth: "1000px",
-		margin: "auto",
-	},
-	statusText: {
-		display: "block",
-		marginLeft: "5px",
-	},
-	statusCard: {
-		display: "flex",
-	},
-	StarRatingBox: {
-		padding: "15px",
-		textAlign: "center",
-	},
-	card: {
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		margin: "10px",
-		padding: "10px",
-		transition: ".2s ease",
-	},
-	displayImage: {
-		height: "80px",
-	},
-})
-
-export const FinishCard = (props: FinishCardProps) => {
-	const { correctWords, incorrectWords, handleRestart, wordCount } = props
-	const classes = finishStyles()
-
-	const calcWPM = () => (correctWords / 60) * 60
-
-	const calcAccuraccy = () => {
-		const output = (correctWords / wordCount) * 100
-		if (isNaN(output)) {
-			return 0
+	const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
+	const testWords: TestWord[] = words.map((w, i) => {
+		let c = false
+		if (cutOffs.includes(i)) {
+			c = true
 		}
-		return output.toFixed(2)
+		return { word: w, status: "eh", cut: c }
+	})
+
+	return testWords
+}
+
+export const Typer = (props: Props) => {
+	const classes = useStyles()
+
+	const [count, setCount] = React.useState(0)
+
+	const [idx, setIdx] = React.useState(0)
+	const [charIdx, setCharIdx] = React.useState(0)
+
+	const [word, setWord] = React.useState<string>("")
+	const [finish, setFinish] = React.useState(false)
+	const [start, setStart] = React.useState(false)
+	const [seconds, setSeconds] = React.useState(60)
+
+	const [correctWords, setCorrectWords] = React.useState(0)
+	const [wrongWords, setWrongWords] = React.useState(0)
+
+	const [c, setC] = React.useState<string>("black")
+
+	React.useEffect(() => {
+		if (!start) return
+		if (seconds > 0) {
+			setTimeout(() => setSeconds(seconds - 1), 1000)
+		} else {
+			setFinish(true)
+		}
+	})
+
+	// sets words status "incorrect" or "correct"
+	const handleStatus = (correct: boolean) => {
+		if (correct) {
+			setCorrectWords(correctWords + 1)
+			props.setWords(
+				props.words.map((w, i) => {
+					if (i === idx) {
+						return {
+							...w,
+							status: "correct",
+						}
+					}
+					return w
+				}),
+			)
+		} else {
+			setWrongWords(wrongWords + 1)
+			props.setWords(
+				props.words.map((w, i) => {
+					if (i === idx) {
+						return {
+							...w,
+							status: "incorrect",
+						}
+					}
+					return w
+				}),
+			)
+		}
 	}
 
+	const handleRestart = () => {
+		window.location.reload()
+	}
+
+	const checkSubWord = () => {
+		const currWord = props.words[idx]
+		const subWord = currWord.word.substr(0, charIdx)
+		const subWord2 = word.substr(0, charIdx + 1)
+
+		if (word === "") {
+			setC("#d7d9ff")
+			return
+		}
+		if (subWord === subWord2) {
+			setC("#9be6ab")
+			return
+		} else {
+			setC("#f26262")
+		}
+	}
+
+	React.useEffect(() => {
+		checkSubWord()
+	}, [word])
+
+	const handleKeyPress = (key: any) => {
+		if (key.code === "Space" && word === "") {
+			return
+		}
+
+		const currWord = props.words[idx]
+
+		if (!start) {
+			setStart(true)
+		}
+		setCharIdx(charIdx + 1)
+
+		if (key.code === "Space") {
+			if (idx === props.words.length) {
+				return
+			}
+			if (word === "") return
+			setWord("")
+			setIdx(idx + 1)
+			setCharIdx(0)
+			if (currWord.word === word) {
+				handleStatus(true)
+			} else {
+				handleStatus(false)
+			}
+
+			setCount(count + 1)
+			return
+		}
+	}
+
+	const handleBackSpace = (key: any) => {
+		if (word.length === 0) return
+		if (key.code && key.code === "Backspace") {
+			if (charIdx === 0) return
+			setCharIdx(charIdx - 1)
+		}
+	}
+
+	const getColour = (status: "correct" | "incorrect" | "eh") => {
+		if (status === "correct") return "green"
+		if (status === "incorrect") return "red"
+		if (status === "eh") return "#373737"
+	}
+
+	const onCurrWord = (currIdx: number) => {
+		return idx === currIdx
+	}
+
+	// useffect to handle scroll height of text display
+	React.useEffect(() => {
+		// if first word
+		if (idx === 0) return
+
+		// get prevous word
+		const prevWord = props.words[idx - 1]
+
+		// get textDisplay div
+		let textDisplay = document.getElementById(DISPLAY_ID)
+
+		// handle scroll
+		if (textDisplay && prevWord.cut) {
+			textDisplay.scrollTop = props.scrollHeight
+			props.setScrollHeight(props.scrollHeight + 61)
+		}
+	}, [idx])
+
 	return (
-		<div className={classes.finishCard}>
-			<Container className={classes.top}>
-				<Paper>{<StarRating result={getResult(calcWPM())} />}</Paper>
-			</Container>
-			<Container className={classes.bottom}>
-				<Paper className={classes.card}>
-					<Typography variant="h6">Acurracy: {calcAccuraccy()}%</Typography>
-				</Paper>
+		<Container style={{}}>
+			{!finish ? (
+				<>
+					<div className={classes.timer}>
+						<Typography className={classes.timerText} variant="h3">
+							{seconds}
+						</Typography>
+					</div>
 
-				<Paper className={classes.card}>
-					<Typography variant="h6">WPM: {calcWPM()}</Typography>
-				</Paper>
-				<Paper className={`${classes.card} ${classes.card}`}>
-					<Typography className={classes.statusText} variant="h6">
-						Correct words: {correctWords}
-					</Typography>
-					<Typography className={classes.statusText} variant="h6">
-						|
-					</Typography>
-					<Typography className={classes.statusText} variant="h6">
-						Incorrect words: {incorrectWords}
-					</Typography>
-				</Paper>
-			</Container>
-
-			<hr />
-
-			<Button variant="contained" color="primary" onClick={handleRestart}>
-				Restart
-			</Button>
-		</div>
+					<div className={classes.typingArea} id={DISPLAY_ID}>
+						<Typography variant="subtitle1">
+							{props.words.map((w, i) => (
+								<React.Fragment key={i}>
+									<span
+										style={{
+											padding: "5px",
+											backgroundColor: onCurrWord(i) ? c : "",
+											color: getColour(w.status),
+											fontSize: "35px",
+											fontWeight: onCurrWord(i) ? "bold" : "unset",
+										}}
+										key={i}
+									>
+										{w.word.split("").map((l, idx) => {
+											return (
+												<span key={l + idx}>
+													<span>{l}</span>
+												</span>
+											)
+										})}
+									</span>
+									{w.cut && <br />}
+								</React.Fragment>
+							))}
+						</Typography>
+					</div>
+					<div className={classes.line}></div>
+					<textarea
+						className={classes.textAreaStyles}
+						autoFocus
+						onKeyPress={handleKeyPress}
+						onKeyDown={handleBackSpace}
+						value={word}
+						onChange={(e) => setWord(e.target.value.trim())}
+						placeholder={idx === 0 ? "Start Typing!" : ""}
+					></textarea>
+					<Button onClick={handleRestart}>Reset</Button>
+					<Button onClick={handleRestart}>Modes</Button>
+					<Button onClick={handleRestart}>Settings</Button>
+				</>
+			) : (
+				<FinishCard wordCount={count} correctWords={correctWords} incorrectWords={wrongWords} handleRestart={handleRestart} />
+			)}
+		</Container>
 	)
 }
 
-interface StarRatingProps {
-	result: Result
+interface Props {
+	words: TestWord[]
+	setWords: (t: TestWord[]) => void
+	theme: "dark" | "light"
+	setTheme: (s: "dark" | "light") => void
+	scrollHeight: number
+	setScrollHeight: (h: number) => void
 }
-export const StarRating = (props: StarRatingProps) => {
-	const { result } = props
-	const classes = finishStyles()
+export const Game = () => {
+	const [words, setWords] = React.useState(genWords())
+	const [scrollHeight, setScrollHeight] = React.useState(0)
+	const [theme, setTheme] = React.useState<"dark" | "light">("light")
 
-	return (
-		<div className={classes.StarRatingBox}>
-			<img src={result.graphic} alt="" className={classes.displayImage} />
-			<Typography variant={"h5"}>{cap(result.rating)}</Typography>
-			{Array.from(Array(5).keys()).map((s, i) => {
-				if (i < result.stars) {
-					return <StarRoundedIcon style={{ color: "#ffba08", fontSize: "50px" }} key={i} />
-				}
-				return <StarBorderRoundedIcon style={{ color: "#ffba08", fontSize: "50px" }} key={i} />
-			})}
-		</div>
-	)
+	return <Typer setTheme={setTheme} theme={theme} scrollHeight={scrollHeight} setScrollHeight={setScrollHeight} words={words} setWords={setWords} />
 }
