@@ -11,7 +11,6 @@ import avarage from "../icons/svg/026-smile.svg"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
 import ninja from "../icons/png/ninja.png"
-// import tooGood from "../icons/svg/032-neutral.svg"
 
 interface Result {
 	rating: RatingType

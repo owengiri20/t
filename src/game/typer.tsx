@@ -1,8 +1,6 @@
 import { Button, Container, Typography } from "@material-ui/core"
-import { DirectionsBike, Height } from "@material-ui/icons"
 import React from "react"
-import { useHistory } from "react-router-dom"
-import { FinishCard, getResult } from "./finish"
+import { FinishCard } from "."
 import { useStyles } from "./style"
 
 // disable scroll wheel
