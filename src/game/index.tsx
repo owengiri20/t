@@ -34,7 +34,7 @@ export const GameInner = (props: GameInnerProps) => {
     const [word, setWord] = React.useState<string>("")
     const [finish, setFinish] = React.useState(false)
     const [start, setStart] = React.useState(false)
-    const [seconds, setSeconds] = React.useState(60)
+    const [seconds, setSeconds] = React.useState(15)
 
     const [correctWords, setCorrectWords] = React.useState(0)
     const [wrongWords, setWrongWords] = React.useState(0)
@@ -148,7 +148,7 @@ export const GameInner = (props: GameInnerProps) => {
     const getColour = (status: "correct" | "incorrect" | "eh") => {
         if (status === "correct") return "green"
         if (status === "incorrect") return "red"
-        if (status === "eh") return "#373737"
+        if (status === "eh") return "#AA8270"
     }
 
     const onCurrWord = (currIdx: number) => {
@@ -174,7 +174,7 @@ export const GameInner = (props: GameInnerProps) => {
     }, [idx])
 
     return (
-        <Container>
+        <Container className={classes.CenterBox}>
             {!finish ? (
                 <>
                     <div className={classes.timer}>

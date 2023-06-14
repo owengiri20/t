@@ -1,33 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron&family=Roboto:wght@100&display=swap");
 * {
-	font-family: "Montserrat", sans-serif;
+    font-family: "Orbitron", sans-serif;
+}
+
+body {
+    background-color: #21190f;
+    /* background: linear-gradient(to bottom, #0d0a06, #21190f 98%); */
+    /* linear-gradient(to top, #192131, #39313A 80%) */
+    height: 100vh;
 }
 
 a {
-	text-decoration: none;
-	color: unset;
+    text-decoration: none;
+    color: unset;
 }
 
 #textDisplay::-webkit-scrollbar-track {
-	-webkit-box-shadow: transparent;
-	background-color: transparent;
+    -webkit-box-shadow: transparent;
+    background-color: transparent;
 }
 
 #textDisplay::-webkit-scrollbar {
-	width: 6px;
-	background-color: transparent;
+    width: 6px;
+    background-color: transparent;
 }
 
 #textDisplay::-webkit-scrollbar-thumb {
-	background-color: transparent;
-	color: #9be6ab;
+    background-color: transparent;
+    color: #9be6ab;
 }
 
 .blinkMe {
-	animation: blinker 1s linear infinite;
+    animation: blinker 1s linear infinite;
 }
 
 @keyframes blinker {
-	50% {
-		opacity: 0;
-	}
+    50% {
+        opacity: 0;
+    }
 }

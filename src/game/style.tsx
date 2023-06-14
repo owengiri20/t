@@ -1,45 +1,57 @@
 import { makeStyles } from "@material-ui/core"
 
 export const useStyles = makeStyles({
-	indicator: { height: "60px", width: "60px" },
-	typingArea: {
-		margin: "20px 0",
-		paddingBottom: "15px",
-		padding: "10px",
-		maxHeight: "250px",
-		overflowY: "auto",
-		fontSize: "20px",
-		textAlign: "center",
-	},
-	textAreaStyles: {
-		width: "100%",
-		fontSize: "30px",
-		padding: "10px",
-		textAlign: "center",
-		backgroundColor: "transparent",
-		border: "0 !important",
-		outline: "none",
-		resize: "none",
-	},
-	line: {
-		height: "2px",
-		width: "100%",
-		backgroundColor: "black",
-		marginBottom: "20px",
-	},
-	timer: {
-		display: "flex",
-		justifyContent: "center",
-	},
-	timerText: {
-		fontSize: "80px",
-		opacity: ".4",
-	},
-	finishCard: {
-		maxWidth: "500px",
-		margin: "auto",
-	},
-	StarRatingBox: {
-		textAlign: "center",
-	},
+    indicator: { height: "60px", width: "60px" },
+    typingArea: {
+        margin: "20px 0",
+        paddingBottom: "15px",
+        padding: "10px",
+        maxHeight: "250px",
+        overflowY: "auto",
+        fontSize: "20px",
+        textAlign: "center",
+    },
+    textAreaStyles: {
+        width: "100%",
+        fontSize: "30px",
+        padding: "10px",
+        textAlign: "center",
+        backgroundColor: "transparent",
+        border: "0 !important",
+        outline: "none",
+        resize: "none",
+        color: "#AA8270",
+    },
+    line: {
+        height: "2px",
+        width: "100%",
+        backgroundColor: "black",
+        marginBottom: "20px",
+    },
+    timer: {
+        display: "flex",
+        justifyContent: "center",
+    },
+    timerText: {
+        fontSize: "80px",
+        opacity: ".4",
+        color: "#AA8270",
+    },
+    finishCard: {
+        maxWidth: "500px",
+        margin: "auto",
+    },
+    StarRatingBox: {
+        textAlign: "center",
+    },
+    CenterBox: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    },
 })
+
+export const COLOURS = {
+    lightBrown: "#AA8270",
+}
