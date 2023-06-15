@@ -10,6 +10,8 @@ export const useStyles = makeStyles({
         overflowY: "auto",
         fontSize: "20px",
         textAlign: "center",
+        pointerEvents: "none",
+        userSelect: "none",
     },
     textAreaStyles: {
         width: "100%",
@@ -49,9 +51,11 @@ export const useStyles = makeStyles({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        height: "100%",
     },
 })
 
 export const COLOURS = {
     lightBrown: "#AA8270",
+    darkishBrown: "#21190f",
 }

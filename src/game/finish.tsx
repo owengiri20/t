@@ -1,4 +1,4 @@
-import { Button, Container, makeStyles, Paper, Typography } from "@material-ui/core"
+import { Box, Button, Container, makeStyles, Paper, Typography } from "@material-ui/core"
 import React from "react"
 
 // icons
@@ -11,6 +11,7 @@ import avarage from "../icons/svg/026-smile.svg"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
 import ninja from "../icons/png/ninja.png"
+import { COLOURS } from "./style"
 
 interface Result {
     rating: RatingType
@@ -70,22 +71,63 @@ const cap = (s: string) => {
 interface FinishCardProps {
     correctWords: number
     incorrectWords: number
+    correctCharsCount: number
     handleRestart: () => void
     wordCount: number
 }
 
 export const finishStyles = makeStyles({
-    top: {
+    finishCard: {
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+    },
+    box: {
         width: "50%",
+        background: "#21190f",
+        borderRadius: "20px",
+        margin: ".5rem",
+    },
+    wpm: {
+        width: "50%",
+        background: "#21190f",
+        borderRadius: "20px",
+        margin: ".5rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    wpmText: {
+        fontSize: "50px",
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+
+    correctIncorrectText: {
+        fontSize: "30px",
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    correctIncorrectTextBox: {
+        width: "50%",
+        background: "#21190f",
+        borderRadius: "20px",
+        margin: ".5rem",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        padding: "1rem",
     },
     bottom: {
         display: "flex",
         justifyContent: "center",
     },
-    finishCard: {
-        maxWidth: "1000px",
-        margin: "auto",
-    },
+
     statusText: {
         display: "block",
         marginLeft: "5px",
@@ -94,27 +136,38 @@ export const finishStyles = makeStyles({
         display: "flex",
     },
     StarRatingBox: {
+        display: "flex",
+        flexDirection: "column",
         padding: "15px",
-        textAlign: "center",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
     },
     card: {
         display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         margin: "10px",
         padding: "10px",
         transition: ".2s ease",
     },
     displayImage: {
         height: "80px",
+        marginBottom: "1rem",
     },
 })
 
+function calculateWPM(correctCharacters: number, timeInSeconds: number): number {
+    const totalWords = correctCharacters / 5 // Convert characters to words
+    const timeInMinutes = timeInSeconds / 60 // Convert time to minutes
+    const wpm = totalWords / timeInMinutes // Calculate words per minute
+
+    return Math.round(wpm)
+}
+
 export const FinishCard = (props: FinishCardProps) => {
-    const { correctWords, incorrectWords, handleRestart, wordCount } = props
+    const { correctWords, incorrectWords, handleRestart, wordCount, correctCharsCount } = props
     const classes = finishStyles()
 
-    const calcWPM = () => (correctWords / 60) * 60
+    // const calcWPM = () => (correctWords / 60) * 60
 
     const calcAccuraccy = () => {
         const output = (correctWords / wordCount) * 100
@@ -126,37 +179,50 @@ export const FinishCard = (props: FinishCardProps) => {
 
     return (
         <div className={classes.finishCard}>
-            <Container className={classes.top}>
-                <Paper>
-                    <StarRating result={getResult(calcWPM())} />
-                </Paper>
-            </Container>
-            <Container className={classes.bottom}>
-                {/* <Paper className={classes.card}>
-                    <Typography variant="h6">Acurracy: {calcAccuraccy()}%</Typography>
-                </Paper> */}
+            <Box
+                sx={{
+                    display: "flex",
+                    width: "100%",
+                    height: "100%",
+                }}
+            >
+                <Container className={classes.box}>
+                    <StarRating result={getResult(calculateWPM(correctCharsCount, 15))} />
+                </Container>
+                <Container className={classes.wpm}>
+                    <Box className={classes.wpmText}>WPM</Box>
+                    <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, 15)}</Box>
+                </Container>
+            </Box>
 
-                <Paper className={classes.card}>
-                    <Typography variant="h6">WPM: {calcWPM()}</Typography>
-                </Paper>
-                <Paper className={`${classes.card} ${classes.card}`}>
-                    <Typography className={classes.statusText} variant="h6">
-                        Correct words: {correctWords}
-                    </Typography>
-                    <Typography className={classes.statusText} variant="h6">
-                        |
-                    </Typography>
-                    <Typography className={classes.statusText} variant="h6">
-                        Incorrect words: {incorrectWords}
-                    </Typography>
-                </Paper>
-            </Container>
+            <Box
+                sx={{
+                    display: "flex",
+                    width: "100%",
+                    height: "100%",
+                }}
+            >
+                <Container className={classes.correctIncorrectTextBox} style={{ borderLeft: "15px solid green" }}>
+                    <Box className={classes.correctIncorrectText}>Correct</Box>
+                    <Box className={classes.correctIncorrectText}>{correctWords}</Box>
+                </Container>
+                <Container className={classes.correctIncorrectTextBox} style={{ borderLeft: "15px solid red" }}>
+                    <Box className={classes.correctIncorrectText}>Incorrect</Box>
+                    <Box className={classes.correctIncorrectText}>{incorrectWords}</Box>
+                </Container>
+            </Box>
 
-            <hr />
+            {/* <hr /> */}
 
-            <Button variant="contained" color="primary" onClick={handleRestart}>
-                Restart
-            </Button>
+            <Box style={{ marginBottom: "2rem", display: "flex", flexGrow: 1, justifyContent: "center", height: "8rem", width: "100%", marginTop: "2rem" }}>
+                <Button
+                    style={{ backgroundColor: COLOURS.darkishBrown, color: COLOURS.lightBrown, borderRadius: "10px", width: "30%" }}
+                    variant="contained"
+                    onClick={handleRestart}
+                >
+                    Play Again
+                </Button>
+            </Box>
         </div>
     )
 }
@@ -171,13 +237,16 @@ export const StarRating = (props: StarRatingProps) => {
     return (
         <div className={classes.StarRatingBox}>
             <img src={result.graphic} alt="" className={classes.displayImage} />
-            <Typography variant={"h5"}>{cap(result.rating)}</Typography>
-            {Array.from(Array(5).keys()).map((s, i) => {
-                if (i < result.stars) {
-                    return <StarRoundedIcon style={{ color: "#ffba08", fontSize: "50px" }} key={i} />
-                }
-                return <StarBorderRoundedIcon style={{ color: "#ffba08", fontSize: "50px" }} key={i} />
-            })}
+            <div></div>
+            {/* <Typography variant={"h5"}>{cap(result.rating)}</Typography> */}
+            <Box>
+                {Array.from(Array(5).keys()).map((s, i) => {
+                    if (i < result.stars) {
+                        return <StarRoundedIcon style={{ color: COLOURS.lightBrown, fontSize: "50px" }} key={i} />
+                    }
+                    return <StarBorderRoundedIcon style={{ color: COLOURS.lightBrown, fontSize: "50px" }} key={i} />
+                })}
+            </Box>
         </div>
     )
 }
