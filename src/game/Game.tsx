@@ -1,8 +1,9 @@
 import { Button, Container, Typography } from "@material-ui/core"
 import React from "react"
-import { FinishCard } from "./finish"
-import { useStyles } from "./style"
+import { FinishCard } from "./Finish"
+import { useStyles } from "./CommonStyles"
 import { genWords, Word } from "./utils/words"
+import { getDuration } from "../db"
 
 // disable scroll wheel
 window.addEventListener(
@@ -23,10 +24,8 @@ interface GameInnerProps {
     setScrollHeight: (h: number) => void
 }
 
-export const GameInner = (props: GameInnerProps) => {
+const GameInner = (props: GameInnerProps) => {
     const classes = useStyles()
-
-    const [count, setCount] = React.useState(0)
 
     const [idx, setIdx] = React.useState(0)
     const [charIdx, setCharIdx] = React.useState(0)
@@ -34,7 +33,7 @@ export const GameInner = (props: GameInnerProps) => {
     const [word, setWord] = React.useState<string>("")
     const [finish, setFinish] = React.useState(false)
     const [start, setStart] = React.useState(false)
-    const [seconds, setSeconds] = React.useState(15)
+    const [seconds, setSeconds] = React.useState(getDuration())
 
     const [correctWords, setCorrectWords] = React.useState(0)
     const [wrongWords, setWrongWords] = React.useState(0)
@@ -155,7 +154,6 @@ export const GameInner = (props: GameInnerProps) => {
                 handleStatus(false)
             }
 
-            setCount(count + 1)
             return
         }
     }
@@ -245,13 +243,7 @@ export const GameInner = (props: GameInnerProps) => {
                     />
                 </>
             ) : (
-                <FinishCard
-                    wordCount={count}
-                    correctWords={correctWords}
-                    incorrectWords={wrongWords}
-                    handleRestart={handleRestart}
-                    correctCharsCount={correctChars}
-                />
+                <FinishCard correctWords={correctWords} incorrectWords={wrongWords} handleRestart={handleRestart} correctCharsCount={correctChars} />
             )}
         </Container>
     )

@@ -6,7 +6,7 @@ import "./App.css"
 import Logo from "./assets/logo.png"
 import { AppWrapper } from "./common/appWrapper"
 import { GameScreen } from "./screens/GameScreen"
-import { COLOURS } from "./game/style"
+import { COLOURS } from "./game/CommonStyles"
 
 function App() {
     return (
@@ -19,7 +19,7 @@ function App() {
                         padding: "1rem",
                         alignItems: "center",
                         borderRadius: "30px",
-                        background: "#0A0603",
+                        background: COLOURS.darkBrown,
                         color: COLOURS.lightBrown,
                         width: "fit-content",
                     }}

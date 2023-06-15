@@ -11,7 +11,8 @@ import avarage from "../icons/svg/026-smile.svg"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
 import ninja from "../icons/png/ninja.png"
-import { COLOURS } from "./style"
+import { COLOURS } from "./CommonStyles"
+import { getDuration } from "../db"
 
 interface Result {
     rating: RatingType
@@ -64,16 +65,11 @@ export const getResult = (wpm: number): Result => {
     }
 }
 
-const cap = (s: string) => {
-    return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
 interface FinishCardProps {
     correctWords: number
     incorrectWords: number
     correctCharsCount: number
     handleRestart: () => void
-    wordCount: number
 }
 
 export const finishStyles = makeStyles({
@@ -155,7 +151,7 @@ export const finishStyles = makeStyles({
     },
 })
 
-function calculateWPM(correctCharacters: number, timeInSeconds: number): number {
+const calculateWPM = (correctCharacters: number, timeInSeconds: number): number => {
     const totalWords = correctCharacters / 5 // Convert characters to words
     const timeInMinutes = timeInSeconds / 60 // Convert time to minutes
     const wpm = totalWords / timeInMinutes // Calculate words per minute
@@ -164,19 +160,8 @@ function calculateWPM(correctCharacters: number, timeInSeconds: number): number 
 }
 
 export const FinishCard = (props: FinishCardProps) => {
-    const { correctWords, incorrectWords, handleRestart, wordCount, correctCharsCount } = props
+    const { correctWords, incorrectWords, handleRestart, correctCharsCount } = props
     const classes = finishStyles()
-
-    // const calcWPM = () => (correctWords / 60) * 60
-
-    const calcAccuraccy = () => {
-        const output = (correctWords / wordCount) * 100
-        if (isNaN(output)) {
-            return 0
-        }
-        return output.toFixed(2)
-    }
-
     return (
         <div className={classes.finishCard}>
             <Box
@@ -187,11 +172,11 @@ export const FinishCard = (props: FinishCardProps) => {
                 }}
             >
                 <Container className={classes.box}>
-                    <StarRating result={getResult(calculateWPM(correctCharsCount, 15))} />
+                    <StarRating result={getResult(calculateWPM(correctCharsCount, getDuration()))} />
                 </Container>
                 <Container className={classes.wpm}>
                     <Box className={classes.wpmText}>WPM</Box>
-                    <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, 15)}</Box>
+                    <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, getDuration())}</Box>
                 </Container>
             </Box>
 
@@ -211,8 +196,6 @@ export const FinishCard = (props: FinishCardProps) => {
                     <Box className={classes.correctIncorrectText}>{incorrectWords}</Box>
                 </Container>
             </Box>
-
-            {/* <hr /> */}
 
             <Box style={{ marginBottom: "2rem", display: "flex", flexGrow: 1, justifyContent: "center", height: "8rem", width: "100%", marginTop: "2rem" }}>
                 <Button
@@ -237,8 +220,7 @@ export const StarRating = (props: StarRatingProps) => {
     return (
         <div className={classes.StarRatingBox}>
             <img src={result.graphic} alt="" className={classes.displayImage} />
-            <div></div>
-            {/* <Typography variant={"h5"}>{cap(result.rating)}</Typography> */}
+            <div />
             <Box>
                 {Array.from(Array(5).keys()).map((s, i) => {
                     if (i < result.stars) {

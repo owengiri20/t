@@ -1,10 +1,10 @@
 import { Box } from "@material-ui/core"
 import React, { useState } from "react"
-import { Game } from "../game"
+import { Game } from "../game/Game"
 import SettingsIcon from "@mui/icons-material/Settings"
 import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from "@mui/icons-material/Refresh"
-import { COLOURS } from "../game/style"
+import { COLOURS } from "../game/CommonStyles"
 import { MenuModal } from "./MenuModal"
 
 export const GameScreen = () => {

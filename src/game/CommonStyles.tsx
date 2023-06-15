@@ -58,4 +58,5 @@ export const useStyles = makeStyles({
 export const COLOURS = {
     lightBrown: "#AA8270",
     darkishBrown: "#21190f",
+    darkBrown: "#0A0603",
 }
