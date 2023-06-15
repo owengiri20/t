@@ -194,6 +194,26 @@ const GameInner = (props: GameInnerProps) => {
         }
     }, [idx])
 
+    React.useEffect(() => {
+        console.log("in")
+
+        const handleStorageChange = (e: any) => {
+            console.log("hello")
+
+            if (e.key === "duration") {
+                console.log("change")
+                setSeconds(parseInt(e.newValue, 10))
+            }
+        }
+
+        window.addEventListener("storage", handleStorageChange)
+
+        // Cleanup function to remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener("storage", handleStorageChange)
+        }
+    }, [])
+
     return (
         <Container className={classes.CenterBox}>
             {!finish ? (
