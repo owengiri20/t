@@ -1,4 +1,4 @@
-import { Box, Button, Container, makeStyles } from "@material-ui/core"
+import { Box, Button, Container, Tooltip, makeStyles } from "@material-ui/core"
 import React from "react"
 
 // icons
@@ -164,8 +164,11 @@ export const FinishCard = (props: FinishCardProps) => {
                     <StarRating result={getResult(calculateWPM(correctCharsCount, useGetDuration()))} />
                 </Container>
                 <Container className={classes.wpm}>
-                    <Box className={classes.wpmText}>WPM</Box>
+                    <Tooltip placement="top" title={"WPM (Words Per Minute) = (Correct Characters / 5) / (Time in Seconds / 60)"}>
+                        <Box className={classes.wpmText}>WPM</Box>
+                    </Tooltip>
                     <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration())}</Box>
+                    {/* <Box style={{ color: "white" }}>Calculation = (Correct Characters / 5) / Duration</Box> */}
                 </Container>
             </Box>
             <Box sx={{ display: "flex", height: "40%" }}>
