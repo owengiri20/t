@@ -12,7 +12,7 @@ import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
 import ninja from "../icons/png/ninja.png"
 import { COLOURS } from "./CommonStyles"
-import { getDuration } from "../db"
+import { useGetDuration } from "../db"
 
 interface Result {
     rating: RatingType
@@ -172,11 +172,11 @@ export const FinishCard = (props: FinishCardProps) => {
                 }}
             >
                 <Container className={classes.box}>
-                    <StarRating result={getResult(calculateWPM(correctCharsCount, getDuration()))} />
+                    <StarRating result={getResult(calculateWPM(correctCharsCount, useGetDuration()))} />
                 </Container>
                 <Container className={classes.wpm}>
                     <Box className={classes.wpmText}>WPM</Box>
-                    <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, getDuration())}</Box>
+                    <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration())}</Box>
                 </Container>
             </Box>
 

@@ -3,7 +3,9 @@ import React from "react"
 import { FinishCard } from "./Finish"
 import { useStyles } from "./CommonStyles"
 import { genWords, Word } from "./utils/words"
-import { getDuration } from "../db"
+// import { getDuration } from "../db"
+import { useReadLocalStorage } from "usehooks-ts"
+import { useGetDuration } from "../db"
 
 // disable scroll wheel
 window.addEventListener(
@@ -33,7 +35,12 @@ const GameInner = (props: GameInnerProps) => {
     const [word, setWord] = React.useState<string>("")
     const [finish, setFinish] = React.useState(false)
     const [start, setStart] = React.useState(false)
-    const [seconds, setSeconds] = React.useState(getDuration())
+
+    const duration = useGetDuration()
+    const [seconds, setSeconds] = React.useState(duration)
+    React.useEffect(() => {
+        setSeconds(duration)
+    }, [duration])
 
     const [correctWords, setCorrectWords] = React.useState(0)
     const [wrongWords, setWrongWords] = React.useState(0)
@@ -87,33 +94,21 @@ const GameInner = (props: GameInnerProps) => {
     }
     // This function is used to compare a typed string against a target word.
     const checkSubWord = () => {
-        // This line grabs the current target word from an array of words passed into the parent component.
         const currWord = props.words[idx]
 
-        // This line creates a substring of the target word up to the current character index the user is supposed to type.
         const subWord = currWord.word.substring(0, charIdx)
 
-        // This line creates a substring of what the user has actually typed so far, up to one character beyond the current character index.
         const subWord2 = word.substring(0, charIdx + 1)
 
-        // If the user has not typed anything (i.e., if their input is an empty string)...
         if (word === "") {
-            // Set a color value to a light blue color (likely used elsewhere to give visual feedback).
             setC("#000")
-            // Stop executing the function here.
             return
         }
 
-        // If the substring of the target word matches the substring of what the user has typed...
         if (subWord === subWord2) {
-            // Set the color value to a light green (likely to indicate the user is typing correctly).
             setC("#1d331f")
-            // Stop executing the function here.
             return
-        }
-        // If none of the above conditions were met (i.e., the user has typed something but it does not match the target word)...
-        else {
-            // Set the color value to light red (likely to indicate the user has made a typo).
+        } else {
             setC("#470c0a")
         }
     }
@@ -195,11 +190,7 @@ const GameInner = (props: GameInnerProps) => {
     }, [idx])
 
     React.useEffect(() => {
-        console.log("in")
-
         const handleStorageChange = (e: any) => {
-            console.log("hello")
-
             if (e.key === "duration") {
                 console.log("change")
                 setSeconds(parseInt(e.newValue, 10))

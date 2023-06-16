@@ -1,7 +1,7 @@
 import { Box, Button, Modal, Typography } from "@material-ui/core"
 import React, { useState } from "react"
 import { COLOURS } from "../game/CommonStyles"
-import { Settings, getDuration, getSettings, handleSaveSettings } from "../db"
+import { Settings, useGetDuration, getSettings, handleSaveSettings } from "../db"
 
 interface MenuModalProps {
     isOpen: boolean
@@ -11,8 +11,10 @@ interface MenuModalProps {
 export const MenuModal = (props: MenuModalProps) => {
     const { isOpen, setIsOpen } = props
 
+    const duration = useGetDuration()
+
     // settings
-    const [selectedDuration, setSelectedDuration] = useState(getDuration())
+    const [selectedDuration, setSelectedDuration] = useState(duration)
 
     // const [settings, setSettings] = useState<Settings>(getSettings())
 
@@ -68,8 +70,9 @@ export const MenuModal = (props: MenuModalProps) => {
                 <Box
                     style={{
                         position: "absolute",
-                        bottom: "1rem",
-                        width: "80%",
+                        bottom: "1.5rem",
+                        display: "flex",
+                        right: "2rem",
                     }}
                 >
                     <Button
@@ -78,6 +81,7 @@ export const MenuModal = (props: MenuModalProps) => {
                             color: COLOURS.lightBrown,
                             borderRadius: "10px",
                             width: "50%",
+                            marginRight: ".7rem",
                         }}
                         variant="contained"
                         onClick={onSave}
