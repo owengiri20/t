@@ -84,7 +84,7 @@ export const saveTest = (test: Test) => {
 
 export const getTests = () => {
     const currentTests = JSON.parse(localStorage.getItem("tests") || "[]")
-    return (currentTests as Test[]).slice(0, 3)
+    return (currentTests as Test[]).sort((a, b) => new Date(b.currentTime).getTime() - new Date(a.currentTime).getTime()).slice(0, 3)
 }
 
 export const calculateWPM = (correctCharacters: number, timeInSeconds: number): number => {
