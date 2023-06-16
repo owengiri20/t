@@ -1,5 +1,3 @@
-// import { useLocalStorage, useReadLocalStorage } from "usehooks-ts"
-
 import { useReadLocalStorage } from "usehooks-ts"
 
 const isWholeNumber = (s: string): boolean => {
@@ -70,7 +68,7 @@ interface Test {
     currentTime: Date
 }
 
-// socores
+// Tests
 export const saveTest = (test: Test) => {
     // check if "tests exist in localstorage"
     if (!localStorage.getItem("tests")) {
@@ -79,17 +77,8 @@ export const saveTest = (test: Test) => {
         return
     }
 
-    // if localstorage "tests" exists
-    // get exitsting tests from localstorage, append new one, save
-
     const currentTests = JSON.parse(localStorage.getItem("tests") || "")
-
-    console.log("here this is current tests", currentTests)
-
     const updatedTests = [...currentTests, test]
-    //
-    console.log("this is updated tests", JSON.stringify(updatedTests))
-
     localStorage.setItem("tests", JSON.stringify(updatedTests))
 }
 
