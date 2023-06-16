@@ -216,7 +216,7 @@ export const FinishCard = (props: FinishCardProps) => {
                 <Button
                     style={{
                         backgroundColor: COLOURS.darkishBrown,
-                        color: COLOURS.lightBrown,
+                        color: "white",
                         borderRadius: "10px",
                         width: "30%",
                         height: "fit-content",
