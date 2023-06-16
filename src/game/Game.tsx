@@ -1,11 +1,9 @@
-import { Button, Container, Typography } from "@material-ui/core"
+import { Container, Typography } from "@material-ui/core"
 import React from "react"
-import { FinishCard } from "./Finish"
 import { useStyles } from "./CommonStyles"
-import { genWords, Word } from "./utils/words"
-// import { getDuration } from "../db"
-import { useReadLocalStorage } from "usehooks-ts"
-import { useGetDuration } from "../db"
+import { FinishCard } from "./Finish"
+import { Word, genWords } from "./utils/words"
+import { calculateWPM, saveTest, useGetDuration } from "../db"
 
 // disable scroll wheel
 window.addEventListener(
@@ -55,6 +53,18 @@ const GameInner = (props: GameInnerProps) => {
             setTimeout(() => setSeconds(seconds - 1), 1000)
         } else {
             setFinish(true)
+
+            if (finish) return
+            // build test
+            const test = {
+                duration: duration,
+                correctWords: correctWords,
+                incorrectWords: wrongWords,
+                wpm: calculateWPM(correctChars, duration),
+                currentTime: new Date(),
+            }
+
+            saveTest(test)
         }
     })
 
@@ -188,22 +198,6 @@ const GameInner = (props: GameInnerProps) => {
             props.setScrollHeight(props.scrollHeight + 61)
         }
     }, [idx])
-
-    React.useEffect(() => {
-        const handleStorageChange = (e: any) => {
-            if (e.key === "duration") {
-                console.log("change")
-                setSeconds(parseInt(e.newValue, 10))
-            }
-        }
-
-        window.addEventListener("storage", handleStorageChange)
-
-        // Cleanup function to remove the event listener when the component unmounts
-        return () => {
-            window.removeEventListener("storage", handleStorageChange)
-        }
-    }, [])
 
     return (
         <Container className={classes.CenterBox}>

@@ -19,3 +19,14 @@ localstorage to store
 -   player settings
     -   time
     -   hide clock
+
+{
+tests : [
+{
+wpm: 63,
+duration: 60,
+correct words: 44,
+incorrect words : 33
+},
+]
+}

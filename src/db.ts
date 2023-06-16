@@ -61,3 +61,47 @@ export const useGetDuration = () => {
 
     return duration
 }
+
+interface Test {
+    duration: number
+    correctWords: number
+    incorrectWords: number
+    wpm: number
+    currentTime: Date
+}
+
+// socores
+export const saveTest = (test: Test) => {
+    // check if "tests exist in localstorage"
+    if (!localStorage.getItem("tests")) {
+        // insert a new test key in localstorage with new test
+        localStorage.setItem("tests", JSON.stringify([test]))
+        return
+    }
+
+    // if localstorage "tests" exists
+    // get exitsting tests from localstorage, append new one, save
+
+    const currentTests = JSON.parse(localStorage.getItem("tests") || "")
+
+    console.log("here this is current tests", currentTests)
+
+    const updatedTests = [...currentTests, test]
+    //
+    console.log("this is updated tests", JSON.stringify(updatedTests))
+
+    localStorage.setItem("tests", JSON.stringify(updatedTests))
+}
+
+export const getTests = () => {
+    const currentTests = JSON.parse(localStorage.getItem("tests") || "[]")
+    return (currentTests as Test[]).slice(0, 3)
+}
+
+export const calculateWPM = (correctCharacters: number, timeInSeconds: number): number => {
+    const totalWords = correctCharacters / 5 // Convert characters to words
+    const timeInMinutes = timeInSeconds / 60 // Convert time to minutes
+    const wpm = totalWords / timeInMinutes // Calculate words per minute
+
+    return Math.round(wpm)
+}

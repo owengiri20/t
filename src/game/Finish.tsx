@@ -1,18 +1,19 @@
-import { Box, Button, Container, makeStyles, Paper, Typography } from "@material-ui/core"
+import { Box, Button, Container, makeStyles } from "@material-ui/core"
 import React from "react"
 
 // icons
-import StarRoundedIcon from "@material-ui/icons/StarRounded"
 import StarBorderRoundedIcon from "@material-ui/icons/StarBorderRounded"
+import StarRoundedIcon from "@material-ui/icons/StarRounded"
 
 // images
-import meh from "../icons/svg/032-neutral.svg"
-import avarage from "../icons/svg/026-smile.svg"
+import { calculateWPM, useGetDuration } from "../db"
+import ninja from "../icons/png/ninja.png"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
-import ninja from "../icons/png/ninja.png"
+import avarage from "../icons/svg/026-smile.svg"
+import meh from "../icons/svg/032-neutral.svg"
 import { COLOURS } from "./CommonStyles"
-import { useGetDuration } from "../db"
+import BasicTable from "./TestsTable"
 
 interface Result {
     rating: RatingType
@@ -46,14 +47,8 @@ export const getResult = (wpm: number): Result => {
         graphic = pro
     }
 
-    if (wpm >= 90 && wpm < 110) {
+    if (wpm >= 90) {
         rating = "ninja"
-        stars = 5
-        graphic = ninja
-    }
-
-    if (wpm >= 110 && wpm < 130) {
-        rating = "too damn good"
         stars = 5
         graphic = ninja
     }
@@ -103,13 +98,12 @@ export const finishStyles = makeStyles({
     },
 
     correctIncorrectText: {
-        fontSize: "30px",
+        fontSize: "20px",
         color: "white",
         fontWeight: "bold",
         textAlign: "center",
     },
     correctIncorrectTextBox: {
-        width: "50%",
         background: "#21190f",
         borderRadius: "20px",
         margin: ".5rem",
@@ -118,6 +112,8 @@ export const finishStyles = makeStyles({
         justifyContent: "center",
         alignItems: "center",
         padding: "1rem",
+        marginRight: "1rem",
+        height: "100%",
     },
     bottom: {
         display: "flex",
@@ -151,24 +147,17 @@ export const finishStyles = makeStyles({
     },
 })
 
-const calculateWPM = (correctCharacters: number, timeInSeconds: number): number => {
-    const totalWords = correctCharacters / 5 // Convert characters to words
-    const timeInMinutes = timeInSeconds / 60 // Convert time to minutes
-    const wpm = totalWords / timeInMinutes // Calculate words per minute
-
-    return Math.round(wpm)
-}
-
 export const FinishCard = (props: FinishCardProps) => {
     const { correctWords, incorrectWords, handleRestart, correctCharsCount } = props
     const classes = finishStyles()
+
     return (
         <div className={classes.finishCard}>
             <Box
                 sx={{
                     display: "flex",
                     width: "100%",
-                    height: "100%",
+                    height: "40%",
                 }}
             >
                 <Container className={classes.box}>
@@ -179,27 +168,57 @@ export const FinishCard = (props: FinishCardProps) => {
                     <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration())}</Box>
                 </Container>
             </Box>
+            <Box sx={{ display: "flex", height: "40%" }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        height: "100%",
+                        width: "100%",
+                        flexDirection: "column",
+                        marginRight: "1rem",
+                    }}
+                >
+                    <Container className={classes.correctIncorrectTextBox} style={{ borderLeft: "10px solid green" }}>
+                        <Box className={classes.correctIncorrectText}>Correct: {correctWords}</Box>
+                    </Container>
+                    <Container className={classes.correctIncorrectTextBox} style={{ borderLeft: "10px solid red" }}>
+                        <Box className={classes.correctIncorrectText}>Incorrect: {incorrectWords}</Box>
+                    </Container>
+                </Box>
 
-            <Box
-                sx={{
-                    display: "flex",
-                    width: "100%",
-                    height: "100%",
-                }}
-            >
-                <Container className={classes.correctIncorrectTextBox} style={{ borderLeft: "15px solid green" }}>
-                    <Box className={classes.correctIncorrectText}>Correct</Box>
-                    <Box className={classes.correctIncorrectText}>{correctWords}</Box>
-                </Container>
-                <Container className={classes.correctIncorrectTextBox} style={{ borderLeft: "15px solid red" }}>
-                    <Box className={classes.correctIncorrectText}>Incorrect</Box>
-                    <Box className={classes.correctIncorrectText}>{incorrectWords}</Box>
-                </Container>
+                <Box
+                    sx={{
+                        display: "flex",
+                        width: "100%",
+                        height: "100%",
+                    }}
+                >
+                    <Container
+                        id="hello"
+                        style={{
+                            padding: 0,
+                            margin: ".5rem",
+                            borderRadius: "10px",
+                            backgroundColor: COLOURS.darkishBrown,
+                        }}
+                    >
+                        <Box>
+                            <BasicTable />
+                        </Box>
+                    </Container>
+                </Box>
             </Box>
 
             <Box style={{ marginBottom: "2rem", display: "flex", flexGrow: 1, justifyContent: "center", height: "8rem", width: "100%", marginTop: "2rem" }}>
                 <Button
-                    style={{ backgroundColor: COLOURS.darkishBrown, color: COLOURS.lightBrown, borderRadius: "10px", width: "30%" }}
+                    style={{
+                        backgroundColor: COLOURS.darkishBrown,
+                        color: COLOURS.lightBrown,
+                        borderRadius: "10px",
+                        width: "30%",
+                        height: "fit-content",
+                        padding: "1rem",
+                    }}
                     variant="contained"
                     onClick={handleRestart}
                 >
