@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import { getTests } from "../db"
-import { Box } from "@material-ui/core"
+import { Box, Tooltip } from "@material-ui/core"
 import { COLOURS } from "./CommonStyles"
 
 export default function TestsTable() {
@@ -18,9 +18,22 @@ export default function TestsTable() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>WPM</TableCell>
-                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>Duration</TableCell>
-                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>C/I</TableCell>
+                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Words Per Minute">
+                                <Box>WPM</Box>
+                            </Tooltip>
+                        </TableCell>
+
+                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Duration in seconds">
+                                <Box>Duration</Box>
+                            </Tooltip>
+                        </TableCell>
+                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Correct/Incorrect Words">
+                                <Box>C/I</Box>
+                            </Tooltip>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -29,7 +42,7 @@ export default function TestsTable() {
                             <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                 {row.wpm}
                             </TableCell>
-                            <TableCell style={{ fontSize: "16px", color: "white" }}>{row.duration}</TableCell>
+                            <TableCell style={{ fontSize: "16px", color: "white" }}>{row.duration} secs</TableCell>
                             <TableCell style={{ fontSize: "16px", color: "white" }}>
                                 {row.correctWords}/{row.incorrectWords}
                             </TableCell>
@@ -37,7 +50,7 @@ export default function TestsTable() {
                     ))}
                 </TableBody>
             </Table>
-            <Box style={{ color: "white", width: "90%", display: "flex", justifyContent: "center", alignItems: "center" }}>recent tests stats</Box>
+            <Box style={{ color: "white", width: "90%", display: "flex", justifyContent: "center", alignItems: "center" }}>Last 3 tests</Box>
         </TableContainer>
     )
 }
