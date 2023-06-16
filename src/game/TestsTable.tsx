@@ -50,7 +50,9 @@ export default function TestsTable() {
                     ))}
                 </TableBody>
             </Table>
-            <Box style={{ color: "white", width: "90%", display: "flex", justifyContent: "center", alignItems: "center" }}>Last 3 tests</Box>
+            {rows.length >= 3 && (
+                <Box style={{ color: "white", width: "90%", display: "flex", justifyContent: "center", alignItems: "center" }}>Last 3 tests</Box>
+            )}
         </TableContainer>
     )
 }
