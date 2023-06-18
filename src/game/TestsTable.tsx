@@ -1,14 +1,12 @@
-import * as React from "react"
+import { Box, Tooltip } from "@material-ui/core"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
 import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
-import Paper from "@mui/material/Paper"
+import * as React from "react"
 import { getTests } from "../db"
-import { Box, Tooltip } from "@material-ui/core"
-import { COLOURS } from "./CommonStyles"
 
 export default function TestsTable() {
     const rows = getTests()
@@ -50,9 +48,7 @@ export default function TestsTable() {
                     ))}
                 </TableBody>
             </Table>
-            {rows.length >= 3 && (
-                <Box style={{ color: "white", width: "90%", display: "flex", justifyContent: "center", alignItems: "center" }}>Last 3 tests</Box>
-            )}
+            <Box style={{ color: "white", width: "90%", display: "flex", justifyContent: "center", alignItems: "center" }}>Recent Tests</Box>
         </TableContainer>
     )
 }

@@ -11,26 +11,45 @@ import { COLOURS } from "./game/CommonStyles"
 function App() {
     return (
         <AppWrapper>
-            <Container maxWidth={"xl"} style={{ maxWidth: "1200px", transform: "scale(.8)" }}>
+            <>
+                <Box style={{ position: "absolute", top: 0, right: "0", margin: "0", padding: "1rem", background: COLOURS.lightBrown }}>In Development</Box>
+                <Container maxWidth={"xl"} style={{ maxWidth: "1200px", transform: "scale(.84)" }}>
+                    <Box
+                        style={{
+                            marginTop: "2rem",
+                            display: "flex",
+                            padding: "1rem",
+                            alignItems: "center",
+                            borderRadius: "30px",
+                            background: COLOURS.darkBrown,
+                            color: COLOURS.lightBrown,
+                            width: "fit-content",
+                        }}
+                    >
+                        <img src={Logo} alt="TrekTyper Logo" height={"80px"} />
+                        <Box sx={{ fontSize: "30px" }}>TrekTyper</Box>
+                    </Box>
+                    <Switch>
+                        <Route path="/" component={GameScreen} exact />
+                    </Switch>
+                </Container>
                 <Box
                     style={{
-                        marginTop: "2rem",
+                        position: "absolute",
+                        bottom: "0",
+                        width: "99%",
                         display: "flex",
-                        padding: "1rem",
-                        alignItems: "center",
-                        borderRadius: "30px",
-                        background: COLOURS.darkBrown,
-                        color: COLOURS.lightBrown,
-                        width: "fit-content",
+                        justifyContent: "center",
+                        paddingBottom: "1rem",
                     }}
                 >
-                    <img src={Logo} alt="TrekTyper Logo" height={"80px"} />
-                    <Box sx={{ fontSize: "30px" }}>TrekTyper</Box>
+                    <Box style={{ color: COLOURS.lightBrown, cursor: "pointer" }}>
+                        <a href="https://owengiri.dev/" target="_blank">
+                            © 2023 Owen Giri
+                        </a>
+                    </Box>
                 </Box>
-                <Switch>
-                    <Route path="/" component={GameScreen} exact />
-                </Switch>
-            </Container>
+            </>
         </AppWrapper>
     )
 }
