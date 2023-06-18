@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core"
+import { Box, useMediaQuery } from "@material-ui/core"
 import Container from "@material-ui/core/Container"
 import React from "react"
 import { Route, Switch } from "react-router-dom"
@@ -9,14 +9,21 @@ import { GameScreen } from "./screens/GameScreen"
 import { COLOURS } from "./game/CommonStyles"
 
 function App() {
+    const under1100Height = useMediaQuery("(max-height:1100px)")
+    console.log(under1100Height)
+
     return (
         <AppWrapper>
             <>
-                <Box style={{ position: "absolute", top: 0, right: "0", margin: "0", padding: "1rem", background: COLOURS.lightBrown }}>In Development</Box>
-                <Container maxWidth={"xl"} style={{ maxWidth: "1200px", transform: "scale(.84)" }}>
+                <Box style={{ position: "absolute", top: 0, right: "0", margin: "0", padding: "1rem", background: COLOURS.lightBrown }}>
+                    <a href="https://github.com/owengiri20/tt" target="_blank">
+                        {"<In Development/>"}
+                    </a>
+                </Box>
+                <Container maxWidth={"xl"} style={{ maxWidth: "1200px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
                     <Box
                         style={{
-                            marginTop: "2rem",
+                            marginTop: under1100Height ? "0" : "2rem",
                             display: "flex",
                             padding: "1rem",
                             alignItems: "center",
