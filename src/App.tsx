@@ -61,7 +61,7 @@ function App() {
                             }}
                         >
                             <AccountCircleIcon
-                                // onClick={() => setOptionsMenuOpen(true)}
+                                onClick={() => window.alert("coming soon!")}
                                 style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }}
                             />
                             <Box sx={{ fontSize: "20px" }}>Sign in</Box>
