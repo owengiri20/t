@@ -48,6 +48,7 @@ function App() {
                         </Box>
 
                         <Box
+                            onClick={() => window.alert("coming soon!")}
                             style={{
                                 marginTop: under1100Height ? "0" : "2rem",
                                 display: "flex",
@@ -60,10 +61,7 @@ function App() {
                                 cursor: "pointer",
                             }}
                         >
-                            <AccountCircleIcon
-                                onClick={() => window.alert("coming soon!")}
-                                style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }}
-                            />
+                            <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }} />
                             <Box sx={{ fontSize: "20px" }}>Sign in</Box>
                         </Box>
                     </Box>
