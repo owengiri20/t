@@ -1,7 +1,7 @@
-import { Box, useMediaQuery } from "@material-ui/core"
+import { Box, makeStyles, useMediaQuery } from "@material-ui/core"
 import Container from "@material-ui/core/Container"
 import React from "react"
-import { Route, Switch } from "react-router-dom"
+import { Route, Switch, useHistory } from "react-router-dom"
 import "./App.css"
 import Logo from "./assets/logo.png"
 import Moon from "./assets/moon.png"
@@ -10,15 +10,37 @@ import { AppWrapper } from "./common/appWrapper"
 import { GameScreen } from "./screens/GameScreen"
 import { COLOURS } from "./game/CommonStyles"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import { Signup } from "./screens/Signup"
+
+export const useStyles = makeStyles({
+    logo: {
+        display: "flex",
+        padding: "1rem",
+        alignItems: "center",
+        borderRadius: "30px",
+        background: COLOURS.darkBrown,
+        color: COLOURS.lightBrown,
+        width: "fit-content",
+    },
+    inDevelopment: {
+        position: "absolute",
+        top: 0,
+        right: "0",
+        margin: "0",
+        padding: "1rem",
+        background: COLOURS.lightBrown,
+    },
+})
 
 function App() {
     const under1100Height = useMediaQuery("(max-height:1100px)")
-    console.log(under1100Height)
+    const classes = useStyles()
+    const history = useHistory()
 
     return (
         <AppWrapper>
             <>
-                <Box style={{ position: "absolute", top: 0, right: "0", margin: "0", padding: "1rem", background: COLOURS.lightBrown }}>
+                <Box className={classes.inDevelopment}>
                     <a href="https://github.com/owengiri20/tt" target="_blank">
                         {"<In Development/>"}
                     </a>
@@ -31,45 +53,21 @@ function App() {
                             alignContent: "center",
                         }}
                     >
-                        <Box
-                            style={{
-                                marginTop: under1100Height ? "0" : "2rem",
-                                display: "flex",
-                                padding: "1rem",
-                                alignItems: "center",
-                                borderRadius: "30px",
-                                background: COLOURS.darkBrown,
-                                color: COLOURS.lightBrown,
-                                width: "fit-content",
-                            }}
-                        >
+                        <Box style={{ marginTop: under1100Height ? "0" : "2rem" }} className={classes.logo}>
                             <img src={Logo} alt="TrekTyper Logo" height={"80px"} />
                             <Box sx={{ fontSize: "30px" }}>TrekTyper</Box>
                         </Box>
 
-                        <Box
-                            onClick={() => window.alert("coming soon!")}
-                            style={{
-                                marginTop: under1100Height ? "0" : "2rem",
-                                display: "flex",
-                                padding: "1rem",
-                                alignItems: "center",
-                                borderRadius: "30px",
-                                background: COLOURS.darkBrown,
-                                color: COLOURS.lightBrown,
-                                width: "fit-content",
-                                cursor: "pointer",
-                            }}
-                        >
+                        <Box onClick={() => history.push("/signup")} style={{ marginTop: under1100Height ? "0" : "2rem" }} className={classes.logo}>
                             <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }} />
-                            <Box sx={{ fontSize: "20px" }}>Sign in</Box>
+                            <Box sx={{ fontSize: "20px" }}>Sign up</Box>
                         </Box>
                     </Box>
 
                     <Switch>
                         <Route path="/" component={GameScreen} exact />
-                        <Route path="/signin" component={GameScreen} exact />
-                        <Route path="/signup" component={GameScreen} exact />
+                        <Route path="/signup" component={Signup} exact />
+                        <Route path="/login" component={GameScreen} exact />
                     </Switch>
                 </Container>
                 <Box
