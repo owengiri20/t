@@ -41,7 +41,7 @@ const useStyles = makeStyles({
         },
     },
 })
-export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) => {
+export const Login = ({ togglePage }: { togglePage: (path: string) => void }) => {
     const classes = useStyles()
 
     return (
@@ -89,29 +89,6 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                 classes={{}}
             />
 
-            <TextField
-                className={classes.root}
-                style={{ width: "90%", marginBottom: "1.5rem" }}
-                id="outlined-basic"
-                label="Confirm Password"
-                variant="filled"
-                placeholder="****"
-                InputLabelProps={{
-                    style: { color: "white" },
-                }}
-                InputProps={{
-                    style: {
-                        color: "white",
-                    },
-                    inputProps: {
-                        style: {
-                            color: "white",
-                        },
-                    },
-                }}
-                classes={{}}
-            />
-
             <Box style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", position: "absolute", bottom: "1rem" }}>
                 <Button
                     style={{
@@ -125,11 +102,11 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                     }}
                     variant="contained"
                 >
-                    Signup
+                    Login
                 </Button>
                 <Box style={{ height: ".1rem", width: "10rem", background: "white", marginTop: ".5rem", marginBottom: ".5rem" }} />
                 <Button
-                    onClick={() => togglePage("login")}
+                    onClick={() => togglePage("signup")}
                     style={{
                         backgroundColor: COLOURS.darkishBrown,
                         color: "white",
@@ -140,7 +117,7 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                     }}
                     variant="contained"
                 >
-                    Already Signed up? Login
+                    Dont have an account? Sign up
                 </Button>
             </Box>
         </Box>

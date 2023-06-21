@@ -11,6 +11,8 @@ import { GameScreen } from "./screens/GameScreen"
 import { COLOURS } from "./game/CommonStyles"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import { Signup } from "./screens/Signup"
+import { Login } from "./screens/Login"
+import { AuthPage } from "./screens/Auth"
 
 export const useStyles = makeStyles({
     logo: {
@@ -41,7 +43,7 @@ function App() {
         <AppWrapper>
             <>
                 <Box className={classes.inDevelopment}>
-                    <a href="https://github.com/owengiri20/tt" target="_blank">
+                    <a href="https://github.com/owengiri20/tt" rel="noreferrer" target="_blank">
                         {"<In Development/>"}
                     </a>
                 </Box>
@@ -58,16 +60,27 @@ function App() {
                             <Box sx={{ fontSize: "30px" }}>TrekTyper</Box>
                         </Box>
 
-                        <Box onClick={() => history.push("/signup")} style={{ marginTop: under1100Height ? "0" : "2rem" }} className={classes.logo}>
-                            <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }} />
-                            <Box sx={{ fontSize: "20px" }}>Sign up</Box>
+                        <Box
+                            onClick={() => history.push("/signup")}
+                            style={{ marginTop: under1100Height ? "0" : "2rem", cursor: "pointer" }}
+                            className={classes.logo}
+                        >
+                            <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} />
+                            <Box
+                                style={{
+                                    userSelect: "none",
+                                    fontSize: "20px",
+                                }}
+                            >
+                                Sign up
+                            </Box>
                         </Box>
                     </Box>
 
                     <Switch>
                         <Route path="/" component={GameScreen} exact />
-                        <Route path="/signup" component={Signup} exact />
-                        <Route path="/login" component={GameScreen} exact />
+                        <Route path="/auth" component={AuthPage} exact />
+                        <Route path="/login" component={Login} exact />
                     </Switch>
                 </Container>
                 <Box
@@ -81,7 +94,7 @@ function App() {
                     }}
                 >
                     <Box style={{ color: COLOURS.lightBrown, background: COLOURS.darkBrown, padding: ".5rem", borderRadius: "7px", cursor: "pointer" }}>
-                        <a href="https://owengiri.dev/" target="_blank">
+                        <a href="https://owengiri.dev/" rel="noreferrer" target="_blank">
                             © 2023 Owen Giri
                         </a>
                     </Box>
