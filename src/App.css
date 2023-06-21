@@ -3,10 +3,14 @@
     font-family: "Orbitron", sans-serif !important;
 }
 
+html {
+    overflow-y: hidden;
+}
+
 body {
     background-color: #21190f;
     height: 100vh;
-    overflow: "hidden";
+    overflow: "hidden !important";
 }
 
 a {
