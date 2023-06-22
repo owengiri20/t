@@ -1,5 +1,6 @@
 import { Box } from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import React from "react"
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface AppWrapperProps {
     children: JSX.Element
 }
+
 export const AppWrapper = (props: AppWrapperProps) => {
     const classes = useStyles()
     return <Box className={classes.root}>{props.children}</Box>

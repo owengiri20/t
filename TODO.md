@@ -31,3 +31,19 @@ on login page
 already signed in
 
 -   check if user signed in
+
+---
+
+-   login
+-   success
+-   handle errrs
+
+logout
+
+basic register
+
+-   register page
+-   fill deets
+-   success
+-   take to login
+    -- verify email flow

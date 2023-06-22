@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Layout } from "./Layout"
 import { Box, Button, ButtonGroup, TextField, makeStyles, useMediaQuery } from "@material-ui/core"
 import { COLOURS } from "../game/CommonStyles"
 import { Login } from "./Login"
 import { Signup } from "./Signup"
 import { useHistory, useLocation } from "react-router-dom"
+import { useAuth } from "../containers/auth"
 
 const useStyles = makeStyles({
     container: {
@@ -73,6 +74,15 @@ export const AuthPage = () => {
             console.error("Invalid page!")
         }
     }
+
+    const { user } = useAuth()
+
+    useEffect(() => {
+        if (!user) return
+
+        // if already authenticated
+        history.push("/")
+    }, [user])
 
     return (
         <Layout>

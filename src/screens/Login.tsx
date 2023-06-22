@@ -1,7 +1,8 @@
-import React from "react"
-import { Layout } from "./Layout"
-import { Box, Button, ButtonGroup, TextField, makeStyles } from "@material-ui/core"
+import { Box, Button, TextField, makeStyles } from "@material-ui/core"
+import React, { useEffect, useState } from "react"
 import { COLOURS } from "../game/CommonStyles"
+import { useMutation } from "@tanstack/react-query"
+import { BASE_API_URL } from "../constants"
 
 const useStyles = makeStyles({
     switchBtn: {
@@ -41,12 +42,67 @@ const useStyles = makeStyles({
         },
     },
 })
+
+interface FormVals {
+    email: string
+    password: string
+}
+
 export const Login = ({ togglePage }: { togglePage: (path: string) => void }) => {
     const classes = useStyles()
+
+    // form vals, may change to react-hook-forms in the future
+    const [formVals, setFormVals] = useState<FormVals>({
+        email: "",
+        password: "",
+    })
+
+    const { mutate } = useMutation({
+        mutationKey: ["todos"],
+        mutationFn: async ({ email, password }: { email: string; password: string }) => {
+            try {
+                console.log("calling")
+
+                const res = await fetch(BASE_API_URL + "/login", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                    }),
+                })
+
+                const data = await res.json()
+                if (data.error) throw new Error(data.error)
+                return data
+            } catch (e) {
+                console.error("Error:", e)
+                throw e
+            }
+        },
+    })
+
+    const handleLogin = () => {
+        if (!formVals.email) {
+            console.log("email empty")
+            return
+        }
+
+        if (!formVals.password) {
+            console.log("password empty")
+            return
+        }
+
+        mutate({ email: formVals.email, password: formVals.password })
+    }
 
     return (
         <Box className={classes.formGroup}>
             <TextField
+                onChange={(e) => setFormVals((prev) => ({ ...prev, email: e.target.value }))}
                 id="outlined-basic"
                 label="Email"
                 variant="filled"
@@ -67,6 +123,7 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
                 }}
             />
             <TextField
+                onChange={(e) => setFormVals((prev) => ({ ...prev, password: e.target.value }))}
                 className={classes.root}
                 style={{ width: "90%", marginBottom: "1.5rem" }}
                 id="outlined-basic"
@@ -101,9 +158,11 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
                         padding: "1rem",
                     }}
                     variant="contained"
+                    onClick={handleLogin}
                 >
                     Login
                 </Button>
+
                 <Box style={{ height: ".1rem", width: "10rem", background: "white", marginTop: ".5rem", marginBottom: ".5rem" }} />
                 <Button
                     onClick={() => togglePage("signup")}

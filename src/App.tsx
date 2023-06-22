@@ -1,18 +1,19 @@
 import { Box, makeStyles, useMediaQuery } from "@material-ui/core"
 import Container from "@material-ui/core/Container"
-import React from "react"
+import React, { useEffect } from "react"
 import { Route, Switch, useHistory } from "react-router-dom"
 import "./App.css"
 import Logo from "./assets/logo.png"
 import Moon from "./assets/moon.png"
 
-import { AppWrapper } from "./common/appWrapper"
-import { GameScreen } from "./screens/GameScreen"
-import { COLOURS } from "./game/CommonStyles"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
-import { Signup } from "./screens/Signup"
-import { Login } from "./screens/Login"
+import { AppWrapper } from "./common/appWrapper"
+import { useAuth } from "./containers/auth"
+import { COLOURS } from "./game/CommonStyles"
 import { AuthPage } from "./screens/Auth"
+import { GameScreen } from "./screens/GameScreen"
+import { AuthButton } from "./components/AuthButton"
+import UserMenu from "./components/UserMenu"
 
 export const useStyles = makeStyles({
     logo: {
@@ -39,6 +40,9 @@ function App() {
     const classes = useStyles()
     const history = useHistory()
 
+    // check me here
+    const { user } = useAuth()
+
     return (
         <AppWrapper>
             <>
@@ -52,7 +56,6 @@ function App() {
                         style={{
                             display: "flex",
                             justifyContent: "space-between",
-                            alignContent: "center",
                         }}
                     >
                         <Box style={{ marginTop: under1100Height ? "0" : "2rem" }} className={classes.logo}>
@@ -60,27 +63,20 @@ function App() {
                             <Box sx={{ fontSize: "30px" }}>TrekTyper</Box>
                         </Box>
 
-                        <Box
-                            onClick={() => history.push("/signup")}
-                            style={{ marginTop: under1100Height ? "0" : "2rem", cursor: "pointer" }}
-                            className={classes.logo}
-                        >
-                            <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} />
-                            <Box
-                                style={{
-                                    userSelect: "none",
-                                    fontSize: "20px",
-                                }}
-                            >
-                                Sign up
-                            </Box>
-                        </Box>
+                        {user ? (
+                            <UserMenu user={user} />
+                        ) : (
+                            <AuthButton
+                                onClick={() => history.push("/auth?page=login")}
+                                style={{ marginTop: under1100Height ? "0" : "2rem", cursor: "pointer" }}
+                                classes={classes.logo}
+                            />
+                        )}
                     </Box>
 
                     <Switch>
                         <Route path="/" component={GameScreen} exact />
                         <Route path="/auth" component={AuthPage} exact />
-                        <Route path="/login" component={Login} exact />
                     </Switch>
                 </Container>
                 <Box
