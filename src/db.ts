@@ -87,10 +87,10 @@ export const getTests = () => {
     return (currentTests as Test[]).sort((a, b) => new Date(b.currentTime).getTime() - new Date(a.currentTime).getTime()).slice(0, 3)
 }
 
-export const calculateWPM = (correctCharacters: number, timeInSeconds: number): number => {
-    const totalWords = correctCharacters / 5 // Convert characters to words
+export const calculateWPM = (correctCharacters: number, timeInSeconds: number, correctWords: number): number => {
+    const totalWords = (correctCharacters + correctWords) / 5 // Convert characters to words
     const timeInMinutes = timeInSeconds / 60 // Convert time to minutes
     const wpm = totalWords / timeInMinutes // Calculate words per minute
 
-    return Math.round(wpm)
+    return wpm
 }
