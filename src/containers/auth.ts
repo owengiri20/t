@@ -70,6 +70,9 @@ export const useAuth = () => {
                 variant: "info",
                 autoHideDuration: 3000,
             })
+            setTimeout(() => {
+                window.location.reload()
+            }, 2800)
         },
         onError: (error) => {
             console.error("Error:", error)

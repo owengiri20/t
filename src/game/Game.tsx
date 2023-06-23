@@ -55,16 +55,6 @@ const GameInner = (props: GameInnerProps) => {
             setFinish(true)
 
             if (finish) return
-            // build test
-            const test = {
-                duration: duration,
-                correctWords: correctWords,
-                incorrectWords: wrongWords,
-                wpm: calculateWPM(correctChars, duration, correctWords),
-                currentTime: new Date(),
-            }
-
-            saveTest(test)
         }
     })
 

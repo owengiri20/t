@@ -6,7 +6,7 @@ import StarBorderRoundedIcon from "@material-ui/icons/StarBorderRounded"
 import StarRoundedIcon from "@material-ui/icons/StarRounded"
 
 // images
-import { calculateWPM, useGetDuration } from "../db"
+import { calculateWPM, saveTest, useGetDuration } from "../db"
 import ninja from "../icons/png/ninja.png"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
@@ -15,6 +15,7 @@ import meh from "../icons/svg/032-neutral.svg"
 import { COLOURS } from "./CommonStyles"
 import BasicTable from "./TestsTable"
 import { useTestResults } from "../containers/tests"
+import { useAuth } from "../containers/auth"
 
 interface Result {
     rating: RatingType
@@ -150,16 +151,33 @@ export const finishStyles = makeStyles({
 
 export const FinishCard = (props: FinishCardProps) => {
     const { saveTestResultFn } = useTestResults()
+    const { user } = useAuth()
+
     const { correctWords, incorrectWords, handleRestart, correctCharsCount } = props
     const classes = finishStyles()
 
     const [testSaved, setTestSaved] = useState(false)
     const dur = useGetDuration()
     const wpm = calculateWPM(correctCharsCount, dur, correctWords)
-    // console.log("fff", correctCharsCount)
 
     useEffect(() => {
         if (testSaved) return
+        // saves to localstorage (for non logged in users)
+        // build test
+        const test = {
+            duration: dur,
+            correctWords: correctWords,
+            incorrectWords: incorrectWords,
+            wpm,
+            currentTime: new Date(),
+        }
+
+        saveTest(test)
+
+        setTestSaved(true)
+
+        //  saves to db
+        if (!user) return
         saveTestResultFn.mutate({
             correctWordsCount: correctWords,
             durationSecs: dur,
