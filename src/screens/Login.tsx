@@ -1,14 +1,10 @@
 import { Box, Button, IconButton, InputAdornment, TextField, makeStyles } from "@material-ui/core"
-import React, { useEffect, useState } from "react"
-import { COLOURS } from "../game/CommonStyles"
-import { useMutation } from "@tanstack/react-query"
-import { BASE_API_URL } from "../constants"
+import { Visibility, VisibilityOff } from "@material-ui/icons"
 import { Alert } from "@mui/material"
+import React, { useEffect, useState } from "react"
 import { useAuth } from "../containers/auth"
-import { log } from "console"
+import { COLOURS } from "../game/CommonStyles"
 import { getErrorMessge } from "../utils"
-import { enqueueSnackbar } from "notistack"
-import { VisibilityOff, Visibility } from "@material-ui/icons"
 
 const useStyles = makeStyles({
     switchBtn: {

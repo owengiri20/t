@@ -35,7 +35,6 @@ export const GameScreen = () => {
                     onClick={() => setOptionsMenuOpen(true)}
                     style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }}
                 />
-                {/* <HomeIcon style={{ color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }} /> */}
             </Box>
             <Game />
             <MenuModal isOpen={optionsMenuOpen} setIsOpen={setOptionsMenuOpen} />

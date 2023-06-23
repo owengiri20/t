@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react"
-import { Layout } from "./Layout"
-import { Box, Button, ButtonGroup, IconButton, InputAdornment, TextField, makeStyles } from "@material-ui/core"
-import { COLOURS } from "../game/CommonStyles"
-import { useAuth } from "../containers/auth"
+import { Box, Button, IconButton, InputAdornment, TextField, makeStyles } from "@material-ui/core"
+import { Visibility, VisibilityOff } from "@material-ui/icons"
 import { Alert } from "@mui/material"
+import React, { useEffect, useState } from "react"
+import { useAuth } from "../containers/auth"
+import { COLOURS } from "../game/CommonStyles"
 import { getErrorMessge } from "../utils"
-import { VisibilityOff, Visibility } from "@material-ui/icons"
 
 const useStyles = makeStyles({
     switchBtn: {
