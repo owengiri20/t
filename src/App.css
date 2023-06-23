@@ -3,10 +3,14 @@
     font-family: "Orbitron", sans-serif !important;
 }
 
+html {
+    overflow-y: hidden;
+}
+
 body {
     background-color: #21190f !important;
     height: 100vh;
-    overflow: hidden;
+    overflow: "hidden !important";
 }
 
 a {
@@ -37,4 +41,14 @@ a {
     50% {
         opacity: 0;
     }
+}
+
+/* Optional: Styling the track (the area behind the thumb) */
+::-webkit-scrollbar-track {
+    background-color: transparent; /* Change this to desired color or remove to make it transparent */
+}
+
+/* Optional: Styling the scrollbar thumb (the draggable handle) */
+::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Change this to desired color or remove to make it transparent */
 }
