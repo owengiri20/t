@@ -1,11 +1,8 @@
 import { Box } from "@material-ui/core"
-import React, { useState } from "react"
-import { Game } from "../game/Game"
-import SettingsIcon from "@mui/icons-material/Settings"
-import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from "@mui/icons-material/Refresh"
+import SettingsIcon from "@mui/icons-material/Settings"
+import React, { useState } from "react"
 import { COLOURS } from "../game/CommonStyles"
-import { MenuModal } from "./MenuModal"
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
     const [optionsMenuOpen, setOptionsMenuOpen] = useState(false)

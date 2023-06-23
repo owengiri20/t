@@ -1,8 +1,14 @@
-import { Box, Button, TextField, makeStyles } from "@material-ui/core"
+import { Box, Button, IconButton, InputAdornment, TextField, makeStyles } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
 import { COLOURS } from "../game/CommonStyles"
 import { useMutation } from "@tanstack/react-query"
 import { BASE_API_URL } from "../constants"
+import { Alert } from "@mui/material"
+import { useAuth } from "../containers/auth"
+import { log } from "console"
+import { getErrorMessge } from "../utils"
+import { enqueueSnackbar } from "notistack"
+import { VisibilityOff, Visibility } from "@material-ui/icons"
 
 const useStyles = makeStyles({
     switchBtn: {
@@ -50,6 +56,8 @@ interface FormVals {
 
 export const Login = ({ togglePage }: { togglePage: (path: string) => void }) => {
     const classes = useStyles()
+    const { loginFn } = useAuth()
+    const [showPassword, setShowPassword] = useState(false)
 
     // form vals, may change to react-hook-forms in the future
     const [formVals, setFormVals] = useState<FormVals>({
@@ -57,46 +65,26 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
         password: "",
     })
 
-    const { mutate } = useMutation({
-        mutationKey: ["todos"],
-        mutationFn: async ({ email, password }: { email: string; password: string }) => {
-            try {
-                console.log("calling")
-
-                const res = await fetch(BASE_API_URL + "/login", {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
-                    }),
-                })
-
-                const data = await res.json()
-                if (data.error) throw new Error(data.error)
-                return data
-            } catch (e) {
-                console.error("Error:", e)
-                throw e
-            }
-        },
-    })
+    // error state
+    const [errorMsg, setErrorMsg] = useState("")
+    useEffect(() => {
+        if (loginFn.error) {
+            setErrorMsg(getErrorMessge(loginFn.error))
+        }
+    }, [loginFn.error, loginFn.data])
 
     const handleLogin = () => {
         if (!formVals.email) {
-            console.log("email empty")
+            setErrorMsg("Please enter your email.")
             return
         }
 
         if (!formVals.password) {
-            console.log("password empty")
+            setErrorMsg("Please enter your password")
             return
         }
 
-        mutate({ email: formVals.email, password: formVals.password })
+        loginFn.mutate({ email: formVals.email, password: formVals.password })
     }
 
     return (
@@ -123,6 +111,7 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
                 }}
             />
             <TextField
+                type={showPassword ? "text" : "password"}
                 onChange={(e) => setFormVals((prev) => ({ ...prev, password: e.target.value }))}
                 className={classes.root}
                 style={{ width: "90%", marginBottom: "1.5rem" }}
@@ -136,15 +125,25 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
                 InputProps={{
                     style: {
                         color: "white",
+                        fontSize: !showPassword ? "25px" : "",
+                        fontWeight: "bold",
                     },
                     inputProps: {
                         style: {
                             color: "white",
                         },
                     },
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton onClick={() => setShowPassword(!showPassword)} style={{ color: "white" }}>
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
                 }}
-                classes={{}}
             />
+
+            {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
             <Box style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", position: "absolute", bottom: "1rem" }}>
                 <Button
@@ -162,7 +161,6 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
                 >
                     Login
                 </Button>
-
                 <Box style={{ height: ".1rem", width: "10rem", background: "white", marginTop: ".5rem", marginBottom: ".5rem" }} />
                 <Button
                     onClick={() => togglePage("signup")}

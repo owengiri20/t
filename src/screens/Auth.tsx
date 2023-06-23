@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react"
-import { Layout } from "./Layout"
-import { Box, Button, ButtonGroup, TextField, makeStyles, useMediaQuery } from "@material-ui/core"
-import { COLOURS } from "../game/CommonStyles"
-import { Login } from "./Login"
-import { Signup } from "./Signup"
+import { Box, Button, ButtonGroup, makeStyles } from "@material-ui/core"
+import React, { useEffect } from "react"
 import { useHistory, useLocation } from "react-router-dom"
 import { useAuth } from "../containers/auth"
+import { COLOURS } from "../game/CommonStyles"
+import { Layout } from "./Layout"
+import { Login } from "./Login"
+import { Signup } from "./Signup"
 
 const useStyles = makeStyles({
     container: {
@@ -16,7 +16,6 @@ const useStyles = makeStyles({
     },
 
     innerBox: {
-        // border: "2px solid " + COLOURS.lightBrown,
         height: "90%",
         width: "60%",
         display: "flex",
@@ -94,18 +93,28 @@ export const AuthPage = () => {
                         variant="outlined"
                     >
                         <Button
-                            style={{ background: currentPage === "login" ? COLOURS.lightBrown : "", color: currentPage === "login" ? COLOURS.darkBrown : "" }}
+                            style={{
+                                fontWeight: currentPage === "login" ? "bold" : "",
+                                fontSize: currentPage === "login" ? "20px" : "",
+                                background: currentPage === "login" ? COLOURS.lightBrown : "",
+                                color: currentPage === "login" ? COLOURS.darkBrown : "",
+                            }}
                             className={classes.switchBtn}
                             onClick={() => togglePage("login")}
                         >
                             Login
                         </Button>
                         <Button
-                            style={{ background: currentPage === "signup" ? COLOURS.lightBrown : "", color: currentPage === "signup" ? COLOURS.darkBrown : "" }}
+                            style={{
+                                fontWeight: currentPage === "signup" ? "bold" : "",
+                                fontSize: currentPage === "signup" ? "20px" : "",
+                                background: currentPage === "signup" ? COLOURS.lightBrown : "",
+                                color: currentPage === "signup" ? COLOURS.darkBrown : "",
+                            }}
                             className={classes.switchBtn}
                             onClick={() => togglePage("signup")}
                         >
-                            Register
+                            Sign up
                         </Button>
                     </ButtonGroup>
 

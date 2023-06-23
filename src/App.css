@@ -4,7 +4,7 @@
 }
 
 body {
-    background-color: #21190f;
+    background-color: #21190f !important;
     height: 100vh;
     overflow: hidden;
 }

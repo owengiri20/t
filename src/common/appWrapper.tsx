@@ -1,6 +1,5 @@
 import { Box } from "@material-ui/core"
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import React from "react"
 
 const useStyles = makeStyles((theme: Theme) =>

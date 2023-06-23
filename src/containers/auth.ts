@@ -1,7 +1,8 @@
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { atom, useAtom } from "jotai"
-import { BASE_API_URL } from "../constants"
 import { useHistory } from "react-router-dom"
+import { BASE_API_URL } from "../constants"
+import { enqueueSnackbar } from "notistack"
 
 const userAtom = atom<User | null>(null)
 
@@ -37,10 +38,14 @@ export const useAuth = () => {
             return data
         },
         onSuccess: (data) => {
+            enqueueSnackbar("Login Successfully!", {
+                variant: "success",
+                autoHideDuration: 3000,
+            })
             setUser(data)
         },
-        onError: (error) => {
-            console.error("Error:", error)
+        onError: (error: any) => {
+            return error
         },
     })
 
@@ -61,7 +66,10 @@ export const useAuth = () => {
         },
         onSuccess: (data) => {
             setUser(null)
-            window.location.reload()
+            enqueueSnackbar("Logged out.", {
+                variant: "info",
+                autoHideDuration: 3000,
+            })
         },
         onError: (error) => {
             console.error("Error:", error)
@@ -95,7 +103,7 @@ export const useAuth = () => {
 
     // signUp func
     const signUpFn = useMutation({
-        mutationKey: ["logout"],
+        mutationKey: ["signup"],
         mutationFn: async ({ email, password, confirmPassword }: { email: string; password: string; confirmPassword: string }) => {
             const res = await fetch(BASE_API_URL + "/signup", {
                 method: "POST",
@@ -115,6 +123,10 @@ export const useAuth = () => {
             return data
         },
         onSuccess: (data) => {
+            enqueueSnackbar("Signed Up Successfully!", {
+                variant: "success",
+                autoHideDuration: 3000,
+            })
             history.push("/auth?page=login")
         },
         onError: (error) => {

@@ -1,7 +1,7 @@
-import { Box, Button, Modal, Typography } from "@material-ui/core"
+import { Box, Button, Modal } from "@material-ui/core"
 import React, { useState } from "react"
+import { handleSaveSettings, useGetDuration } from "../db"
 import { COLOURS } from "../game/CommonStyles"
-import { Settings, useGetDuration, getSettings, handleSaveSettings } from "../db"
 
 interface MenuModalProps {
     isOpen: boolean

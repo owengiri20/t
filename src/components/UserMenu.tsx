@@ -1,11 +1,11 @@
-import * as React from "react"
+import { useMediaQuery } from "@material-ui/core"
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
 import MenuItem from "@mui/material/MenuItem"
+import * as React from "react"
 import { User, useAuth } from "../containers/auth"
-import { Box, makeStyles, useMediaQuery } from "@material-ui/core"
 import { COLOURS } from "../game/CommonStyles"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 
 export default function UserMenu({ user }: { user: User }) {
     const under1100Height = useMediaQuery("(max-height:1100px)")
@@ -30,7 +30,7 @@ export default function UserMenu({ user }: { user: User }) {
                     display: "flex",
                     padding: "1rem",
                     alignItems: "center",
-                    borderRadius: "30px",
+                    borderRadius: "15px",
                     background: COLOURS.darkBrown,
                     color: COLOURS.lightBrown,
                     width: "fit-content",
@@ -43,7 +43,7 @@ export default function UserMenu({ user }: { user: User }) {
                 <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} /> {user.username}
             </Button>
             <Menu
-                sx={{ mt: ".1rem", "& .MuiMenu-paper": { backgroundColor: "black", color: COLOURS.lightBrown, width: "7rem" } }}
+                sx={{ mt: ".1rem", "& .MuiMenu-paper": { backgroundColor: COLOURS.darkBrown, color: COLOURS.lightBrown, width: "10rem" } }}
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
@@ -52,7 +52,7 @@ export default function UserMenu({ user }: { user: User }) {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={() => window.alert("coming soon!")}>Profile</MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </div>

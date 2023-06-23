@@ -1,19 +1,18 @@
 import { Box, makeStyles, useMediaQuery } from "@material-ui/core"
 import Container from "@material-ui/core/Container"
-import React, { useEffect } from "react"
+import React from "react"
 import { Route, Switch, useHistory } from "react-router-dom"
 import "./App.css"
 import Logo from "./assets/logo.png"
 import Moon from "./assets/moon.png"
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import { AppWrapper } from "./common/appWrapper"
+import { AuthButton } from "./components/AuthButton"
+import UserMenu from "./components/UserMenu"
 import { useAuth } from "./containers/auth"
 import { COLOURS } from "./game/CommonStyles"
 import { AuthPage } from "./screens/Auth"
 import { GameScreen } from "./screens/GameScreen"
-import { AuthButton } from "./components/AuthButton"
-import UserMenu from "./components/UserMenu"
 
 export const useStyles = makeStyles({
     logo: {

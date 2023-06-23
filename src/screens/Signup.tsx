@@ -1,8 +1,11 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Layout } from "./Layout"
-import { Box, Button, ButtonGroup, TextField, makeStyles } from "@material-ui/core"
+import { Box, Button, ButtonGroup, IconButton, InputAdornment, TextField, makeStyles } from "@material-ui/core"
 import { COLOURS } from "../game/CommonStyles"
 import { useAuth } from "../containers/auth"
+import { Alert } from "@mui/material"
+import { getErrorMessge } from "../utils"
+import { VisibilityOff, Visibility } from "@material-ui/icons"
 
 const useStyles = makeStyles({
     switchBtn: {
@@ -51,6 +54,7 @@ interface FormVals {
 
 export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) => {
     const classes = useStyles()
+    const [showPassword, setShowPassword] = useState(false)
     const { signUpFn } = useAuth()
 
     // form vals, may change to react-hook-forms in the future
@@ -60,24 +64,39 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
         confirmPassword: "",
     })
 
+    // error state
+    const [errorMsg, setErrorMsg] = useState("")
+    useEffect(() => {
+        if (signUpFn.error) {
+            setErrorMsg(getErrorMessge(signUpFn.error))
+        }
+    }, [signUpFn.error, signUpFn.data])
+
     const handleSignup = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
         if (!formVals.email) {
-            console.log("email empty")
+            setErrorMsg("Please provide an email address.")
+            return
+        }
+
+        if (!emailRegex.test(formVals.email)) {
+            setErrorMsg("Please provide a valid email address.")
             return
         }
 
         if (!formVals.password) {
-            console.log("password empty")
+            setErrorMsg("Please provide a password.")
             return
         }
 
         if (!formVals.confirmPassword) {
-            console.log("confirm password empty")
+            setErrorMsg("Please fill in the confirm password field.")
             return
         }
 
         if (formVals.password !== formVals.confirmPassword) {
-            console.log("password and confirm passwords do not match")
+            setErrorMsg("Password and confirm passwords does not match.")
             return
         }
 
@@ -108,6 +127,7 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                 }}
             />
             <TextField
+                type={showPassword ? "text" : "password"}
                 onChange={(e) => setFormVals((prev) => ({ ...prev, password: e.target.value }))}
                 className={classes.root}
                 style={{ width: "90%", marginBottom: "1.5rem" }}
@@ -121,17 +141,25 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                 InputProps={{
                     style: {
                         color: "white",
+                        fontSize: !showPassword ? "25px" : "",
+                        fontWeight: "bold",
                     },
                     inputProps: {
                         style: {
                             color: "white",
                         },
                     },
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton onClick={() => setShowPassword(!showPassword)} style={{ color: "white" }}>
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
                 }}
-                classes={{}}
             />
-
             <TextField
+                type={showPassword ? "text" : "password"}
                 onChange={(e) => setFormVals((prev) => ({ ...prev, confirmPassword: e.target.value }))}
                 className={classes.root}
                 style={{ width: "90%", marginBottom: "1.5rem" }}
@@ -145,15 +173,25 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                 InputProps={{
                     style: {
                         color: "white",
+                        fontSize: !showPassword ? "25px" : "",
+                        fontWeight: "bold",
                     },
                     inputProps: {
                         style: {
                             color: "white",
                         },
                     },
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton onClick={() => setShowPassword(!showPassword)} style={{ color: "white" }}>
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
                 }}
-                classes={{}}
             />
+
+            {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
             <Box style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", position: "absolute", bottom: "1rem" }}>
                 <Button
