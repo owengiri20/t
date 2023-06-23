@@ -161,13 +161,13 @@ export const FinishCard = (props: FinishCardProps) => {
                 }}
             >
                 <Container className={classes.box}>
-                    <StarRating result={getResult(calculateWPM(correctCharsCount, useGetDuration()))} />
+                    <StarRating result={getResult(calculateWPM(correctCharsCount, useGetDuration(), correctWords))} />
                 </Container>
                 <Container className={classes.wpm}>
                     <Tooltip placement="top" title={"WPM (Words Per Minute) = (Correct Characters / 5) / (Time in Seconds / 60)"}>
                         <Box className={classes.wpmText}>WPM</Box>
                     </Tooltip>
-                    <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration())}</Box>
+                    <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration(), correctWords)}</Box>
                     {/* <Box style={{ color: "white" }}>Calculation = (Correct Characters / 5) / Duration</Box> */}
                 </Container>
             </Box>

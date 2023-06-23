@@ -60,7 +60,7 @@ const GameInner = (props: GameInnerProps) => {
                 duration: duration,
                 correctWords: correctWords,
                 incorrectWords: wrongWords,
-                wpm: calculateWPM(correctChars, duration),
+                wpm: calculateWPM(correctChars, duration, correctWords),
                 currentTime: new Date(),
             }
 
