@@ -173,7 +173,6 @@ export const FinishCard = (props: FinishCardProps) => {
         }
 
         saveTest(test)
-
         setTestSaved(true)
 
         //  saves to db

@@ -7,9 +7,12 @@ import { enqueueSnackbar } from "notistack"
 const userAtom = atom<User | null>(null)
 
 export interface User {
+    ID: string
+    id: string
     name: string
     username: string
     email: string
+    joined: string
 }
 
 export const useAuth = () => {

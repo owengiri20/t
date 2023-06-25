@@ -92,5 +92,5 @@ export const calculateWPM = (correctCharacters: number, timeInSeconds: number, c
     const timeInMinutes = timeInSeconds / 60 // Convert time to minutes
     const wpm = totalWords / timeInMinutes // Calculate words per minute
 
-    return wpm
+    return Number(wpm.toFixed(1))
 }

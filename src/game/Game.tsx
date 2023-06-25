@@ -1,18 +1,18 @@
 import { Container, Typography } from "@material-ui/core"
 import React from "react"
+import { useGetDuration } from "../db"
 import { useStyles } from "./CommonStyles"
 import { FinishCard } from "./Finish"
 import { Word, genWords } from "./utils/words"
-import { calculateWPM, saveTest, useGetDuration } from "../db"
 
 // disable scroll wheel
-window.addEventListener(
-    "wheel",
-    function (e) {
-        e.preventDefault()
-    },
-    { passive: false },
-)
+// window.addEventListener(
+//     "wheel",
+//     function (e) {
+//         e.preventDefault()
+//     },
+//     { passive: false },
+// )
 
 // id of text display
 const DISPLAY_ID = "textDisplay"
@@ -45,7 +45,7 @@ const GameInner = (props: GameInnerProps) => {
 
     const [correctChars, setCorrectChars] = React.useState(0)
 
-    const [c, setC] = React.useState<string>("black")
+    const [highlightedTextColour, setHighlightedTextColour] = React.useState<string>("#000")
 
     React.useEffect(() => {
         if (!start) return
@@ -53,8 +53,6 @@ const GameInner = (props: GameInnerProps) => {
             setTimeout(() => setSeconds(seconds - 1), 1000)
         } else {
             setFinish(true)
-
-            if (finish) return
         }
     })
 
@@ -92,6 +90,7 @@ const GameInner = (props: GameInnerProps) => {
     const handleRestart = () => {
         window.location.reload()
     }
+
     // This function is used to compare a typed string against a target word.
     const checkSubWord = () => {
         const currWord = props.words[idx]
@@ -101,15 +100,15 @@ const GameInner = (props: GameInnerProps) => {
         const subWord2 = word.substring(0, charIdx + 1)
 
         if (word === "") {
-            setC("#000")
+            setHighlightedTextColour("#000")
             return
         }
 
         if (subWord === subWord2) {
-            setC("#1d331f")
+            setHighlightedTextColour("#1d331f")
             return
         } else {
-            setC("#470c0a")
+            setHighlightedTextColour("#470c0a")
         }
     }
 
@@ -118,6 +117,7 @@ const GameInner = (props: GameInnerProps) => {
     }, [word])
 
     const handleKeyPress = (key: any) => {
+        // if pressing space when empty, do nothing
         if (key.code === "Space" && word === "") {
             return
         }
@@ -206,7 +206,7 @@ const GameInner = (props: GameInnerProps) => {
                                     <span
                                         style={{
                                             padding: "5px",
-                                            backgroundColor: onCurrWord(i) ? c : "",
+                                            backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
                                             color: getColour(w.status),
                                             fontSize: "35px",
                                             fontWeight: onCurrWord(i) ? "bold" : "unset",

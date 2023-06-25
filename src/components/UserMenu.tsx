@@ -6,8 +6,10 @@ import MenuItem from "@mui/material/MenuItem"
 import * as React from "react"
 import { User, useAuth } from "../containers/auth"
 import { COLOURS } from "../game/CommonStyles"
+import { useHistory } from "react-router-dom"
 
 export default function UserMenu({ user }: { user: User }) {
+    const history = useHistory()
     const under1100Height = useMediaQuery("(max-height:1100px)")
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
@@ -52,7 +54,14 @@ export default function UserMenu({ user }: { user: User }) {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <MenuItem onClick={() => window.alert("coming soon!")}>Profile</MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        history.push(`/profile/${user.ID}`)
+                        handleClose()
+                    }}
+                >
+                    Profile
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
         </div>
