@@ -1,12 +1,12 @@
 import { Box, Button, Container, Tooltip, makeStyles } from "@material-ui/core"
-import React from "react"
+import React, { useEffect, useState } from "react"
 
 // icons
 import StarBorderRoundedIcon from "@material-ui/icons/StarBorderRounded"
 import StarRoundedIcon from "@material-ui/icons/StarRounded"
 
 // images
-import { calculateWPM, useGetDuration } from "../db"
+import { calculateWPM, saveTest, useGetDuration } from "../db"
 import ninja from "../icons/png/ninja.png"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
@@ -14,6 +14,8 @@ import avarage from "../icons/svg/026-smile.svg"
 import meh from "../icons/svg/032-neutral.svg"
 import { COLOURS } from "./CommonStyles"
 import BasicTable from "./TestsTable"
+import { useTestResults } from "../containers/tests"
+import { useAuth } from "../containers/auth"
 
 interface Result {
     rating: RatingType
@@ -148,8 +150,42 @@ export const finishStyles = makeStyles({
 })
 
 export const FinishCard = (props: FinishCardProps) => {
+    const { saveTestResultFn } = useTestResults()
+    const { user } = useAuth()
+
     const { correctWords, incorrectWords, handleRestart, correctCharsCount } = props
     const classes = finishStyles()
+
+    const [testSaved, setTestSaved] = useState(false)
+    const dur = useGetDuration()
+    const wpm = calculateWPM(correctCharsCount, dur, correctWords)
+
+    useEffect(() => {
+        if (testSaved) return
+        // saves to localstorage (for non logged in users)
+        // build test
+        const test = {
+            duration: dur,
+            correctWords: correctWords,
+            incorrectWords: incorrectWords,
+            wpm,
+            currentTime: new Date(),
+        }
+
+        saveTest(test)
+        setTestSaved(true)
+
+        //  saves to db
+        if (!user) return
+        saveTestResultFn.mutate({
+            correctWordsCount: correctWords,
+            durationSecs: dur,
+            incorrectWordsCount: incorrectWords,
+            wpm,
+        })
+
+        setTestSaved(true)
+    }, [])
 
     return (
         <div className={classes.finishCard}>
@@ -168,7 +204,6 @@ export const FinishCard = (props: FinishCardProps) => {
                         <Box className={classes.wpmText}>WPM</Box>
                     </Tooltip>
                     <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration(), correctWords)}</Box>
-                    {/* <Box style={{ color: "white" }}>Calculation = (Correct Characters / 5) / Duration</Box> */}
                 </Container>
             </Box>
             <Box sx={{ display: "flex", height: "40%" }}>

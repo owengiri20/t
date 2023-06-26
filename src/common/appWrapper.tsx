@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface AppWrapperProps {
     children: JSX.Element
 }
+
 export const AppWrapper = (props: AppWrapperProps) => {
     const classes = useStyles()
     return <Box className={classes.root}>{props.children}</Box>

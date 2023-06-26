@@ -1,25 +1,93 @@
-import { Box, useMediaQuery } from "@material-ui/core"
+import { Box, makeStyles, useMediaQuery } from "@material-ui/core"
 import Container from "@material-ui/core/Container"
-import React from "react"
-import { Route, Switch } from "react-router-dom"
+import React, { useEffect, useState } from "react"
+import { Route, Switch, useHistory } from "react-router-dom"
 import "./App.css"
 import Logo from "./assets/logo.png"
 import Moon from "./assets/moon.png"
 
 import { AppWrapper } from "./common/appWrapper"
-import { GameScreen } from "./screens/GameScreen"
+import { AuthButton } from "./components/AuthButton"
+import UserMenu from "./components/UserMenu"
+import { useAuth } from "./containers/auth"
 import { COLOURS } from "./game/CommonStyles"
-import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import { AuthPage } from "./screens/Auth"
+import { GameScreen } from "./screens/GameScreen"
+import { ProfilePage } from "./screens/PlayerProfile"
+
+export const useStyles = makeStyles({
+    logo: {
+        display: "flex",
+        padding: "1rem",
+        alignItems: "center",
+        borderRadius: "30px",
+        background: COLOURS.darkBrown,
+        color: COLOURS.lightBrown,
+        width: "fit-content",
+        cursor: "pointer",
+        userSelect: "none",
+    },
+    inDevelopment: {
+        position: "absolute",
+        top: 0,
+        right: "0",
+        margin: "0",
+        padding: "1rem",
+        background: COLOURS.lightBrown,
+    },
+})
 
 function App() {
     const under1100Height = useMediaQuery("(max-height:1100px)")
-    console.log(under1100Height)
+    const classes = useStyles()
+    const history = useHistory()
+
+    // check me here
+    const { user } = useAuth()
+
+    const [showApp, setShowApp] = useState(false)
+
+    useEffect(() => {
+        // Check if 'user_allowed' data exists in local storage and if it's not expired
+        const userAllowedData = localStorage.getItem("user_allowed")
+        if (userAllowedData) {
+            const { allowed, expiry } = JSON.parse(userAllowedData)
+            if (allowed && new Date(expiry) > new Date()) {
+                setShowApp(true)
+                return
+            }
+        }
+
+        const checkPassword = () => {
+            let enteredPassword = window.prompt("Enter the password:")
+            if (enteredPassword === "hasbulla") {
+                setShowApp(true)
+                // Save 'user_allowed' data to local storage with expiry 30 minutes from now
+                localStorage.setItem(
+                    "user_allowed",
+                    JSON.stringify({
+                        allowed: true,
+                        expiry: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes from now
+                    }),
+                )
+            } else {
+                alert("Nah bro")
+                checkPassword() // recursively call checkPassword
+            }
+        }
+
+        checkPassword()
+    }, [])
+
+    if (!showApp) {
+        return <div>no</div>
+    }
 
     return (
         <AppWrapper>
             <>
-                <Box style={{ position: "absolute", top: 0, right: "0", margin: "0", padding: "1rem", background: COLOURS.lightBrown }}>
-                    <a href="https://github.com/owengiri20/tt" target="_blank">
+                <Box className={classes.inDevelopment}>
+                    <a href="https://github.com/owengiri20/tt" rel="noreferrer" target="_blank">
                         {"<In Development/>"}
                     </a>
                 </Box>
@@ -28,48 +96,28 @@ function App() {
                         style={{
                             display: "flex",
                             justifyContent: "space-between",
-                            alignContent: "center",
                         }}
                     >
-                        <Box
-                            style={{
-                                marginTop: under1100Height ? "0" : "2rem",
-                                display: "flex",
-                                padding: "1rem",
-                                alignItems: "center",
-                                borderRadius: "30px",
-                                background: COLOURS.darkBrown,
-                                color: COLOURS.lightBrown,
-                                width: "fit-content",
-                            }}
-                        >
+                        <Box onClick={() => history.push("/")} style={{ marginTop: under1100Height ? "0" : "2rem" }} className={classes.logo}>
                             <img src={Logo} alt="TrekTyper Logo" height={"80px"} />
                             <Box sx={{ fontSize: "30px" }}>TrekTyper</Box>
                         </Box>
 
-                        <Box
-                            onClick={() => window.alert("coming soon!")}
-                            style={{
-                                marginTop: under1100Height ? "0" : "2rem",
-                                display: "flex",
-                                padding: "1rem",
-                                alignItems: "center",
-                                borderRadius: "30px",
-                                background: COLOURS.darkBrown,
-                                color: COLOURS.lightBrown,
-                                width: "fit-content",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }} />
-                            <Box sx={{ fontSize: "20px" }}>Sign in</Box>
-                        </Box>
+                        {user ? (
+                            <UserMenu user={user} />
+                        ) : (
+                            <AuthButton
+                                onClick={() => history.push("/auth?page=login")}
+                                style={{ marginTop: under1100Height ? "0" : "2rem", cursor: "pointer" }}
+                                classes={classes.logo}
+                            />
+                        )}
                     </Box>
 
                     <Switch>
                         <Route path="/" component={GameScreen} exact />
-                        <Route path="/signin" component={GameScreen} exact />
-                        <Route path="/signup" component={GameScreen} exact />
+                        <Route path="/auth" component={AuthPage} exact />
+                        <Route path="/profile/:playerID" component={ProfilePage} exact />
                     </Switch>
                 </Container>
                 <Box
@@ -83,7 +131,7 @@ function App() {
                     }}
                 >
                     <Box style={{ color: COLOURS.lightBrown, background: COLOURS.darkBrown, padding: ".5rem", borderRadius: "7px", cursor: "pointer" }}>
-                        <a href="https://owengiri.dev/" target="_blank">
+                        <a href="https://owengiri.dev/" rel="noreferrer" target="_blank">
                             © 2023 Owen Giri
                         </a>
                     </Box>

@@ -1,10 +1,9 @@
 import { Box } from "@material-ui/core"
-import React, { useState } from "react"
-import { Game } from "../game/Game"
-import SettingsIcon from "@mui/icons-material/Settings"
-import HomeIcon from "@mui/icons-material/Home"
 import RefreshIcon from "@mui/icons-material/Refresh"
+import SettingsIcon from "@mui/icons-material/Settings"
+import React, { useState } from "react"
 import { COLOURS } from "../game/CommonStyles"
+import { Game } from "../game/Game"
 import { MenuModal } from "./MenuModal"
 
 export const GameScreen = () => {
@@ -36,7 +35,6 @@ export const GameScreen = () => {
                     onClick={() => setOptionsMenuOpen(true)}
                     style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }}
                 />
-                {/* <HomeIcon style={{ color: COLOURS.lightBrown, fontSize: "35px", cursor: "pointer" }} /> */}
             </Box>
             <Game />
             <MenuModal isOpen={optionsMenuOpen} setIsOpen={setOptionsMenuOpen} />
