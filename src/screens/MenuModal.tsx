@@ -45,7 +45,7 @@ export const MenuModal = (props: MenuModalProps) => {
                     <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
                         <Box id="modal-modal-description">Duration (Seconds)</Box>
                         <Box display={"flex"}>
-                            {[15, 30, 60, 69].map((d) => {
+                            {[15, 30, 60, 120].map((d) => {
                                 return (
                                     <Box
                                         style={{
