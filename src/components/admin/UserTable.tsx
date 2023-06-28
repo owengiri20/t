@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography/Typography"
 import { useEffect, useState } from "react"
 import React from "react"
+import { useHistory } from "react-router-dom"
 
 interface UserListReq {
     limit: number
@@ -44,6 +45,7 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
 
     const [users, setUsers] = useState<UserListResp>()
     const classes = useStyles()
+    const history = useHistory()
 
     useEffect(() => {
         const timerId = setTimeout(() => {
@@ -113,13 +115,17 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
                     <TableRow>
                         <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
                             <Tooltip placement="top-start" style={{ cursor: "default" }} title="Words Per Minute">
-                                <Box>Username</Box>
+                                <Box>ID</Box>
                             </Tooltip>
                         </TableCell>
-
                         <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
                             <Tooltip placement="top-start" style={{ cursor: "default" }} title="Duration in seconds">
                                 <Box>Email</Box>
+                            </Tooltip>
+                        </TableCell>
+                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Words Per Minute">
+                                <Box>Username</Box>
                             </Tooltip>
                         </TableCell>
                     </TableRow>
@@ -128,12 +134,20 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
                     {userID &&
                         users &&
                         users.rows.map((row, idx) => (
-                            <TableRow key={idx} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
-                                    {row.username}
+                            <TableRow key={idx} sx={{ cursor: "pointer", "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <TableCell
+                                    onClick={() => history.push(`/profile/${row.ID}`)}
+                                    style={{ fontSize: "16px", color: "white" }}
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {row.ID}
                                 </TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                     {row.email}
+                                </TableCell>
+                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
+                                    {row.username}
                                 </TableCell>
                             </TableRow>
                         ))}

@@ -146,7 +146,7 @@ export const ProfilePage = () => {
                     {/* averages */}
                     <Box className={classes.bottom}>
                         <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>30 secs</Typography>
+                            <Typography className={classes.hiScoreBoxDuration}>15 secs</Typography>
                             <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
                                 {(stats?.avg_15 ?? 0).toFixed(1)}
                             </Typography>

@@ -86,6 +86,7 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                 <TableBody>
                     {userID &&
                         testsFromDB &&
+                        testsFromDB.rows &&
                         testsFromDB.rows.map((row, idx) => (
                             <TableRow key={idx} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                                 <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
