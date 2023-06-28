@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { Layout } from "./Layout"
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { PlayerStatsGetResp, usePlayer } from "../containers/player"
+import TestsTable from "../game/RecentTestsTable"
 
 const useStyles = makeStyles({
     top: {
@@ -23,6 +24,14 @@ const useStyles = makeStyles({
         display: "flex",
         height: "18rem",
         justifyContent: "center",
+    },
+    bottomTable: {
+        display: "flex",
+        height: "fit-content",
+        justifyContent: "center",
+        width: "100%",
+        alignItems: "center",
+        flexDirection: "column",
     },
     avatarContainer: { display: "flex" },
     avatarDisplay: {
@@ -206,6 +215,15 @@ export const ProfilePage = () => {
                             </Typography>
                             <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
                         </Box>
+                    </Box>
+                </Box>
+
+                <Box className={classes.bottomTable}>
+                    <Box height={"100%"} width={"90%"}>
+                        <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
+                            Recent Perfomances
+                        </Typography>
+                        <TestsTable userID={playerID} />
                     </Box>
                 </Box>
             </Box>

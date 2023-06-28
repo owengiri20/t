@@ -11,9 +11,10 @@ import { AuthButton } from "./components/AuthButton"
 import UserMenu from "./components/UserMenu"
 import { useAuth } from "./containers/auth"
 import { COLOURS } from "./game/CommonStyles"
-import { AuthPage } from "./screens/Auth"
-import { GameScreen } from "./screens/GameScreen"
-import { ProfilePage } from "./screens/PlayerProfile"
+import { AuthPage } from "./pages/AuthPage"
+import { GameScreen } from "./pages/GameScreen"
+import { ProfilePage } from "./pages/PlayerProfile"
+import { AdminPage } from "./pages/AdminPage"
 
 export const useStyles = makeStyles({
     logo: {
@@ -45,7 +46,7 @@ function App() {
     // check me here
     const { user } = useAuth()
 
-    const [showApp, setShowApp] = useState(false)
+    const [showApp, setShowApp] = useState(true)
 
     useEffect(() => {
         // Check if 'user_allowed' data exists in local storage and if it's not expired
@@ -76,7 +77,7 @@ function App() {
             }
         }
 
-        checkPassword()
+        // checkPassword()
     }, [])
 
     if (!showApp) {
@@ -91,7 +92,7 @@ function App() {
                         {"<In Development/>"}
                     </a>
                 </Box>
-                <Container maxWidth={"xl"} style={{ maxWidth: "1200px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
+                <Container maxWidth={"xl"} style={{ maxWidth: "1300px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
                     <Box
                         style={{
                             display: "flex",
@@ -118,6 +119,7 @@ function App() {
                         <Route path="/" component={GameScreen} exact />
                         <Route path="/auth" component={AuthPage} exact />
                         <Route path="/profile/:playerID" component={ProfilePage} exact />
+                        <Route path="/admin" component={AdminPage} exact />
                     </Switch>
                 </Container>
                 <Box

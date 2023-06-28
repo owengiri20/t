@@ -13,6 +13,7 @@ export interface User {
     username: string
     email: string
     joined: string
+    is_admin: boolean
 }
 
 export const useAuth = () => {

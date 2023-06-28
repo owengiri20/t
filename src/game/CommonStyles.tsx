@@ -60,4 +60,6 @@ export const COLOURS = {
     notSoLightBrown: "#1f130a",
     darkishBrown: "#21190f",
     darkBrown: "#0A0603",
+
+    fadedRed: "#9c3d3d",
 }
