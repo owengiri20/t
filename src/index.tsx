@@ -9,15 +9,21 @@ import CssBaseline from "@material-ui/core/CssBaseline"
 import { SnackbarProvider } from "notistack"
 const queryClient = new QueryClient()
 
-const darkTheme = createTheme({
+const appThme = createTheme({
     palette: {
         mode: "dark",
+    },
+
+    typography: {
+        allVariants: {
+            color: "#fff",
+        },
     },
 })
 
 ReactDOM.render(
     <React.StrictMode>
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={appThme}>
             <SnackbarProvider />
             <CssBaseline />
 
