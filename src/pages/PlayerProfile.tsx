@@ -4,6 +4,7 @@ import { Layout } from "./Layout"
 import { Box, Typography, makeStyles } from "@material-ui/core"
 import { PlayerStatsGetResp, usePlayer } from "../containers/player"
 import TestsTable from "../game/RecentTestsTable"
+import { formatDate } from "../utils"
 
 const useStyles = makeStyles({
     top: {
@@ -93,16 +94,6 @@ const useStyles = makeStyles({
         color: "white",
     },
 })
-
-function formatDate(dateStr: string): string {
-    let dateObj = new Date(dateStr)
-    let formattedDate = dateObj.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-    })
-    return formattedDate
-}
 
 export const ProfilePage = () => {
     const { playerID } = useParams<any>()

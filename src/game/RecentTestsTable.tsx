@@ -61,7 +61,7 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
     const testsFromLocalStorage = getTests()
 
     return (
-        <TableContainer component={Box}>
+        <TableContainer component={Box} sx={{ mb: "2rem" }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
@@ -94,7 +94,7 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                                 </TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>{row.duration_secs} secs</TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>
-                                    {row.correct_words_count}/{row.incorrect_words_count}
+                                    {row.correct_words_count ?? 0}/{row.incorrect_words_count ?? 0}
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -107,7 +107,7 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                                 </TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>{row.duration} secs</TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>
-                                    {row.correctWords}/{row.incorrectWords}
+                                    {row.correctWords ?? 0}/{row.incorrectWords ?? 0}
                                 </TableCell>
                             </TableRow>
                         ))}

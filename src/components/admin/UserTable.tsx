@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import { useQuery } from "@tanstack/react-query"
 import { enqueueSnackbar } from "notistack"
-import { fetchData } from "../../utils"
+import { fetchData, formatDate } from "../../utils"
 import { User } from "../../containers/auth"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography/Typography"
@@ -75,10 +75,11 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
                 limit: filter.limit.toString(),
                 sort_by: filter.sort_by ?? "",
             })
-            console.log("calling")
 
             const res = await fetchData(`/admin/users?${params.toString()}`, "GET", null)
             const data = await res.json()
+            console.log("calling", data)
+
             if (data.error) {
                 throw new Error(data.error)
             }
@@ -128,6 +129,11 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
                                 <Box>Username</Box>
                             </Tooltip>
                         </TableCell>
+                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Words Per Minute">
+                                <Box>Joined</Box>
+                            </Tooltip>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -148,6 +154,9 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
                                 </TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                     {row.username}
+                                </TableCell>
+                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
+                                    {formatDate(row?.CreatedAt ?? "")}
                                 </TableCell>
                             </TableRow>
                         ))}

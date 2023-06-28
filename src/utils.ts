@@ -13,6 +13,16 @@ export async function fetchData(endpoint: string, method: string, body: any) {
     return response
 }
 
-export const getErrorMessge = (err: any) => {
+export function formatDate(dateStr: string): string {
+    let dateObj = new Date(dateStr)
+    let formattedDate = dateObj.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+    })
+    return formattedDate
+}
+
+export function getErrorMessge(err: any) {
     return err?.message ?? "Something went wrong, please contact support"
 }

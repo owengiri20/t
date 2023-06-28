@@ -7,7 +7,11 @@ import { enqueueSnackbar } from "notistack"
 const userAtom = atom<User | null>(null)
 
 export interface User {
+    // auto gorm fields
     ID: string
+    CreatedAt: string
+
+    // actual fields
     id: string
     name: string
     username: string
