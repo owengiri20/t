@@ -15,21 +15,22 @@ export interface PlayerStatsGetResp {
     avg_120?: number
 }
 
+const playerStatsFetch = async (playerID: string) => {
+    const res = await fetch(BASE_API_URL + `/player/${playerID}/stats`, {
+        method: "GET",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+
+    const data = await res.json()
+    if (data.error) throw new Error(data.error)
+    return data
+}
+
 export const usePlayer = (pID: string) => {
     // Public Player stats
-    const playerStatsFetch = async (playerID: string) => {
-        const res = await fetch(BASE_API_URL + `/player/${playerID}/stats`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-
-        const data = await res.json()
-        if (data.error) throw new Error(data.error)
-        return data
-    }
     const playerStatsQuery = useQuery<PlayerStatsGetResp>({
         queryKey: ["player-stats-public", pID],
         queryFn: () => playerStatsFetch(pID),

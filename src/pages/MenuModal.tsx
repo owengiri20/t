@@ -48,6 +48,7 @@ export const MenuModal = (props: MenuModalProps) => {
                             {[15, 30, 60, 120].map((d) => {
                                 return (
                                     <Box
+                                        key={d}
                                         style={{
                                             marginRight: "1rem",
                                             background: selectedDuration === d ? COLOURS.darkishBrown : "",

@@ -13,9 +13,10 @@ import pro from "../icons/svg/014-sunglasses.svg"
 import avarage from "../icons/svg/026-smile.svg"
 import meh from "../icons/svg/032-neutral.svg"
 import { COLOURS } from "./CommonStyles"
-import BasicTable from "./TestsTable"
+import BasicTable from "./RecentTestsTable"
 import { useTestResults } from "../containers/tests"
 import { useAuth } from "../containers/auth"
+import TestsTable from "./RecentTestsTable"
 
 interface Result {
     rating: RatingType
@@ -241,7 +242,7 @@ export const FinishCard = (props: FinishCardProps) => {
                         }}
                     >
                         <Box>
-                            <BasicTable />
+                            <TestsTable limit={3} userID={user?.ID} />
                         </Box>
                     </Container>
                 </Box>

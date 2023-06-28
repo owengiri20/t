@@ -58,7 +58,7 @@ export default function UserMenu({ user }: { user: User }) {
                         "aria-labelledby": "basic-button",
                     }}
                 >
-                    <MenuItem onClick={() => history.push("/admin")}>ADMIN</MenuItem>
+                    {user.is_admin && <MenuItem onClick={() => history.push("/admin")}>ADMIN</MenuItem>}
                     <MenuItem
                         onClick={() => {
                             history.push(`/profile/${user.ID}`)
@@ -89,7 +89,7 @@ export default function UserMenu({ user }: { user: User }) {
                         textAlign: "center",
                     }}
                 >
-                    <Box style={{ marginBottom: "2rem" }}>Are you sure you want to logout?</Box>
+                    <Box style={{ marginBottom: "2rem", fontSize: "1.2rem" }}>Are you sure you want to logout?</Box>
 
                     <Button
                         style={{

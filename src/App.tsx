@@ -92,7 +92,7 @@ function App() {
                         {"<In Development/>"}
                     </a>
                 </Box>
-                <Container maxWidth={"xl"} style={{ maxWidth: "1200px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
+                <Container maxWidth={"xl"} style={{ maxWidth: "1300px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
                     <Box
                         style={{
                             display: "flex",
