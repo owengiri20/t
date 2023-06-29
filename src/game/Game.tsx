@@ -4,28 +4,17 @@ import { useGetDuration } from "../db"
 import { useStyles } from "./CommonStyles"
 import { FinishCard } from "./Finish"
 import { Word, genWords } from "./utils/words"
-
-// disable scroll wheel
-// window.addEventListener(
-//     "wheel",
-//     function (e) {
-//         e.preventDefault()
-//     },
-//     { passive: false },
-// )
+import { useGame } from "../containers/game"
 
 // id of text display
 const DISPLAY_ID = "textDisplay"
 
-interface GameInnerProps {
-    words: Word[]
-    setWords: (t: Word[]) => void
-    scrollHeight: number
-    setScrollHeight: (h: number) => void
-}
-
-const GameInner = (props: GameInnerProps) => {
+export const Game = () => {
     const classes = useStyles()
+    const GAME = useGame()
+
+    const [words, setWords] = React.useState(genWords())
+    const [scrollHeight, setScrollHeight] = React.useState(0)
 
     const [idx, setIdx] = React.useState(0)
     const [charIdx, setCharIdx] = React.useState(0)
@@ -49,19 +38,28 @@ const GameInner = (props: GameInnerProps) => {
 
     React.useEffect(() => {
         if (!start) return
-        if (seconds > 0) {
-            setTimeout(() => setSeconds(seconds - 1), 1000)
-        } else {
-            setFinish(true)
+
+        const countdownTimeout = setTimeout(() => {
+            if (seconds > 0) {
+                setSeconds((prevSeconds) => prevSeconds - 1)
+            } else {
+                setFinish(true)
+                GAME.setGameState((prev) => ({ ...prev, status: "finished" }))
+            }
+        }, 1000)
+
+        // Cleanup function
+        return () => {
+            clearTimeout(countdownTimeout)
         }
-    })
+    }, [start, seconds])
 
     // sets words status "incorrect" or "correct"
     const handleStatus = (correct: boolean) => {
         if (correct) {
             setCorrectWords(correctWords + 1)
-            props.setWords(
-                props.words.map((w, i) => {
+            setWords(
+                words.map((w, i) => {
                     if (i === idx) {
                         return {
                             ...w,
@@ -73,8 +71,8 @@ const GameInner = (props: GameInnerProps) => {
             )
         } else {
             setWrongWords(wrongWords + 1)
-            props.setWords(
-                props.words.map((w, i) => {
+            setWords(
+                words.map((w, i) => {
                     if (i === idx) {
                         return {
                             ...w,
@@ -93,7 +91,7 @@ const GameInner = (props: GameInnerProps) => {
 
     // This function is used to compare a typed string against a target word.
     const checkSubWord = () => {
-        const currWord = props.words[idx]
+        const currWord = words[idx]
 
         const subWord = currWord.word.substring(0, charIdx)
 
@@ -122,10 +120,11 @@ const GameInner = (props: GameInnerProps) => {
             return
         }
 
-        const currWord = props.words[idx]
+        const currWord = words[idx]
 
         if (!start) {
             setStart(true)
+            GAME.setGameState((prev) => ({ ...prev, status: "playing" }))
         }
 
         // Check if the typed character is correct and increment correctChars if it is
@@ -136,7 +135,7 @@ const GameInner = (props: GameInnerProps) => {
         setCharIdx(charIdx + 1)
 
         if (key.code === "Space") {
-            if (idx === props.words.length) {
+            if (idx === words.length) {
                 return
             }
             if (word === "") return
@@ -177,15 +176,15 @@ const GameInner = (props: GameInnerProps) => {
         if (idx === 0) return
 
         // get prevous word
-        const prevWord = props.words[idx - 1]
+        const prevWord = words[idx - 1]
 
         // get textDisplay div
         let textDisplay = document.getElementById(DISPLAY_ID)
 
         // handle scroll
         if (textDisplay && prevWord.cut) {
-            textDisplay.scrollTop = props.scrollHeight
-            props.setScrollHeight(props.scrollHeight + 61)
+            textDisplay.scrollTop = scrollHeight
+            setScrollHeight(scrollHeight + 61)
         }
     }, [idx])
 
@@ -201,7 +200,7 @@ const GameInner = (props: GameInnerProps) => {
 
                     <div className={classes.typingArea} id={DISPLAY_ID}>
                         <Typography variant="subtitle1">
-                            {props.words.map((w, i) => (
+                            {words.map((w, i) => (
                                 <React.Fragment key={i}>
                                     <span
                                         style={{
@@ -242,11 +241,4 @@ const GameInner = (props: GameInnerProps) => {
             )}
         </Container>
     )
-}
-
-export const Game = () => {
-    const [words, setWords] = React.useState(genWords())
-    const [scrollHeight, setScrollHeight] = React.useState(0)
-
-    return <GameInner scrollHeight={scrollHeight} setScrollHeight={setScrollHeight} words={words} setWords={setWords} />
 }

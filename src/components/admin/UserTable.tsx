@@ -78,7 +78,6 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
 
             const res = await fetchData(`/admin/users?${params.toString()}`, "GET", null)
             const data = await res.json()
-            console.log("calling", data)
 
             if (data.error) {
                 throw new Error(data.error)

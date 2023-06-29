@@ -5,6 +5,7 @@ import { User } from "./auth"
 
 export interface PlayerStatsGetResp {
     player?: User
+    tests_completed?: number
     hi_score_15?: number
     hi_score_30?: number
     hi_score_60?: number
