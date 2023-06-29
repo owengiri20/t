@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Layout } from "./Layout"
-import { Box, Typography, makeStyles } from "@material-ui/core"
+import { Box, Tooltip, Typography, makeStyles } from "@material-ui/core"
 import { PlayerStatsGetResp, usePlayer } from "../containers/player"
 import TestsTable from "../game/RecentTestsTable"
 import { formatDate } from "../utils"
+import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications"
+import EditIcon from "@mui/icons-material/Edit"
+import { useAuth } from "../containers/auth"
 
 const useStyles = makeStyles({
     top: {
@@ -34,7 +37,7 @@ const useStyles = makeStyles({
         alignItems: "center",
         flexDirection: "column",
     },
-    avatarContainer: { display: "flex" },
+    avatarContainer: { display: "flex", width: "100%" },
     avatarDisplay: {
         borderRadius: "10px",
         height: "15rem",
@@ -97,6 +100,8 @@ const useStyles = makeStyles({
 
 export const ProfilePage = () => {
     const { playerID } = useParams<any>()
+    const { user } = useAuth()
+
     const classes = useStyles()
     const [stats, setStats] = useState<PlayerStatsGetResp | undefined>()
     const { playerStatsQuery } = usePlayer(playerID)
@@ -117,10 +122,31 @@ export const ProfilePage = () => {
                     {/* avatar and name */}
                     <Box className={classes.avatarContainer}>
                         <img className={classes.avatarDisplay} src="https://i.ibb.co/QF8T7kc/fire-astro-2.png" alt="" />
-                        <Box>
-                            <Typography className={classes.nameLabel} variant="h5">
-                                {stats?.player?.username}
-                            </Typography>
+                        <Box width={"100%"}>
+                            <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <Typography className={classes.nameLabel} variant="h5">
+                                    {stats?.player?.username}
+                                </Typography>
+                                {user?.ID.toString() === playerID.toString() && (
+                                    <Tooltip placement="top-start" style={{ cursor: "default" }} title={"Edit Profile Details"}>
+                                        <EditIcon
+                                            onClick={() => {
+                                                window.alert("Coming soon.")
+                                            }}
+                                            style={{
+                                                border: "2px solid white",
+                                                borderRadius: "10px",
+                                                padding: ".4rem",
+                                                marginRight: "3rem",
+                                                color: "#fff",
+                                                fontSize: "40px",
+                                                cursor: "pointer",
+                                            }}
+                                        />
+                                    </Tooltip>
+                                )}
+                            </Box>
+
                             <Typography className={classes.DateLabel} variant="body1">
                                 Tests Completed: {stats?.tests_completed ?? "n/a"}
                             </Typography>

@@ -107,7 +107,7 @@ function App() {
 
                         <Box display={"flex"}>
                             <TTButton
-                                onClick={() => window.alert("coming soon Yong. coming soon")}
+                                onClick={() => window.alert("Coming soon.")}
                                 sx={{
                                     marginTop: under1100Height ? "0" : "2rem",
                                     marginRight: "1rem",
@@ -147,7 +147,7 @@ function App() {
                     }}
                 >
                     <Box style={{ color: COLOURS.lightBrown, background: COLOURS.darkBrown, padding: ".5rem", borderRadius: "7px", cursor: "pointer" }}>
-                        <a href="https://owengiri.dev/" rel="noreferrer" target="_blank">
+                        <a tabIndex={-1} href="https://owengiri.dev/" rel="noreferrer" target="_blank">
                             © 2023 Owen Giri
                         </a>
                     </Box>
