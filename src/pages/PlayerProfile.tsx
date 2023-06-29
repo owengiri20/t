@@ -116,13 +116,13 @@ export const ProfilePage = () => {
                 <Box className={classes.top}>
                     {/* avatar and name */}
                     <Box className={classes.avatarContainer}>
-                        <img className={classes.avatarDisplay} src="https://i.ibb.co/ccqpHZv/fire-astro.png" alt="" />
+                        <img className={classes.avatarDisplay} src="https://i.ibb.co/QF8T7kc/fire-astro-2.png" alt="" />
                         <Box>
                             <Typography className={classes.nameLabel} variant="h5">
                                 {stats?.player?.username}
                             </Typography>
                             <Typography className={classes.DateLabel} variant="body1">
-                                Tests Taken: {stats?.tests_completed ?? "n/a"}
+                                Tests Completed: {stats?.tests_completed ?? "n/a"}
                             </Typography>
                             <Typography className={classes.DateLabel} variant="body1">
                                 Joined {formatDate(stats?.player?.joined ?? "")}
