@@ -7,7 +7,6 @@ import * as React from "react"
 import { useHistory } from "react-router-dom"
 import { User, useAuth } from "../containers/auth"
 import { COLOURS } from "../game/CommonStyles"
-import { setSyntheticLeadingComments } from "typescript"
 
 export default function UserMenu({ user }: { user: User }) {
     const history = useHistory()
@@ -30,46 +29,44 @@ export default function UserMenu({ user }: { user: User }) {
 
     return (
         <>
-            <div>
-                <Button
-                    style={{
-                        display: "flex",
-                        padding: "1rem",
-                        alignItems: "center",
-                        borderRadius: "15px",
-                        background: COLOURS.darkBrown,
-                        color: COLOURS.lightBrown,
-                        width: "fit-content",
-                        marginTop: under1100Height ? "0" : "2rem",
-                        cursor: "pointer",
-                        fontSize: "15px",
+            <Button
+                style={{
+                    display: "flex",
+                    padding: "1rem",
+                    alignItems: "center",
+                    borderRadius: "15px",
+                    background: COLOURS.darkBrown,
+                    color: COLOURS.lightBrown,
+                    width: "fit-content",
+                    marginTop: under1100Height ? "0" : "2rem",
+                    cursor: "pointer",
+                    fontSize: "15px",
+                }}
+                onClick={handleClick}
+            >
+                <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} /> {user.username}
+            </Button>
+            <Menu
+                sx={{ mt: ".1rem", "& .MuiMenu-paper": { backgroundColor: COLOURS.darkBrown, color: COLOURS.lightBrown, width: "10rem" } }}
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                }}
+            >
+                {user.is_admin && <MenuItem onClick={() => history.push("/admin")}>ADMIN</MenuItem>}
+                <MenuItem
+                    onClick={() => {
+                        history.push(`/profile/${user.ID}`)
+                        handleClose()
                     }}
-                    onClick={handleClick}
                 >
-                    <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} /> {user.username}
-                </Button>
-                <Menu
-                    sx={{ mt: ".1rem", "& .MuiMenu-paper": { backgroundColor: COLOURS.darkBrown, color: COLOURS.lightBrown, width: "10rem" } }}
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        "aria-labelledby": "basic-button",
-                    }}
-                >
-                    {user.is_admin && <MenuItem onClick={() => history.push("/admin")}>ADMIN</MenuItem>}
-                    <MenuItem
-                        onClick={() => {
-                            history.push(`/profile/${user.ID}`)
-                            handleClose()
-                        }}
-                    >
-                        Profile
-                    </MenuItem>
-                    <MenuItem onClick={() => setLogoutModalOpen(true)}>Logout</MenuItem>
-                </Menu>
-            </div>
+                    Profile
+                </MenuItem>
+                <MenuItem onClick={() => setLogoutModalOpen(true)}>Logout</MenuItem>
+            </Menu>
 
             {/* are you sure logout modal  */}
             <Modal

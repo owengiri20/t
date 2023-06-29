@@ -3,6 +3,7 @@ import { atom, useAtom } from "jotai"
 import { useHistory } from "react-router-dom"
 import { BASE_API_URL } from "../constants"
 import { enqueueSnackbar } from "notistack"
+import { useState } from "react"
 
 const userAtom = atom<User | null>(null)
 
@@ -23,6 +24,8 @@ export interface User {
 export const useAuth = () => {
     // user state
     const [user, setUser] = useAtom(userAtom)
+    // const [user, setUser] = useState(null)
+
     const history = useHistory()
 
     // login func

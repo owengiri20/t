@@ -122,7 +122,7 @@ export const ProfilePage = () => {
                                 {stats?.player?.username}
                             </Typography>
                             <Typography className={classes.DateLabel} variant="body1">
-                                Tests Taken: coming soon!
+                                Tests Taken: {stats?.tests_completed ?? "n/a"}
                             </Typography>
                             <Typography className={classes.DateLabel} variant="body1">
                                 Joined {formatDate(stats?.player?.joined ?? "")}
@@ -176,7 +176,7 @@ export const ProfilePage = () => {
                     {/* averages */}
                     <Box className={classes.bottom}>
                         <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>30 secs</Typography>
+                            <Typography className={classes.hiScoreBoxDuration}>15 secs</Typography>
                             <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
                                 {(stats?.hi_score_15 ?? 0).toFixed(1)}
                             </Typography>
@@ -184,7 +184,7 @@ export const ProfilePage = () => {
                         </Box>
 
                         <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>60 secs</Typography>
+                            <Typography className={classes.hiScoreBoxDuration}>30 secs</Typography>
                             <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
                                 {(stats?.hi_score_30 ?? 0).toFixed(1)}
                             </Typography>
@@ -192,7 +192,7 @@ export const ProfilePage = () => {
                         </Box>
 
                         <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>120 secs</Typography>
+                            <Typography className={classes.hiScoreBoxDuration}>60 secs</Typography>
                             <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
                                 {(stats?.hi_score_60 ?? 0).toFixed(1)}
                             </Typography>

@@ -15,13 +15,14 @@ import { AuthPage } from "./pages/AuthPage"
 import { GameScreen } from "./pages/GameScreen"
 import { ProfilePage } from "./pages/PlayerProfile"
 import { AdminPage } from "./pages/AdminPage"
+import TTButton from "./common/TTButton"
 
 export const useStyles = makeStyles({
     logo: {
         display: "flex",
         padding: "1rem",
         alignItems: "center",
-        borderRadius: "30px",
+        borderRadius: "20px",
         background: COLOURS.darkBrown,
         color: COLOURS.lightBrown,
         width: "fit-content",
@@ -100,19 +101,32 @@ function App() {
                         }}
                     >
                         <Box onClick={() => history.push("/")} style={{ marginTop: under1100Height ? "0" : "2rem" }} className={classes.logo}>
-                            <img src={Logo} alt="TrekTyper Logo" height={"80px"} />
-                            <Box sx={{ fontSize: "30px" }}>TrekTyper</Box>
+                            <img src={Logo} alt="TrekTyper Logo" height={"70px"} />
+                            <Box sx={{ fontSize: "25px" }}>TrekTyper</Box>
                         </Box>
 
-                        {user ? (
-                            <UserMenu user={user} />
-                        ) : (
-                            <AuthButton
-                                onClick={() => history.push("/auth?page=login")}
-                                style={{ marginTop: under1100Height ? "0" : "2rem", cursor: "pointer" }}
-                                classes={classes.logo}
-                            />
-                        )}
+                        <Box display={"flex"}>
+                            <TTButton
+                                onClick={() => window.alert("coming soon Yong. coming soon")}
+                                sx={{
+                                    marginTop: under1100Height ? "0" : "2rem",
+                                    marginRight: "1rem",
+                                    padding: "1rem",
+                                }}
+                            >
+                                Leaderboard
+                            </TTButton>
+
+                            {user ? (
+                                <UserMenu user={user} />
+                            ) : (
+                                <AuthButton
+                                    onClick={() => history.push("/auth?page=login")}
+                                    style={{ marginTop: under1100Height ? "0" : "2rem", cursor: "pointer" }}
+                                    classes={classes.logo}
+                                />
+                            )}
+                        </Box>
                     </Box>
 
                     <Switch>
