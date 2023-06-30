@@ -38,19 +38,18 @@ export const Game = () => {
 
     React.useEffect(() => {
         if (!start) return
+        let countDown: NodeJS.Timeout | null = null
+        if (seconds > 0) {
+            countDown = setTimeout(() => setSeconds(seconds - 1), 1000)
+        } else {
+            setFinish(true)
+        }
 
-        const countdownTimeout = setTimeout(() => {
-            if (seconds > 0) {
-                setSeconds((prevSeconds) => prevSeconds - 1)
-            } else {
-                setFinish(true)
-                GAME.setGameState((prev) => ({ ...prev, status: "finished" }))
-            }
-        }, 1000)
-
-        // Cleanup function
+        //  Cleanup function
         return () => {
-            clearTimeout(countdownTimeout)
+            if (countDown) {
+                clearTimeout(countDown)
+            }
         }
     }, [start, seconds])
 

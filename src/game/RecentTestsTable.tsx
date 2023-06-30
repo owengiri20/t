@@ -8,8 +8,9 @@ import TableRow from "@mui/material/TableRow"
 import * as React from "react"
 import { getTests } from "../db"
 import { useQuery } from "@tanstack/react-query"
-import { fetchData } from "../utils"
+import { fetchData, formatToDateTimeString } from "../utils"
 import { enqueueSnackbar } from "notistack"
+import { convertCompilerOptionsFromJson } from "typescript"
 interface ListTestReq {
     limit: number
     sort_by: string
@@ -81,6 +82,12 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                                 <Box>C/I</Box>
                             </Tooltip>
                         </TableCell>
+
+                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Correct/Incorrect Words">
+                                <Box>Date/time</Box>
+                            </Tooltip>
+                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -96,6 +103,7 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>
                                     {row.correct_words_count ?? 0}/{row.incorrect_words_count ?? 0}
                                 </TableCell>
+                                <TableCell style={{ fontSize: "16px", color: "white" }}>{formatToDateTimeString(row.CreatedAt) ?? "n/a"}</TableCell>
                             </TableRow>
                         ))}
 
@@ -108,6 +116,9 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>{row.duration} secs</TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>
                                     {row.correctWords ?? 0}/{row.incorrectWords ?? 0}
+                                </TableCell>
+                                <TableCell style={{ fontSize: "16px", color: "white" }}>
+                                    {/* {row.correct_words_count ?? 0}/{row.incorrect_words_count ?? 0} */}
                                 </TableCell>
                             </TableRow>
                         ))}

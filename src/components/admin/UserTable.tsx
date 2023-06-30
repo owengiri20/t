@@ -95,6 +95,10 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
         enabled: !!userID,
     })
 
+    const onRowClick = (playerID: string) => {
+        history.push(`/profile/${playerID}`)
+    }
+
     return (
         <TableContainer component={Box} style={{ height: "100%", display: "flex", flexDirection: "column" }}>
             <Typography mx="1rem" variant="h5">
@@ -140,21 +144,16 @@ export default function AdminUsersTable({ userID, limit }: { userID?: string; li
                         users &&
                         users.rows.map((row, idx) => (
                             <TableRow key={idx} sx={{ cursor: "pointer", "&:last-child td, &:last-child th": { border: 0 } }}>
-                                <TableCell
-                                    onClick={() => history.push(`/profile/${row.ID}`)}
-                                    style={{ fontSize: "16px", color: "white" }}
-                                    component="th"
-                                    scope="row"
-                                >
+                                <TableCell onClick={() => onRowClick(row.ID)} style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                     {row.ID}
                                 </TableCell>
-                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
+                                <TableCell onClick={() => onRowClick(row.ID)} style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                     {row.email}
                                 </TableCell>
-                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
+                                <TableCell onClick={() => onRowClick(row.ID)} style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                     {row.username}
                                 </TableCell>
-                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
+                                <TableCell onClick={() => onRowClick(row.ID)} style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                     {formatDate(row?.CreatedAt ?? "")}
                                 </TableCell>
                             </TableRow>
