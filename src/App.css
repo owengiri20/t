@@ -45,7 +45,9 @@ a {
 
 ::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
     background: transparent !important;
+    cursor: pointer;
 }
 
 ::-webkit-scrollbar-thumb {

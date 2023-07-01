@@ -16,6 +16,16 @@ export interface PlayerStatsGetResp {
     avg_120?: number
 }
 
+export interface Avatar {
+    // auto gorm fields
+    ID: number
+    CreatedAt: string
+    DeletedAt: string
+
+    url: string
+    file_name: string
+}
+
 const playerStatsFetch = async (playerID: string) => {
     const res = await fetch(BASE_API_URL + `/player/${playerID}/stats`, {
         method: "GET",

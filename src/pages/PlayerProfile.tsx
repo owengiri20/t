@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { Layout } from "./Layout"
 import { Box, Modal, Tooltip, Typography, makeStyles } from "@material-ui/core"
-import { PlayerStatsGetResp, usePlayer } from "../containers/player"
+import EditIcon from "@mui/icons-material/Edit"
+import Button from "@mui/material/Button"
+import TextField from "@mui/material/TextField"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { enqueueSnackbar } from "notistack"
+import React, { useCallback, useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
+import { User, useAuth } from "../containers/auth"
+import { Avatar, PlayerStatsGetResp, usePlayer } from "../containers/player"
+import { COLOURS } from "../game/CommonStyles"
 import TestsTable from "../game/RecentTestsTable"
 import { fetchData, formatDate, getErrorMessge } from "../utils"
-import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications"
-import EditIcon from "@mui/icons-material/Edit"
-import { User, useAuth } from "../containers/auth"
-import Button from "@mui/material/Button"
-import { COLOURS } from "../game/CommonStyles"
-import TextField from "@mui/material/TextField"
-import { useMutation } from "@tanstack/react-query"
-import { enqueueSnackbar } from "notistack"
+import { Layout } from "./Layout"
 
 const useStyles = makeStyles({
     top: {
@@ -113,6 +112,8 @@ export const ProfilePage = () => {
     const [stats, setStats] = useState<PlayerStatsGetResp | undefined>()
     const { playerStatsQuery } = usePlayer(playerID)
     useEffect(() => {
+        console.log("hello", playerStatsQuery.data)
+
         if (playerStatsQuery.data) {
             setStats(playerStatsQuery.data)
         }
@@ -129,7 +130,7 @@ export const ProfilePage = () => {
                     <Box className={classes.top}>
                         {/* avatar and name */}
                         <Box className={classes.avatarContainer}>
-                            <img className={classes.avatarDisplay} src="https://i.ibb.co/QF8T7kc/fire-astro-2.png" alt="" />
+                            <img className={classes.avatarDisplay} src={stats?.player?.avatar?.url ?? ""} alt="" />
                             <Box width={"100%"}>
                                 <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                     <Typography className={classes.nameLabel} variant="h5">
@@ -260,18 +261,21 @@ export const ProfilePage = () => {
 
 interface FormVals {
     newUsername: string
+    avatarID?: number
 }
 const EditProfileModal = ({ refetch, open, setIsOpen, player }: { refetch: () => void; player: User; open: boolean; setIsOpen: (b: boolean) => void }) => {
     const [formVals, setFormVals] = useState<FormVals>({
         newUsername: player.username,
+        avatarID: player.avatar?.ID,
     })
 
     // update mutation
     const { mutate } = useMutation({
-        mutationKey: ["signup"],
-        mutationFn: async ({ newUsername }: { newUsername: string }) => {
+        mutationKey: ["update-profile"],
+        mutationFn: async ({ newUsername, avatarID }: { newUsername: string; avatarID?: number }) => {
             const res = await fetchData("/player", "PUT", {
                 newUsername,
+                avatarID,
             })
 
             const data = await res.json()
@@ -295,6 +299,36 @@ const EditProfileModal = ({ refetch, open, setIsOpen, player }: { refetch: () =>
         },
     })
 
+    // query avatars
+    const avatarsQ = useQuery({
+        queryKey: ["list-avatars"],
+        queryFn: async () => {
+            const res = await fetchData("/avatars", "GET", undefined)
+            const data = await res.json()
+            if (data.error) throw new Error(data.error)
+
+            // set data here
+            return data as Avatar[]
+        },
+        onError: (error) => {
+            enqueueSnackbar(getErrorMessge(error), {
+                variant: "error",
+                autoHideDuration: 3000,
+            })
+        },
+    })
+
+    const dispalyedAvatar = useCallback(
+        (id: number) => {
+            if (!avatarsQ || !avatarsQ.data) {
+                return null
+            }
+
+            return avatarsQ.data.find((d) => d.ID === id)
+        },
+        [avatarsQ.data],
+    )
+
     const handleSave = () => {
         if (!formVals.newUsername) {
             enqueueSnackbar("Username cannot be empty.", {
@@ -304,8 +338,9 @@ const EditProfileModal = ({ refetch, open, setIsOpen, player }: { refetch: () =>
             return
         }
 
-        mutate({ newUsername: formVals.newUsername })
+        mutate({ newUsername: formVals.newUsername, avatarID: formVals.avatarID })
     }
+
     return (
         <Modal
             style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center", outline: "none" }}
@@ -332,8 +367,53 @@ const EditProfileModal = ({ refetch, open, setIsOpen, player }: { refetch: () =>
                     variant="filled"
                     value={formVals.newUsername}
                     placeholder="fill username"
-                    style={{ marginTop: "1rem", marginBottom: "1.5rem", width: "100%" }}
+                    style={{ marginTop: "1rem", marginBottom: "2rem", width: "100%" }}
                 />
+
+                <Box style={{ marginBottom: "2rem", fontSize: "1rem" }}>Select Avatar</Box>
+                <Box sx={{ display: "flex" }}>
+                    <Box>
+                        <img
+                            style={{ marginRight: "1rem", width: "200px", height: "200px", borderRadius: "10px", border: "1px solid white" }}
+                            src={dispalyedAvatar(formVals.avatarID ?? 0) ? dispalyedAvatar(formVals.avatarID ?? 0)?.url : ""}
+                            alt=""
+                        />
+                        <Typography variant="caption" display="block">
+                            Selected avatar
+                        </Typography>
+                    </Box>
+
+                    {avatarsQ.isLoading || !avatarsQ.data ? (
+                        <Box>Loading...</Box>
+                    ) : (
+                        <Box style={{ overflowX: "auto" }} sx={{ flex: 1, display: "flex", flexWrap: "nowrap" }}>
+                            <>
+                                {avatarsQ.data.map((n) => {
+                                    return (
+                                        <img
+                                            onClick={() => {
+                                                setFormVals((prev) => ({ ...prev, avatarID: n.ID }))
+                                            }}
+                                            key={n.url}
+                                            style={{
+                                                border: formVals.avatarID === n.ID ? "1px solid white" : "",
+                                                cursor: "pointer",
+                                                marginRight: "1rem",
+                                                width: "180px",
+                                                height: "180px",
+                                                padding: "1rem",
+                                                borderRadius: "10px",
+                                            }}
+                                            src={n.url}
+                                            alt=""
+                                        />
+                                    )
+                                })}
+                            </>
+                        </Box>
+                    )}
+                </Box>
+
                 <Box
                     sx={{
                         position: "absolute",

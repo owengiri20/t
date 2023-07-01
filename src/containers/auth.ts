@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom"
 import { BASE_API_URL } from "../constants"
 import { enqueueSnackbar } from "notistack"
 import { useState } from "react"
+import { Avatar } from "./player"
 
 const userAtom = atom<User | null>(null)
 
@@ -11,6 +12,7 @@ export interface User {
     // auto gorm fields
     ID: string
     CreatedAt: string
+    DeletedAt: string
 
     // actual fields
     id: string
@@ -19,6 +21,7 @@ export interface User {
     email: string
     joined: string
     is_admin: boolean
+    avatar?: Avatar
 }
 
 export const useAuth = () => {
