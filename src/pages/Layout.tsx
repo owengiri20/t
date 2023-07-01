@@ -9,7 +9,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 marginTop: "3rem",
                 height: "90vh",
                 maxHeight: "800px",
-                maxWidth: "1300px",
+                maxWidth: "100%",
                 display: "flex",
                 flexDirection: "column",
             }}

@@ -62,4 +62,5 @@ export const COLOURS = {
     darkBrown: "#0A0603",
 
     fadedRed: "#9c3d3d",
+    fadedGreen: "#456b3d",
 }

@@ -93,14 +93,14 @@ function App() {
                         {"<In Development/>"}
                     </a>
                 </Box>
-                <Container maxWidth={"xl"} style={{ maxWidth: "1300px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
+                <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
                     <Box
                         style={{
                             display: "flex",
                             justifyContent: "space-between",
                         }}
                     >
-                        <Box onClick={() => history.push("/")} style={{ marginTop: under1100Height ? "0" : "2rem" }} className={classes.logo}>
+                        <Box onClick={() => history.push("/")} style={{ marginTop: under1100Height ? "-1rem" : "2rem" }} className={classes.logo}>
                             <img src={Logo} alt="TrekTyper Logo" height={"70px"} />
                             <Box sx={{ fontSize: "25px" }}>TrekTyper</Box>
                         </Box>
