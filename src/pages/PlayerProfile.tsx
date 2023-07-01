@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { Layout } from "./Layout"
-import { Box, Tooltip, Typography, makeStyles } from "@material-ui/core"
+import { Box, Modal, Tooltip, Typography, makeStyles } from "@material-ui/core"
 import { PlayerStatsGetResp, usePlayer } from "../containers/player"
 import TestsTable from "../game/RecentTestsTable"
-import { formatDate } from "../utils"
+import { fetchData, formatDate, getErrorMessge } from "../utils"
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications"
 import EditIcon from "@mui/icons-material/Edit"
-import { useAuth } from "../containers/auth"
+import { User, useAuth } from "../containers/auth"
+import Button from "@mui/material/Button"
+import { COLOURS } from "../game/CommonStyles"
+import TextField from "@mui/material/TextField"
+import { useMutation } from "@tanstack/react-query"
+import { enqueueSnackbar } from "notistack"
 
 const useStyles = makeStyles({
     top: {
@@ -102,6 +107,8 @@ export const ProfilePage = () => {
     const { playerID } = useParams<any>()
     const { user } = useAuth()
 
+    const [editModalOpen, setEditModalOpen] = useState(false)
+
     const classes = useStyles()
     const [stats, setStats] = useState<PlayerStatsGetResp | undefined>()
     const { playerStatsQuery } = usePlayer(playerID)
@@ -112,138 +119,253 @@ export const ProfilePage = () => {
     }, [playerStatsQuery.data, playerStatsQuery.error])
 
     return (
-        <Layout>
-            <Box
-                style={{
-                    overflowY: "auto",
-                }}
-            >
-                <Box className={classes.top}>
-                    {/* avatar and name */}
-                    <Box className={classes.avatarContainer}>
-                        <img className={classes.avatarDisplay} src="https://i.ibb.co/QF8T7kc/fire-astro-2.png" alt="" />
-                        <Box width={"100%"}>
-                            <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <Typography className={classes.nameLabel} variant="h5">
-                                    {stats?.player?.username}
+        <>
+            <Layout>
+                <Box
+                    style={{
+                        overflowY: "auto",
+                    }}
+                >
+                    <Box className={classes.top}>
+                        {/* avatar and name */}
+                        <Box className={classes.avatarContainer}>
+                            <img className={classes.avatarDisplay} src="https://i.ibb.co/QF8T7kc/fire-astro-2.png" alt="" />
+                            <Box width={"100%"}>
+                                <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    <Typography className={classes.nameLabel} variant="h5">
+                                        {stats?.player?.username}
+                                    </Typography>
+                                    {user?.ID.toString() === playerID.toString() && (
+                                        <Tooltip placement="top-start" style={{ cursor: "default" }} title={"Edit Profile Details"}>
+                                            <EditIcon
+                                                onClick={() => {
+                                                    setEditModalOpen(true)
+                                                }}
+                                                style={{
+                                                    border: "2px solid white",
+                                                    borderRadius: "10px",
+                                                    padding: ".4rem",
+                                                    marginRight: "3rem",
+                                                    color: "#fff",
+                                                    fontSize: "40px",
+                                                    cursor: "pointer",
+                                                }}
+                                            />
+                                        </Tooltip>
+                                    )}
+                                </Box>
+
+                                <Typography className={classes.DateLabel} variant="body1">
+                                    Tests Completed: {stats?.tests_completed ?? "n/a"}
                                 </Typography>
-                                {user?.ID.toString() === playerID.toString() && (
-                                    <Tooltip placement="top-start" style={{ cursor: "default" }} title={"Edit Profile Details"}>
-                                        <EditIcon
-                                            onClick={() => {
-                                                window.alert("Coming soon.")
-                                            }}
-                                            style={{
-                                                border: "2px solid white",
-                                                borderRadius: "10px",
-                                                padding: ".4rem",
-                                                marginRight: "3rem",
-                                                color: "#fff",
-                                                fontSize: "40px",
-                                                cursor: "pointer",
-                                            }}
-                                        />
-                                    </Tooltip>
-                                )}
+                                <Typography className={classes.DateLabel} variant="body1">
+                                    Joined {formatDate(stats?.player?.joined ?? "")}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    </Box>
+                    <Box className={classes.bottomContainer}>
+                        <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
+                            Averages.
+                        </Typography>
+                        {/* averages */}
+                        <Box className={classes.bottom}>
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>15 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.avg_15 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
+                            </Box>
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>30 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.avg_30 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
                             </Box>
 
-                            <Typography className={classes.DateLabel} variant="body1">
-                                Tests Completed: {stats?.tests_completed ?? "n/a"}
-                            </Typography>
-                            <Typography className={classes.DateLabel} variant="body1">
-                                Joined {formatDate(stats?.player?.joined ?? "")}
-                            </Typography>
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>60 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.avg_60 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
+                            </Box>
+
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>120 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.avg_120 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
-                <Box className={classes.bottomContainer}>
-                    <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
-                        Averages.
-                    </Typography>
-                    {/* averages */}
-                    <Box className={classes.bottom}>
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>15 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.avg_15 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>30 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.avg_30 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
 
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>60 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.avg_60 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
-
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>120 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.avg_120 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
-                    </Box>
-                </Box>
-
-                <Box className={classes.bottomContainer}>
-                    <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
-                        Hi-scores.
-                    </Typography>
-                    {/* averages */}
-                    <Box className={classes.bottom}>
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>15 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.hi_score_15 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
-
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>30 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.hi_score_30 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
-
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>60 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.hi_score_60 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
-
-                        <Box className={classes.averagesBox}>
-                            <Typography className={classes.hiScoreBoxDuration}>120 secs</Typography>
-                            <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
-                                {(stats?.hi_score_120 ?? 0).toFixed(1)}
-                            </Typography>
-                            <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
-                        </Box>
-                    </Box>
-                </Box>
-
-                <Box className={classes.bottomTable}>
-                    <Box height={"100%"} width={"90%"}>
+                    <Box className={classes.bottomContainer}>
                         <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
-                            Recent Perfomances
+                            Hi-scores.
                         </Typography>
-                        <TestsTable userID={playerID} />
+                        {/* averages */}
+                        <Box className={classes.bottom}>
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>15 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.hi_score_15 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
+                            </Box>
+
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>30 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.hi_score_30 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
+                            </Box>
+
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>60 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.hi_score_60 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
+                            </Box>
+
+                            <Box className={classes.averagesBox}>
+                                <Typography className={classes.hiScoreBoxDuration}>120 secs</Typography>
+                                <Typography className={classes.hiScoreBoxWPM} style={{ fontWeight: "bold" }}>
+                                    {(stats?.hi_score_120 ?? 0).toFixed(1)}
+                                </Typography>
+                                <Typography className={classes.hiScoreBoxWPMLabel}>WPM</Typography>
+                            </Box>
+                        </Box>
                     </Box>
+
+                    <Box className={classes.bottomTable}>
+                        <Box height={"100%"} width={"90%"}>
+                            <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
+                                Recent Perfomances
+                            </Typography>
+                            <TestsTable userID={playerID} />
+                        </Box>
+                    </Box>
+                </Box>
+            </Layout>
+            {user && <EditProfileModal refetch={() => playerStatsQuery.refetch()} player={user} open={editModalOpen} setIsOpen={setEditModalOpen} />}
+        </>
+    )
+}
+
+interface FormVals {
+    newUsername: string
+}
+const EditProfileModal = ({ refetch, open, setIsOpen, player }: { refetch: () => void; player: User; open: boolean; setIsOpen: (b: boolean) => void }) => {
+    const [formVals, setFormVals] = useState<FormVals>({
+        newUsername: player.username,
+    })
+
+    // update mutation
+    const { mutate } = useMutation({
+        mutationKey: ["signup"],
+        mutationFn: async ({ newUsername }: { newUsername: string }) => {
+            const res = await fetchData("/player", "PUT", {
+                newUsername,
+            })
+
+            const data = await res.json()
+            if (data.error) throw new Error(data.error)
+            return data
+        },
+        onSuccess: (data) => {
+            enqueueSnackbar("Details updated successfully!", {
+                variant: "success",
+                autoHideDuration: 3000,
+            })
+
+            setIsOpen(false)
+            refetch()
+        },
+        onError: (error) => {
+            enqueueSnackbar(getErrorMessge(error), {
+                variant: "error",
+                autoHideDuration: 3000,
+            })
+        },
+    })
+
+    const handleSave = () => {
+        if (!formVals.newUsername) {
+            enqueueSnackbar("Username cannot be empty.", {
+                variant: "error",
+                autoHideDuration: 3000,
+            })
+            return
+        }
+
+        mutate({ newUsername: formVals.newUsername })
+    }
+    return (
+        <Modal
+            style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center", outline: "none" }}
+            open={open}
+            onClose={() => setIsOpen(false)}
+        >
+            <Box
+                style={{
+                    padding: "2rem",
+                    color: "white",
+                    borderRadius: "20px",
+                    background: COLOURS.darkBrown,
+                    height: "600px",
+                    width: "70%",
+                    maxWidth: "1000px",
+                    position: "relative",
+                }}
+            >
+                <Box style={{ marginBottom: "2rem", fontSize: "1.2rem" }}>Edit Profile Details</Box>
+                <TextField
+                    onChange={(e) => setFormVals((prev) => ({ ...prev, newUsername: e.target.value }))}
+                    id="outlined-basic"
+                    label="Username"
+                    variant="filled"
+                    value={formVals.newUsername}
+                    placeholder="fill username"
+                    style={{ marginTop: "1rem", marginBottom: "1.5rem", width: "100%" }}
+                />
+                <Box
+                    sx={{
+                        position: "absolute",
+                        bottom: "2rem",
+                        right: "2rem",
+                    }}
+                >
+                    <Button
+                        style={{
+                            backgroundColor: COLOURS.fadedGreen,
+                            color: "white",
+                            borderRadius: "10px",
+                            marginRight: ".7rem",
+                        }}
+                        variant="contained"
+                        onClick={handleSave}
+                    >
+                        Save Changes
+                    </Button>
+                    <Button
+                        style={{
+                            backgroundColor: COLOURS.darkishBrown,
+                            color: COLOURS.lightBrown,
+                            borderRadius: "10px",
+                        }}
+                        variant="contained"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        Cancel
+                    </Button>
                 </Box>
             </Box>
-        </Layout>
+        </Modal>
     )
 }
