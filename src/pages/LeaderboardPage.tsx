@@ -4,6 +4,8 @@ import React from "react"
 import LeaderboardTable from "../components/leaderboard/LeaderboardTable"
 import { Layout } from "./Layout"
 import Box from "@mui/material/Box"
+import { COLOURS } from "../game/CommonStyles"
+import { makeStyles } from "@material-ui/core/styles"
 interface TabPanelProps {
     children?: React.ReactNode
     index: number
@@ -44,9 +46,27 @@ export const LeaderboardPage = () => {
         <Layout>
             <>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Highest WPM" {...a11yProps(0)} />
-                        <Tab label="Highest WPM Per User" {...a11yProps(1)} />
+                    <Tabs
+                        TabIndicatorProps={{
+                            style: {
+                                backgroundColor: COLOURS.lightBrown,
+                            },
+                        }}
+                        sx={{
+                            ".Mui-selected": {
+                                color: "white !important",
+                            },
+                            ".MuiTab-wrapper": {
+                                alignItems: "self-start",
+                                justifyContent: "flex-start",
+                            },
+                        }}
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="basic tabs example"
+                    >
+                        <Tab sx={{ width: "20rem" }} label="Highest WPM" {...a11yProps(0)} />
+                        <Tab sx={{ alignItems: "start", width: "20rem" }} label="Highest WPM Per User" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>

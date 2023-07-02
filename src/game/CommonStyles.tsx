@@ -63,4 +63,6 @@ export const COLOURS = {
 
     fadedRed: "#9c3d3d",
     fadedGreen: "#456b3d",
+
+    podium: "#19212b",
 }

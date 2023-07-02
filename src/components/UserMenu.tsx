@@ -44,7 +44,13 @@ export default function UserMenu({ user }: { user: User }) {
                 }}
                 onClick={handleClick}
             >
-                <AccountCircleIcon style={{ marginRight: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} /> {user.username}
+                {user.username}
+
+                {!user.avatar ? (
+                    <AccountCircleIcon style={{ marginLeft: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} />
+                ) : (
+                    <img style={{ height: "3.5rem", width: "3.5rem", marginLeft: "1rem", borderRadius: "10px" }} src={user.avatar.url} alt="user's avatar" />
+                )}
             </Button>
             <Menu
                 sx={{ mt: ".1rem", "& .MuiMenu-paper": { backgroundColor: COLOURS.darkBrown, color: COLOURS.lightBrown, width: "10rem" } }}
