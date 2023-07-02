@@ -1,4 +1,4 @@
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 import { enqueueSnackbar } from "notistack"
 import { BASE_API_URL } from "../constants"
 

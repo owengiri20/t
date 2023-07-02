@@ -18,7 +18,7 @@ import { User } from "../../containers/auth"
 import { TestResult } from "../../containers/player"
 import { fetchData, formatToDateTimeString } from "../../utils"
 
-interface UserListReq {
+interface LeadbordReq {
     duration: number
 }
 
@@ -27,22 +27,14 @@ interface LeaderboardObject {
     user: User
 }
 
-const useStyles = makeStyles(() => ({
-    ul: {
-        "& .MuiPaginationItem-root": {
-            color: "#fff",
-        },
-    },
-}))
-
-export default function LeaderboardTableHighestWPM({ limit }: { limit?: number }) {
-    const [pageNum, setPageNum] = useState(0)
-    const [offset, setOffset] = useState(0)
-
-    const [filter, setFilter] = useState<UserListReq>({ duration: 15 })
-
+interface LeaderboardTableProps {
+    limit?: number
+    endpoint: string
+    title?: string
+}
+export default function LeaderboardTable({ limit, endpoint, title }: LeaderboardTableProps) {
+    const [filter, setFilter] = useState<LeadbordReq>({ duration: 15 })
     const [users, setUsers] = useState<LeaderboardObject[]>()
-    const classes = useStyles()
     const history = useHistory()
 
     // query users results
@@ -54,7 +46,7 @@ export default function LeaderboardTableHighestWPM({ limit }: { limit?: number }
                 duration: filter.duration.toString(),
             })
 
-            const res = await fetchData(`/leaderboard/highest-wpm?${params.toString()}`, "GET", null)
+            const res = await fetchData(`${endpoint}?${params.toString()}`, "GET", null)
             const data = await res.json()
 
             console.log("heloo", data)
@@ -86,11 +78,12 @@ export default function LeaderboardTableHighestWPM({ limit }: { limit?: number }
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
+                paddingRight: "1rem",
             }}
         >
             <Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "2.6rem" }}>
                 <Typography mx="1rem" variant="h5">
-                    Highest WPM Per User
+                    {title}
                 </Typography>
 
                 <FormControl sx={{ marginTop: "1rem" }}>

@@ -1,14 +1,9 @@
-import React from "react"
-import AdminUsersTable from "../components/admin/UserTable"
-import { Layout } from "./Layout"
-import LeaderboardTable from "../components/leaderboard/LeaderboardTable"
-import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
-import Typography from "@mui/material/Typography"
-
+import Tabs from "@mui/material/Tabs"
+import React from "react"
+import LeaderboardTable from "../components/leaderboard/LeaderboardTable"
+import { Layout } from "./Layout"
 import Box from "@mui/material/Box"
-import LeaderboardTablePerUser from "../components/leaderboard/LeaderboardTablePerUser"
-import LeaderboardTableHighestWPM from "../components/leaderboard/LeaderboardTable"
 interface TabPanelProps {
     children?: React.ReactNode
     index: number
@@ -56,12 +51,12 @@ export const LeaderboardPage = () => {
                 </Box>
                 <TabPanel value={value} index={0}>
                     <Box sx={{ height: "85%" }}>
-                        <LeaderboardTableHighestWPM limit={10} />
+                        <LeaderboardTable limit={10} endpoint={"/leaderboard/highest-wpm"} title="Highest WPM" />
                     </Box>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Box>
-                        <LeaderboardTablePerUser limit={10} />
+                    <Box sx={{ height: "85%" }}>
+                        <LeaderboardTable limit={10} endpoint={"/leaderboard/highest-wpm-per-user"} title="Highest WPM (Per User)" />
                     </Box>
                 </TabPanel>
             </>
