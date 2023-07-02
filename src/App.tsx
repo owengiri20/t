@@ -12,10 +12,12 @@ import UserMenu from "./components/UserMenu"
 import { useAuth } from "./containers/auth"
 import { COLOURS } from "./game/CommonStyles"
 import { AuthPage } from "./pages/AuthPage"
-import { GameScreen } from "./pages/GameScreen"
+import { GameScreen } from "./pages/GamePage"
 import { ProfilePage } from "./pages/PlayerProfile"
 import { AdminPage } from "./pages/AdminPage"
 import TTButton from "./common/TTButton"
+import { Leaderboard } from "@mui/icons-material"
+import { LeaderboardPage } from "./pages/LeaderboardPage"
 
 export const useStyles = makeStyles({
     logo: {
@@ -107,7 +109,10 @@ function App() {
 
                         <Box display={"flex"}>
                             <TTButton
-                                onClick={() => window.alert("Coming soon.")}
+                                onClick={() => {
+                                    window.alert("coming soon")
+                                    // history.push("/leaderboard")
+                                }}
                                 sx={{
                                     marginTop: under1100Height ? "0" : "2rem",
                                     marginRight: "1rem",
@@ -134,6 +139,7 @@ function App() {
                         <Route path="/auth" component={AuthPage} exact />
                         <Route path="/profile/:playerID" component={ProfilePage} exact />
                         <Route path="/admin" component={AdminPage} exact />
+                        <Route path="/leaderboard" component={LeaderboardPage} exact />
                     </Switch>
                 </Container>
                 <Box

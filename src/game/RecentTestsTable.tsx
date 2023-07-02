@@ -11,6 +11,7 @@ import { useQuery } from "@tanstack/react-query"
 import { fetchData, formatToDateTimeString } from "../utils"
 import { enqueueSnackbar } from "notistack"
 import { convertCompilerOptionsFromJson } from "typescript"
+import { TestResult } from "../containers/player"
 interface ListTestReq {
     limit: number
     sort_by: string
@@ -20,16 +21,6 @@ interface ListTestReq {
 interface TestResutlsResp {
     total: number
     rows: TestResult[]
-}
-
-interface TestResult {
-    ID: number
-    CreatedAt: string
-    user_id: number
-    wpm: number
-    duration_secs: number
-    correct_words_count: number
-    incorrect_words_count?: number
 }
 
 export default function TestsTable({ userID, limit }: { userID?: string; limit?: number }) {
