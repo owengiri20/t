@@ -109,7 +109,10 @@ function App() {
 
                         <Box display={"flex"}>
                             <TTButton
-                                onClick={() => history.push("/leaderboard")}
+                                onClick={() => {
+                                    window.alert("coming soon")
+                                    // history.push("/leaderboard")
+                                }}
                                 sx={{
                                     marginTop: under1100Height ? "0" : "2rem",
                                     marginRight: "1rem",
