@@ -71,12 +71,12 @@ export const LeaderboardPage = () => {
                 </Box>
                 <TabPanel value={value} index={0}>
                     <Box sx={{ height: "85%" }}>
-                        <LeaderboardTable limit={10} endpoint={"/leaderboard/highest-wpm"} title="Highest WPM" />
+                        <LeaderboardTable key="wpm" limit={10} endpoint={"/leaderboard/highest-wpm"} title="Highest WPM" />
                     </Box>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <Box sx={{ height: "85%" }}>
-                        <LeaderboardTable limit={10} endpoint={"/leaderboard/highest-wpm-per-user"} title="Highest WPM (Per User)" />
+                        <LeaderboardTable key="wpm-per-user" limit={10} endpoint={"/leaderboard/highest-wpm-per-user"} title="Highest WPM (Per User)" />
                     </Box>
                 </TabPanel>
             </>

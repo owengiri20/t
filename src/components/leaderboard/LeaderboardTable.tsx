@@ -32,6 +32,7 @@ interface LeaderboardTableProps {
     limit?: number
     endpoint: string
     title?: string
+    key: string
 }
 
 interface Top3 {
@@ -39,7 +40,7 @@ interface Top3 {
     pos2?: LeaderboardObject
     pos3?: LeaderboardObject
 }
-export default function LeaderboardTable({ limit, endpoint, title }: LeaderboardTableProps) {
+export default function LeaderboardTable({ limit, endpoint, title, key }: LeaderboardTableProps) {
     const [filter, setFilter] = useState<LeadbordReq>({ duration: 15 })
     const [users, setUsers] = useState<LeaderboardObject[]>()
     const [top3, setTop3] = useState<Top3>()
@@ -47,8 +48,8 @@ export default function LeaderboardTable({ limit, endpoint, title }: Leaderboard
     const history = useHistory()
 
     // query users results
-    const { refetch } = useQuery({
-        queryKey: ["leaderboard", filter],
+    useQuery({
+        queryKey: ["leaderboard-" + key, filter],
         queryFn: async ({ queryKey }) => {
             const [_key, _filter, _offset] = queryKey
             const params = new URLSearchParams({
