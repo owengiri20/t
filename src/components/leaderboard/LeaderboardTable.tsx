@@ -58,8 +58,6 @@ export default function LeaderboardTable({ limit, endpoint, title }: Leaderboard
             const res = await fetchData(`${endpoint}?${params.toString()}`, "GET", null)
             const data = await res.json()
 
-            console.log("heloo", data)
-
             if (data.error) {
                 throw new Error(data.error)
             }
