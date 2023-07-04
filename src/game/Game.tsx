@@ -1,10 +1,13 @@
-import { Container, Typography } from "@material-ui/core"
 import React from "react"
 import { useGetDuration } from "../db"
-import { useStyles } from "./CommonStyles"
+import { COLOURS, useStyles } from "./CommonStyles"
 import { FinishCard } from "./Finish"
 import { Word, genWords } from "./utils/words"
 import { useGame } from "../containers/game"
+import Container from "@mui/material/Container"
+import Typography from "@mui/material/Typography"
+
+import "../shake.css"
 
 // id of text display
 const DISPLAY_ID = "textDisplay"
@@ -192,38 +195,46 @@ export const Game = () => {
             {!finish ? (
                 <>
                     <div className={classes.timer}>
-                        <Typography className={classes.timerText} variant="h3">
+                        <Typography
+                            sx={{
+                                color: seconds <= 3 ? "red" : COLOURS.lightBrown,
+                                fontSize: "4.3rem",
+                            }}
+                        >
                             {seconds}
                         </Typography>
                     </div>
 
-                    <div className={classes.typingArea} id={DISPLAY_ID}>
-                        <Typography variant="subtitle1">
-                            {words.map((w, i) => (
-                                <React.Fragment key={i}>
-                                    <span
-                                        style={{
-                                            padding: "5px",
-                                            backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
-                                            color: getColour(w.status),
-                                            fontSize: "35px",
-                                            fontWeight: onCurrWord(i) ? "bold" : "unset",
-                                        }}
-                                        key={i}
-                                    >
-                                        {w.word.split("").map((l, idx) => {
-                                            return (
-                                                <span key={l + idx}>
-                                                    <span>{l}</span>
-                                                </span>
-                                            )
-                                        })}
-                                    </span>
-                                    {w.cut && <br />}
-                                </React.Fragment>
-                            ))}
-                        </Typography>
+                    <div className={seconds <= 3 ? "shake-n-bake" : ""}>
+                        <div className={classes.typingArea} id={DISPLAY_ID}>
+                            <Typography variant="subtitle1">
+                                {words.map((w, i) => (
+                                    <React.Fragment key={i}>
+                                        <span
+                                            style={{
+                                                padding: "5px",
+                                                backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
+                                                color: getColour(w.status),
+                                                fontSize: "35px",
+                                                fontWeight: onCurrWord(i) ? "bold" : "unset",
+                                            }}
+                                            key={i}
+                                        >
+                                            {w.word.split("").map((l, idx) => {
+                                                return (
+                                                    <span key={l + idx}>
+                                                        <span>{l}</span>
+                                                    </span>
+                                                )
+                                            })}
+                                        </span>
+                                        {w.cut && <br />}
+                                    </React.Fragment>
+                                ))}
+                            </Typography>
+                        </div>
                     </div>
+
                     <div className={classes.line}></div>
                     <textarea
                         className={classes.textAreaStyles}
