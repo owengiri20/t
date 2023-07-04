@@ -35,7 +35,7 @@ export const useStyles = makeStyles({
         justifyContent: "center",
     },
     timerText: {
-        fontSize: "80px",
+        fontSize: "100px",
         opacity: ".4",
         color: "#AA8270",
     },
