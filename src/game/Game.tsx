@@ -17,14 +17,17 @@ export const Game = () => {
     const GAME = useGame()
 
     const [words, setWords] = React.useState(genWords())
+
+    // console.log(words.length)
+
     const [scrollHeight, setScrollHeight] = React.useState(0)
 
     const [idx, setIdx] = React.useState(0)
     const [charIdx, setCharIdx] = React.useState(0)
 
     const [word, setWord] = React.useState<string>("")
-    const [finish, setFinish] = React.useState(false)
-    const [start, setStart] = React.useState(false)
+    // const [finish, setFinish] = React.useState(false)
+    // const [start, setStart] = React.useState(false)
 
     const duration = useGetDuration()
     const [seconds, setSeconds] = React.useState(duration)
@@ -40,12 +43,12 @@ export const Game = () => {
     const [highlightedTextColour, setHighlightedTextColour] = React.useState<string>("#000")
 
     React.useEffect(() => {
-        if (!start) return
+        if (GAME.gameState.status !== "playing") return
         let countDown: NodeJS.Timeout | null = null
         if (seconds > 0) {
             countDown = setTimeout(() => setSeconds(seconds - 1), 1000)
         } else {
-            setFinish(true)
+            GAME.setGameState((prev) => ({ ...prev, status: "finished" }))
         }
 
         //  Cleanup function
@@ -54,37 +57,24 @@ export const Game = () => {
                 clearTimeout(countDown)
             }
         }
-    }, [start, seconds])
+    }, [GAME.gameState.status, seconds])
 
-    // sets words status "incorrect" or "correct"
     const handleStatus = (correct: boolean) => {
+        const newWords = [...words]
         if (correct) {
-            setCorrectWords(correctWords + 1)
-            setWords(
-                words.map((w, i) => {
-                    if (i === idx) {
-                        return {
-                            ...w,
-                            status: "correct",
-                        }
-                    }
-                    return w
-                }),
-            )
+            setCorrectWords((prev) => prev + 1)
+            newWords[idx] = {
+                ...newWords[idx],
+                status: "correct",
+            }
         } else {
-            setWrongWords(wrongWords + 1)
-            setWords(
-                words.map((w, i) => {
-                    if (i === idx) {
-                        return {
-                            ...w,
-                            status: "incorrect",
-                        }
-                    }
-                    return w
-                }),
-            )
+            setWrongWords((prev) => prev + 1)
+            newWords[idx] = {
+                ...newWords[idx],
+                status: "incorrect",
+            }
         }
+        setWords(newWords)
     }
 
     const handleRestart = () => {
@@ -124,8 +114,7 @@ export const Game = () => {
 
         const currWord = words[idx]
 
-        if (!start) {
-            setStart(true)
+        if (GAME.gameState.status !== "playing") {
             GAME.setGameState((prev) => ({ ...prev, status: "playing" }))
         }
 
@@ -162,10 +151,14 @@ export const Game = () => {
         }
     }
 
+    const statusToColorMap: Record<"correct" | "incorrect" | "eh", string> = {
+        correct: "green",
+        incorrect: "red",
+        eh: "#AA8270",
+    }
+
     const getColour = (status: "correct" | "incorrect" | "eh") => {
-        if (status === "correct") return "green"
-        if (status === "incorrect") return "red"
-        if (status === "eh") return "#AA8270"
+        return statusToColorMap[status]
     }
 
     const onCurrWord = (currIdx: number) => {
@@ -192,12 +185,12 @@ export const Game = () => {
 
     return (
         <Container className={classes.CenterBox}>
-            {!finish ? (
+            {GAME.gameState.status !== "finished" ? (
                 <>
                     <div className={classes.timer}>
                         <Typography
                             sx={{
-                                color: seconds <= 3 ? "red" : COLOURS.lightBrown,
+                                color: seconds <= 3 ? "orange" : COLOURS.lightBrown,
                                 fontSize: "4.3rem",
                             }}
                         >

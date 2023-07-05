@@ -29,17 +29,19 @@ export const shuffle = (arr: string[]) => {
     return arr
 }
 
-// generate list of words of json file
 export const genWords = (): Word[] => {
     const words: string[] = shuffle([...wordsJSON.split("|"), ...wordsJSON.split("|")])
     const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
-    const testWords: Word[] = words.map((w, i) => {
+    let testWords: Word[] = words.map((w, i) => {
         let c = false
         if (cutOffs.includes(i)) {
             c = true
         }
         return { word: w, status: "eh", cut: c }
     })
+
+    // Cap the length to 350
+    testWords = testWords.slice(0, 350)
 
     return testWords
 }
