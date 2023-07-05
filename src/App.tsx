@@ -17,6 +17,7 @@ import { ProfilePage } from "./pages/PlayerProfile"
 import { AdminPage } from "./pages/AdminPage"
 import TTButton from "./common/TTButton"
 import { Leaderboard } from "@mui/icons-material"
+import GitHubIcon from "@mui/icons-material/GitHub"
 import { LeaderboardPage } from "./pages/LeaderboardPage"
 
 export const useStyles = makeStyles({
@@ -37,7 +38,10 @@ export const useStyles = makeStyles({
         right: "0",
         margin: "0",
         padding: "1rem",
+        fontWeight: "bold",
         background: COLOURS.lightBrown,
+        display: "flex",
+        alignItems: "center",
     },
 })
 
@@ -49,50 +53,13 @@ function App() {
     // check me here
     const { user } = useAuth()
 
-    const [showApp, setShowApp] = useState(true)
-
-    useEffect(() => {
-        // Check if 'user_allowed' data exists in local storage and if it's not expired
-        const userAllowedData = localStorage.getItem("user_allowed")
-        if (userAllowedData) {
-            const { allowed, expiry } = JSON.parse(userAllowedData)
-            if (allowed && new Date(expiry) > new Date()) {
-                setShowApp(true)
-                return
-            }
-        }
-
-        const checkPassword = () => {
-            let enteredPassword = window.prompt("Enter the password:")
-            if (enteredPassword === "hasbulla") {
-                setShowApp(true)
-                // Save 'user_allowed' data to local storage with expiry 30 minutes from now
-                localStorage.setItem(
-                    "user_allowed",
-                    JSON.stringify({
-                        allowed: true,
-                        expiry: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes from now
-                    }),
-                )
-            } else {
-                alert("Nah bro")
-                checkPassword() // recursively call checkPassword
-            }
-        }
-
-        // checkPassword()
-    }, [])
-
-    if (!showApp) {
-        return <div>no</div>
-    }
-
     return (
         <AppWrapper>
             <>
                 <Box className={classes.inDevelopment}>
+                    <GitHubIcon sx={{ mr: ".2rem" }} />
                     <a href="https://github.com/owengiri20/tt" rel="noreferrer" target="_blank">
-                        {"<In Development/>"}
+                        {"IN DEVELOPMENT"}
                     </a>
                 </Box>
                 <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>

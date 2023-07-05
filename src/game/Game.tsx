@@ -205,35 +205,35 @@ export const Game = () => {
                         </Typography>
                     </div>
 
-                    <div className={seconds <= 3 ? "shake-n-bake" : ""}>
-                        <div className={classes.typingArea} id={DISPLAY_ID}>
-                            <Typography variant="subtitle1">
-                                {words.map((w, i) => (
-                                    <React.Fragment key={i}>
-                                        <span
-                                            style={{
-                                                padding: "5px",
-                                                backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
-                                                color: getColour(w.status),
-                                                fontSize: "35px",
-                                                fontWeight: onCurrWord(i) ? "bold" : "unset",
-                                            }}
-                                            key={i}
-                                        >
-                                            {w.word.split("").map((l, idx) => {
-                                                return (
-                                                    <span key={l + idx}>
-                                                        <span>{l}</span>
-                                                    </span>
-                                                )
-                                            })}
-                                        </span>
-                                        {w.cut && <br />}
-                                    </React.Fragment>
-                                ))}
-                            </Typography>
-                        </div>
+                    {/* <div className={seconds <= 3 ? "shake-n-bake" : ""}> */}
+                    <div className={classes.typingArea} id={DISPLAY_ID}>
+                        <Typography variant="subtitle1">
+                            {words.map((w, i) => (
+                                <React.Fragment key={i}>
+                                    <span
+                                        style={{
+                                            padding: "5px",
+                                            backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
+                                            color: getColour(w.status),
+                                            fontSize: "35px",
+                                            fontWeight: onCurrWord(i) ? "bold" : "unset",
+                                        }}
+                                        key={i}
+                                    >
+                                        {w.word.split("").map((l, idx) => {
+                                            return (
+                                                <span key={l + idx}>
+                                                    <span>{l}</span>
+                                                </span>
+                                            )
+                                        })}
+                                    </span>
+                                    {w.cut && <br />}
+                                </React.Fragment>
+                            ))}
+                        </Typography>
                     </div>
+                    {/* </div> */}
 
                     <div className={classes.line}></div>
                     <textarea
