@@ -140,7 +140,7 @@ export default function LeaderboardTable({ limit, endpoint, title, key }: Leader
                 </Box>
 
                 <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: "1rem" }}>
-                    {/* pos2 */}
+                    {/* pos3 */}
                     <Box
                         sx={{ height: "7rem", flex: 1 }}
                         style={{
@@ -167,12 +167,12 @@ export default function LeaderboardTable({ limit, endpoint, title, key }: Leader
                                     width: "5rem",
                                     borderRadius: "10px",
                                 }}
-                                src={top3?.pos2?.user.avatar?.url}
+                                src={top3?.pos3?.user.avatar?.url}
                                 alt=""
                             />
                         </Box>
                         <Typography marginTop={"2rem"} textAlign={"center"}>
-                            {top3?.pos2?.user.username ?? "N/A"}
+                            {top3?.pos3?.user.username ?? "N/A"}
                         </Typography>
                     </Box>
 
@@ -238,12 +238,12 @@ export default function LeaderboardTable({ limit, endpoint, title, key }: Leader
                                     borderRadius: "10px",
                                     border: "2.5px solid #b4b6b4",
                                 }}
-                                src={top3?.pos3?.user.avatar?.url}
+                                src={top3?.pos2?.user.avatar?.url}
                                 alt=""
                             />
                         </Box>
                         <Typography marginTop={"2rem"} textAlign={"center"}>
-                            {top3?.pos3?.user.username ?? "N/A"}
+                            {top3?.pos2?.user.username ?? "N/A"}
                         </Typography>
                     </Box>
                 </Box>
