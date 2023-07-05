@@ -30,7 +30,7 @@ export const shuffle = (arr: string[]) => {
 }
 
 export const genWords = (): Word[] => {
-    const words: string[] = shuffle([...wordsJSON.split("|"), ...wordsJSON.split("|")])
+    const words: string[] = shuffle([...wordsJSON.split("|"), ...wordsJSON.split("|"), ...wordsJSON.split("|")])
     const cutOffs = everyNth(Array.from(Array(words.length).keys()), 5)
     let testWords: Word[] = words.map((w, i) => {
         let c = false
