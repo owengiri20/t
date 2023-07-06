@@ -47,6 +47,19 @@ export const useStyles = makeStyles({
 
 function App() {
     const under1100Height = useMediaQuery("(max-height:1100px)")
+    const under800Height = useMediaQuery("(max-height:800px)")
+
+    const getScale = () => {
+        // if (under800Height) {
+        //     return "scale(.65)"
+        // }
+        if (under1100Height) {
+            return "scale(.7)"
+        }
+     
+        return "scale(1)"
+    }
+
     const classes = useStyles()
     const history = useHistory()
 
@@ -62,7 +75,7 @@ function App() {
                         {"IN DEVELOPMENT"}
                     </a>
                 </Box>
-                <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: under1100Height ? "scale(.7)" : "scale(.9)" }}>
+                <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: getScale() }}>
                     <Box
                         style={{
                             display: "flex",
@@ -111,7 +124,7 @@ function App() {
                 <Box
                     style={{
                         position: "absolute",
-                        bottom: "0",
+                        bottom: "-3rem",
                         width: "99%",
                         display: "flex",
                         justifyContent: "center",
