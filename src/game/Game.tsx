@@ -8,6 +8,7 @@ import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 
 import "../shake.css"
+import { Box } from "@mui/material"
 
 // id of text display
 const DISPLAY_ID = "textDisplay"
@@ -26,8 +27,6 @@ export const Game = () => {
     const [charIdx, setCharIdx] = React.useState(0)
 
     const [word, setWord] = React.useState<string>("")
-    // const [finish, setFinish] = React.useState(false)
-    // const [start, setStart] = React.useState(false)
 
     const duration = useGetDuration()
     const [seconds, setSeconds] = React.useState(duration)
@@ -208,7 +207,7 @@ export const Game = () => {
                                             padding: "5px",
                                             backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
                                             color: getColour(w.status),
-                                            fontSize: "3vh",
+                                            fontSize: "35px",
                                             fontWeight: onCurrWord(i) ? "bold" : "unset",
                                         }}
                                         key={i}

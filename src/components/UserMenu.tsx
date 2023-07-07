@@ -10,7 +10,6 @@ import { COLOURS } from "../game/CommonStyles"
 
 export default function UserMenu({ user }: { user: User }) {
     const history = useHistory()
-    const under1100Height = useMediaQuery("(max-height:1100px)")
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
     const { logoutFn } = useAuth()
@@ -38,7 +37,6 @@ export default function UserMenu({ user }: { user: User }) {
                     background: COLOURS.darkBrown,
                     color: COLOURS.lightBrown,
                     width: "fit-content",
-                    marginTop: under1100Height ? "0" : "2rem",
                     cursor: "pointer",
                     fontSize: "15px",
                 }}

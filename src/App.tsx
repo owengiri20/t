@@ -6,13 +6,12 @@ import "./App.css"
 import Logo from "./assets/logo.png"
 import Moon from "./assets/moon.png"
 
-import { AppWrapper } from "./common/appWrapper"
 import { AuthButton } from "./components/AuthButton"
 import UserMenu from "./components/UserMenu"
 import { useAuth } from "./containers/auth"
 import { COLOURS } from "./game/CommonStyles"
 import { AuthPage } from "./pages/AuthPage"
-import { GameScreen } from "./pages/GamePage"
+import { GamePage } from "./pages/GamePage"
 import { ProfilePage } from "./pages/PlayerProfile"
 import { AdminPage } from "./pages/AdminPage"
 import TTButton from "./common/TTButton"
@@ -53,75 +52,73 @@ function App() {
     const { user } = useAuth()
 
     return (
-        <AppWrapper>
-            <>
-                <Box className={classes.inDevelopment}>
-                    <GitHubIcon sx={{ mr: ".2rem" }} />
-                    <a href="https://github.com/owengiri20/tt" rel="noreferrer" target="_blank">
-                        IN DEVELOPMENT
-                    </a>
-                </Box>
-                <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: "scale(.85)" }}>
-                    <Box
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <Box onClick={() => history.push("/")} className={classes.logo}>
-                            <img src={Logo} alt="TrekTyper Logo" height={"60px"} />
-                            <Box sx={{ fontSize: "22px" }}>TrekTyper</Box>
-                        </Box>
-
-                        <Box display={"flex"}>
-                            <TTButton
-                                onClick={() => {
-                                    history.push("/leaderboard")
-                                }}
-                                sx={{
-                                    marginRight: "1rem",
-                                    padding: "1rem",
-                                }}
-                            >
-                                Leaderboard
-                            </TTButton>
-
-                            {user ? (
-                                <UserMenu user={user} />
-                            ) : (
-                                <AuthButton onClick={() => history.push("/auth?page=login")} style={{ cursor: "pointer" }} classes={classes.logo} />
-                            )}
-                        </Box>
-                    </Box>
-
-                    <Switch>
-                        <Route path="/" component={GameScreen} exact />
-                        <Route path="/auth" component={AuthPage} exact />
-                        <Route path="/profile/:playerID" component={ProfilePage} exact />
-                        <Route path="/admin" component={AdminPage} exact />
-                        <Route path="/leaderboard" component={LeaderboardPage} exact />
-                    </Switch>
-                </Container>
+        <>
+            <Box className={classes.inDevelopment}>
+                <GitHubIcon sx={{ mr: ".2rem" }} />
+                <a href="https://github.com/owengiri20/tt" rel="noreferrer" target="_blank">
+                    IN DEVELOPMENT
+                </a>
+            </Box>
+            <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: "scale(.85)", height: "70vh" }}>
                 <Box
                     style={{
-                        position: "absolute",
-                        bottom: "1rem",
-                        width: "99%",
                         display: "flex",
-                        justifyContent: "center",
-                        paddingBottom: "1rem",
+                        justifyContent: "space-between",
                     }}
                 >
-                    <Box style={{ color: COLOURS.lightBrown, background: COLOURS.darkBrown, padding: ".5rem", borderRadius: "7px", cursor: "pointer" }}>
-                        <a tabIndex={-1} href="https://owengiri.dev/" rel="noreferrer" target="_blank">
-                            © 2023 Owen Giri
-                        </a>
+                    <Box onClick={() => history.push("/")} className={classes.logo}>
+                        <img src={Logo} alt="TrekTyper Logo" height={"60px"} />
+                        <Box sx={{ fontSize: "22px" }}>TrekTyper</Box>
                     </Box>
 
-                    <img style={{ position: "absolute", zIndex: -99, height: "70vh", bottom: "-40vh" }} src={Moon} alt="TrekTyper Logo" height={"80px"} />
+                    <Box display={"flex"}>
+                        <TTButton
+                            onClick={() => {
+                                history.push("/leaderboard")
+                            }}
+                            sx={{
+                                marginRight: "1rem",
+                                padding: "1rem",
+                            }}
+                        >
+                            Leaderboard
+                        </TTButton>
+
+                        {user ? (
+                            <UserMenu user={user} />
+                        ) : (
+                            <AuthButton onClick={() => history.push("/auth?page=login")} style={{ cursor: "pointer" }} classes={classes.logo} />
+                        )}
+                    </Box>
                 </Box>
-            </>
-        </AppWrapper>
+
+                <Switch>
+                    <Route path="/" component={GamePage} exact />
+                    <Route path="/auth" component={AuthPage} exact />
+                    <Route path="/profile/:playerID" component={ProfilePage} exact />
+                    <Route path="/admin" component={AdminPage} exact />
+                    <Route path="/leaderboard" component={LeaderboardPage} exact />
+                </Switch>
+            </Container>
+            <Box
+                style={{
+                    position: "absolute",
+                    bottom: "1rem",
+                    width: "99%",
+                    display: "flex",
+                    justifyContent: "center",
+                    paddingBottom: "1rem",
+                }}
+            >
+                <Box style={{ color: COLOURS.lightBrown, background: COLOURS.darkBrown, padding: ".5rem", borderRadius: "7px", cursor: "pointer" }}>
+                    <a tabIndex={-1} href="https://owengiri.dev/" rel="noreferrer" target="_blank">
+                        © 2023 Owen Giri
+                    </a>
+                </Box>
+
+                <img style={{ position: "absolute", zIndex: -99, height: "70vh", bottom: "-40vh" }} src={Moon} alt="TrekTyper Logo" height={"80px"} />
+            </Box>
+        </>
     )
 }
 

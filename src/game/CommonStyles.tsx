@@ -46,7 +46,7 @@ export const useStyles = makeStyles({
         textAlign: "center",
     },
     CenterBox: {
-        display: "flex",
+        display: "flex !important",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",

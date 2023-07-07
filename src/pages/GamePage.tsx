@@ -8,7 +8,7 @@ import { Box, Tooltip } from "@material-ui/core"
 import { useGame } from "../containers/game"
 import useHotkeys from "@reecelucas/react-use-hotkeys"
 
-export const GameScreen = () => {
+export const GamePage = () => {
     const [optionsMenuOpen, setOptionsMenuOpen] = useState(false)
     const { hideSettings } = useGame()
 
@@ -32,11 +32,10 @@ export const GameScreen = () => {
     return (
         <Box
             sx={{
-                margin: "auto",
                 marginTop: "3rem",
                 maxWidth: "100%",
                 display: "flex",
-                flex: 1,
+                height: "100%",
                 flexDirection: "column",
             }}
             style={{
