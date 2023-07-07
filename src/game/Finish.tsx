@@ -17,6 +17,7 @@ import BasicTable from "./RecentTestsTable"
 import { useTestResults } from "../containers/tests"
 import { useAuth } from "../containers/auth"
 import TestsTable from "./RecentTestsTable"
+import { useGame } from "../containers/game"
 
 interface Result {
     rating: RatingType
@@ -151,43 +152,9 @@ export const finishStyles = makeStyles({
 })
 
 export const FinishCard = (props: FinishCardProps) => {
-    const { saveTestResultFn } = useTestResults()
     const { user } = useAuth()
-
     const { correctWords, incorrectWords, handleRestart, correctCharsCount } = props
     const classes = finishStyles()
-
-    const [testSaved, setTestSaved] = useState(false)
-    const dur = useGetDuration()
-    const wpm = calculateWPM(correctCharsCount, dur, correctWords)
-
-    useEffect(() => {
-        if (testSaved) return
-        // saves to localstorage (for non logged in users)
-        // build test
-        const test = {
-            duration: dur,
-            correctWords: correctWords,
-            incorrectWords: incorrectWords,
-            wpm,
-            currentTime: new Date(),
-        }
-
-        saveTest(test)
-        setTestSaved(true)
-
-        //  saves to db
-        if (!user) return
-        saveTestResultFn.mutate({
-            correctWordsCount: correctWords,
-            durationSecs: dur,
-            incorrectWordsCount: incorrectWords,
-            wpm,
-        })
-
-        setTestSaved(true)
-    }, [])
-
     return (
         <div className={classes.finishCard}>
             <Box

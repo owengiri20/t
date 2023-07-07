@@ -1,5 +1,5 @@
-import React from "react"
-import { useGetDuration } from "../db"
+import React, { useState } from "react"
+import { calculateWPM, saveTest, useGetDuration } from "../db"
 import { COLOURS, useStyles } from "./CommonStyles"
 import { FinishCard } from "./Finish"
 import { Word, genWords } from "./utils/words"
@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography"
 
 import "../shake.css"
 import { Box } from "@mui/material"
+import { useTestResults } from "../containers/tests"
+import { useAuth } from "../containers/auth"
 
 // id of text display
 const DISPLAY_ID = "textDisplay"
@@ -16,10 +18,9 @@ const DISPLAY_ID = "textDisplay"
 export const Game = () => {
     const classes = useStyles()
     const GAME = useGame()
+    const { user } = useAuth()
 
     const [words, setWords] = React.useState(genWords())
-
-    // console.log(words.length)
 
     const [scrollHeight, setScrollHeight] = React.useState(0)
 
@@ -41,12 +42,41 @@ export const Game = () => {
 
     const [highlightedTextColour, setHighlightedTextColour] = React.useState<string>("#000")
 
+    const [testSaved, setTestSaved] = useState(false)
+
+    const dur = useGetDuration()
+    const wpm = calculateWPM(correctChars, dur, correctWords)
+    const { saveTestResultFn } = useTestResults()
+
     React.useEffect(() => {
         if (GAME.gameState.status !== "playing") return
         let countDown: NodeJS.Timeout | null = null
         if (seconds > 0) {
             countDown = setTimeout(() => setSeconds(seconds - 1), 1000)
         } else {
+            if (testSaved) return
+            // saves to localstorage (for non logged in users)
+            const test = {
+                duration: dur,
+                correctWords: correctWords,
+                incorrectWords: wrongWords,
+                wpm,
+                currentTime: new Date(),
+            }
+
+            saveTest(test)
+            setTestSaved(true)
+
+            //  saves to db
+            if (!user) return
+            saveTestResultFn.mutate({
+                correctWordsCount: correctWords,
+                durationSecs: dur,
+                incorrectWordsCount: wrongWords,
+                wpm,
+            })
+
+            setTestSaved(true)
             GAME.setGameState((prev) => ({ ...prev, status: "finished" }))
         }
 

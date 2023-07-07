@@ -1,5 +1,4 @@
 import { atom, useAtom } from "jotai"
-import { useState } from "react"
 
 export interface GameState {
     status: "finished" | "idle" | "playing"
