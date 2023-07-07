@@ -37,7 +37,7 @@ export const useStyles = makeStyles({
         top: 0,
         right: "0",
         margin: "0",
-        padding: "1rem",
+        padding: ".5rem",
         fontWeight: "bold",
         background: COLOURS.lightBrown,
         display: "flex",
@@ -46,20 +46,6 @@ export const useStyles = makeStyles({
 })
 
 function App() {
-    const under1100Height = useMediaQuery("(max-height:1100px)")
-    const under800Height = useMediaQuery("(max-height:800px)")
-
-    const getScale = () => {
-        // if (under800Height) {
-        //     return "scale(.65)"
-        // }
-        if (under1100Height) {
-            return "scale(.7)"
-        }
-     
-        return "scale(1)"
-    }
-
     const classes = useStyles()
     const history = useHistory()
 
@@ -72,19 +58,19 @@ function App() {
                 <Box className={classes.inDevelopment}>
                     <GitHubIcon sx={{ mr: ".2rem" }} />
                     <a href="https://github.com/owengiri20/tt" rel="noreferrer" target="_blank">
-                        {"IN DEVELOPMENT"}
+                        IN DEVELOPMENT
                     </a>
                 </Box>
-                <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: getScale() }}>
+                <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: "scale(.85)" }}>
                     <Box
                         style={{
                             display: "flex",
                             justifyContent: "space-between",
                         }}
                     >
-                        <Box onClick={() => history.push("/")} style={{ marginTop: under1100Height ? "-1rem" : "2rem" }} className={classes.logo}>
-                            <img src={Logo} alt="TrekTyper Logo" height={"70px"} />
-                            <Box sx={{ fontSize: "25px" }}>TrekTyper</Box>
+                        <Box onClick={() => history.push("/")} className={classes.logo}>
+                            <img src={Logo} alt="TrekTyper Logo" height={"60px"} />
+                            <Box sx={{ fontSize: "22px" }}>TrekTyper</Box>
                         </Box>
 
                         <Box display={"flex"}>
@@ -93,7 +79,6 @@ function App() {
                                     history.push("/leaderboard")
                                 }}
                                 sx={{
-                                    marginTop: under1100Height ? "0" : "2rem",
                                     marginRight: "1rem",
                                     padding: "1rem",
                                 }}
@@ -104,11 +89,7 @@ function App() {
                             {user ? (
                                 <UserMenu user={user} />
                             ) : (
-                                <AuthButton
-                                    onClick={() => history.push("/auth?page=login")}
-                                    style={{ marginTop: under1100Height ? "0" : "2rem", cursor: "pointer" }}
-                                    classes={classes.logo}
-                                />
+                                <AuthButton onClick={() => history.push("/auth?page=login")} style={{ cursor: "pointer" }} classes={classes.logo} />
                             )}
                         </Box>
                     </Box>
@@ -124,7 +105,7 @@ function App() {
                 <Box
                     style={{
                         position: "absolute",
-                        bottom: "-3rem",
+                        bottom: "1rem",
                         width: "99%",
                         display: "flex",
                         justifyContent: "center",

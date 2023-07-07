@@ -34,10 +34,9 @@ export const GameScreen = () => {
             sx={{
                 margin: "auto",
                 marginTop: "3rem",
-                height: "90vh",
-                maxHeight: "800px",
                 maxWidth: "100%",
                 display: "flex",
+                flex: 1,
                 flexDirection: "column",
             }}
             style={{

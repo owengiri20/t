@@ -7,8 +7,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             sx={{
                 margin: "auto",
                 marginTop: "3rem",
-                height: "90vh",
-                maxHeight: "800px",
+                height: "80vh",
                 maxWidth: "100%",
                 display: "flex",
                 flexDirection: "column",

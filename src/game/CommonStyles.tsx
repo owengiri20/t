@@ -8,7 +8,6 @@ export const useStyles = makeStyles({
         padding: "10px",
         maxHeight: "250px",
         overflowY: "auto",
-        fontSize: "20px",
         textAlign: "center",
         pointerEvents: "none",
         userSelect: "none",

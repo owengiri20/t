@@ -208,7 +208,7 @@ export const Game = () => {
                                             padding: "5px",
                                             backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
                                             color: getColour(w.status),
-                                            fontSize: "35px",
+                                            fontSize: "3vh",
                                             fontWeight: onCurrWord(i) ? "bold" : "unset",
                                         }}
                                         key={i}
