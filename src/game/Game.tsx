@@ -230,7 +230,7 @@ export const Game = () => {
 
     return (
         <Container className={classes.CenterBox}>
-            {GAME.gameState.status !== "idle" ? (
+            {GAME.gameState.status !== "finished" ? (
                 <>
                     <div className={classes.timer}>
                         <Typography
