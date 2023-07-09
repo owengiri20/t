@@ -176,7 +176,7 @@ export const FinishCard = (props: FinishCardProps) => {
                     <Tooltip placement="top" title={"WPM (Words Per Minute) = (Correct Characters / 5) / (Time in Seconds / 60)"}>
                         <Box className={classes.wpmText}>Accuracy</Box>
                     </Tooltip>
-                    <Box className={classes.wpmText}>{calculateCharAccuracy(correctCharsCount, totalCharsCount, correctWords)}</Box>
+                    <Box className={classes.wpmText}>{calculateCharAccuracy(correctCharsCount, totalCharsCount, correctWords)}%</Box>
                 </Container>
             </Box>
             <Box sx={{ display: "flex", height: "40%" }}>
