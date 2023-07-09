@@ -66,7 +66,14 @@ function App() {
                         justifyContent: "space-between",
                     }}
                 >
-                    <Box onClick={() => history.push("/")} className={classes.logo}>
+                    <Box
+                        onClick={() => {
+                            history.push("/")
+                            // temp solution
+                            window.location.reload()
+                        }}
+                        className={classes.logo}
+                    >
                         <img src={Logo} alt="TrekTyper Logo" height={"60px"} />
                         <Box sx={{ fontSize: "22px" }}>TrekTyper</Box>
                     </Box>

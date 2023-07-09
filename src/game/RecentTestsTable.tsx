@@ -5,13 +5,12 @@ import TableCell from "@mui/material/TableCell"
 import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
-import * as React from "react"
-import { getTests } from "../db"
 import { useQuery } from "@tanstack/react-query"
-import { fetchData, formatToDateTimeString } from "../utils"
 import { enqueueSnackbar } from "notistack"
-import { convertCompilerOptionsFromJson } from "typescript"
+import * as React from "react"
 import { TestResult } from "../containers/player"
+import { getTests } from "../db"
+import { fetchData, formatToDateTimeString } from "../utils"
 interface ListTestReq {
     limit: number
     sort_by: string
@@ -62,6 +61,11 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                                 <Box>WPM</Box>
                             </Tooltip>
                         </TableCell>
+                        <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Words Per Minute">
+                                <Box>ACC</Box>
+                            </Tooltip>
+                        </TableCell>
 
                         <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
                             <Tooltip placement="top-start" style={{ cursor: "default" }} title="Duration in seconds">
@@ -90,27 +94,14 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                                 <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
                                     {row.wpm}
                                 </TableCell>
+                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
+                                    {row.accuracy ?? 0}%
+                                </TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>{row.duration_secs} secs</TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>
                                     {row.correct_words_count ?? 0}/{row.incorrect_words_count ?? 0}
                                 </TableCell>
                                 <TableCell style={{ fontSize: "16px", color: "white" }}>{formatToDateTimeString(row.CreatedAt) ?? "n/a"}</TableCell>
-                            </TableRow>
-                        ))}
-
-                    {!userID &&
-                        testsFromLocalStorage.map((row, idx) => (
-                            <TableRow key={idx} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                                <TableCell style={{ fontSize: "16px", color: "white" }} component="th" scope="row">
-                                    {row.wpm}
-                                </TableCell>
-                                <TableCell style={{ fontSize: "16px", color: "white" }}>{row.duration} secs</TableCell>
-                                <TableCell style={{ fontSize: "16px", color: "white" }}>
-                                    {row.correctWords ?? 0}/{row.incorrectWords ?? 0}
-                                </TableCell>
-                                <TableCell style={{ fontSize: "16px", color: "white" }}>
-                                    {/* {row.correct_words_count ?? 0}/{row.incorrect_words_count ?? 0} */}
-                                </TableCell>
                             </TableRow>
                         ))}
                 </TableBody>

@@ -21,9 +21,13 @@ export interface TestResult {
     CreatedAt: string
     user_id: number
     wpm: number
+    accuracy: number
     duration_secs: number
     correct_words_count: number
     incorrect_words_count?: number
+    total_chars_count: number
+    correct_chars_count: number
+    incorrect_chars_count: number
 }
 
 export interface Avatar {
