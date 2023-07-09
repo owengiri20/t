@@ -90,7 +90,6 @@ export const Game = () => {
 
             setTestSaved(true)
             GAME.setGameState((prev) => ({ ...prev, status: "finished" }))
-            console.log({ correctChars, incorrectChars, totalChars })
         }
 
         //  Cleanup function
