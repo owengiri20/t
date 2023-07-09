@@ -4,15 +4,28 @@ import { BASE_API_URL } from "../constants"
 
 interface SaveTestReq {
     wpm: number
+    accuracy: number
     durationSecs: number
     correctWordsCount: number
     incorrectWordsCount: number
+    totalCharsCount: number
+    incorrectCharsCount: number
+    correctCharsCount: number
 }
 
 export const useTestResults = () => {
     const saveTestResultFn = useMutation({
         mutationKey: ["save_test"],
-        mutationFn: async ({ wpm, durationSecs, correctWordsCount, incorrectWordsCount }: SaveTestReq) => {
+        mutationFn: async ({
+            wpm,
+            accuracy,
+            durationSecs,
+            correctWordsCount,
+            incorrectWordsCount,
+            totalCharsCount,
+            incorrectCharsCount,
+            correctCharsCount,
+        }: SaveTestReq) => {
             const res = await fetch(BASE_API_URL + "/test-result", {
                 method: "POST",
                 credentials: "include",
@@ -21,9 +34,13 @@ export const useTestResults = () => {
                 },
                 body: JSON.stringify({
                     wpm,
+                    accuracy,
                     durationSecs,
                     correctWordsCount,
                     incorrectWordsCount,
+                    totalCharsCount,
+                    incorrectCharsCount,
+                    correctCharsCount,
                 }),
             })
 

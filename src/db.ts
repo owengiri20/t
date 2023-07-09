@@ -94,3 +94,9 @@ export const calculateWPM = (correctCharacters: number, timeInSeconds: number, c
 
     return Number(wpm.toFixed(1))
 }
+
+export const calculateCharAccuracy = (correctChars: number, totalChars: number, correctWordsCount: number): number => {
+    const accuracy = ((correctChars + correctWordsCount) / totalChars) * 100 // Calculate character accuracy as a percentage
+
+    return Number(accuracy.toFixed(1))
+}

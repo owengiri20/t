@@ -1,32 +1,37 @@
-import React, { useState } from "react"
-import { calculateWPM, saveTest, useGetDuration } from "../db"
-import { COLOURS, useStyles } from "./CommonStyles"
-import { FinishCard } from "./Finish"
-import { Word, genWords } from "./utils/words"
-import { useGame } from "../containers/game"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
+import React, { useState } from "react"
+import { useGame } from "../containers/game"
+import { calculateCharAccuracy, calculateWPM, saveTest, useGetDuration } from "../db"
+import { COLOURS, useStyles } from "./CommonStyles"
+import { FinishCard } from "./Finish"
+import { genWords } from "./utils/words"
 
-import "../shake.css"
-import { Box } from "@mui/material"
-import { useTestResults } from "../containers/tests"
 import { useAuth } from "../containers/auth"
+import { useTestResults } from "../containers/tests"
+import "../shake.css"
 
 // id of text display
 const DISPLAY_ID = "textDisplay"
 
 export const Game = () => {
+    // styles
     const classes = useStyles()
+
+    // game state
     const GAME = useGame()
+
+    // auth
     const { user } = useAuth()
 
     const [words, setWords] = React.useState(genWords())
 
-    const [scrollHeight, setScrollHeight] = React.useState(0)
-
     const [idx, setIdx] = React.useState(0)
     const [charIdx, setCharIdx] = React.useState(0)
 
+    const [scrollHeight, setScrollHeight] = React.useState(0)
+
+    // value in the input - word being typed
     const [word, setWord] = React.useState<string>("")
 
     const duration = useGetDuration()
@@ -39,6 +44,8 @@ export const Game = () => {
     const [wrongWords, setWrongWords] = React.useState(0)
 
     const [correctChars, setCorrectChars] = React.useState(0)
+    const [totalChars, setTotalChars] = React.useState(0)
+    const [incorrectChars, setIncorrectChars] = React.useState(0)
 
     const [highlightedTextColour, setHighlightedTextColour] = React.useState<string>("#000")
 
@@ -46,6 +53,7 @@ export const Game = () => {
 
     const dur = useGetDuration()
     const wpm = calculateWPM(correctChars, dur, correctWords)
+    const accuracy = calculateCharAccuracy(correctChars, totalChars, correctWords)
     const { saveTestResultFn } = useTestResults()
 
     React.useEffect(() => {
@@ -65,19 +73,24 @@ export const Game = () => {
             }
 
             saveTest(test)
-            setTestSaved(true)
 
             //  saves to db
-            if (!user) return
-            saveTestResultFn.mutate({
-                correctWordsCount: correctWords,
-                durationSecs: dur,
-                incorrectWordsCount: wrongWords,
-                wpm,
-            })
+            if (user) {
+                saveTestResultFn.mutate({
+                    correctWordsCount: correctWords,
+                    durationSecs: dur,
+                    incorrectWordsCount: wrongWords,
+                    accuracy,
+                    wpm,
+                    correctCharsCount: correctChars,
+                    incorrectCharsCount: incorrectChars,
+                    totalCharsCount: totalChars,
+                })
+            }
 
             setTestSaved(true)
             GAME.setGameState((prev) => ({ ...prev, status: "finished" }))
+            console.log({ correctChars, incorrectChars, totalChars })
         }
 
         //  Cleanup function
@@ -150,7 +163,11 @@ export const Game = () => {
         // Check if the typed character is correct and increment correctChars if it is
         if (key.key === currWord.word[charIdx]) {
             setCorrectChars(correctChars + 1)
+        } else if (key.code !== "Space") {
+            setIncorrectChars(incorrectChars + 1) // Incorrect character count
         }
+
+        setTotalChars(totalChars + 1) // Total character count
 
         setCharIdx(charIdx + 1)
 
@@ -214,7 +231,7 @@ export const Game = () => {
 
     return (
         <Container className={classes.CenterBox}>
-            {GAME.gameState.status !== "finished" ? (
+            {GAME.gameState.status !== "idle" ? (
                 <>
                     <div className={classes.timer}>
                         <Typography
@@ -227,7 +244,6 @@ export const Game = () => {
                         </Typography>
                     </div>
 
-                    {/* <div className={seconds <= 3 ? "shake-n-bake" : ""}> */}
                     <div className={classes.typingArea} id={DISPLAY_ID}>
                         <Typography variant="subtitle1">
                             {words.map((w, i) => (
@@ -255,7 +271,6 @@ export const Game = () => {
                             ))}
                         </Typography>
                     </div>
-                    {/* </div> */}
 
                     <div className={classes.line}></div>
                     <textarea
@@ -269,7 +284,13 @@ export const Game = () => {
                     />
                 </>
             ) : (
-                <FinishCard correctWords={correctWords} incorrectWords={wrongWords} handleRestart={handleRestart} correctCharsCount={correctChars} />
+                <FinishCard
+                    totalCharsCount={totalChars}
+                    correctWords={correctWords}
+                    incorrectWords={wrongWords}
+                    handleRestart={handleRestart}
+                    correctCharsCount={correctChars}
+                />
             )}
         </Container>
     )

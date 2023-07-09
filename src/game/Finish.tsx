@@ -1,23 +1,21 @@
 import { Box, Button, Container, Tooltip, makeStyles } from "@material-ui/core"
-import React, { useEffect, useState } from "react"
+import React from "react"
 
 // icons
 import StarBorderRoundedIcon from "@material-ui/icons/StarBorderRounded"
 import StarRoundedIcon from "@material-ui/icons/StarRounded"
 
 // images
-import { calculateWPM, saveTest, useGetDuration } from "../db"
+import { useAuth } from "../containers/auth"
+import { calculateCharAccuracy, calculateWPM, useGetDuration } from "../db"
 import ninja from "../icons/png/ninja.png"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
 import avarage from "../icons/svg/026-smile.svg"
 import meh from "../icons/svg/032-neutral.svg"
 import { COLOURS } from "./CommonStyles"
-import BasicTable from "./RecentTestsTable"
-import { useTestResults } from "../containers/tests"
-import { useAuth } from "../containers/auth"
 import TestsTable from "./RecentTestsTable"
-import { useGame } from "../containers/game"
+import Typography from "@mui/material/Typography"
 
 interface Result {
     rating: RatingType
@@ -68,6 +66,7 @@ interface FinishCardProps {
     correctWords: number
     incorrectWords: number
     correctCharsCount: number
+    totalCharsCount: number
     handleRestart: () => void
 }
 
@@ -95,7 +94,7 @@ export const finishStyles = makeStyles({
         alignItems: "center",
     },
     wpmText: {
-        fontSize: "50px",
+        fontSize: "40px",
         color: "white",
         fontWeight: "bold",
         textAlign: "center",
@@ -153,7 +152,7 @@ export const finishStyles = makeStyles({
 
 export const FinishCard = (props: FinishCardProps) => {
     const { user } = useAuth()
-    const { correctWords, incorrectWords, handleRestart, correctCharsCount } = props
+    const { correctWords, incorrectWords, handleRestart, correctCharsCount, totalCharsCount } = props
     const classes = finishStyles()
     return (
         <div className={classes.finishCard}>
@@ -172,6 +171,12 @@ export const FinishCard = (props: FinishCardProps) => {
                         <Box className={classes.wpmText}>WPM</Box>
                     </Tooltip>
                     <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration(), correctWords)}</Box>
+                </Container>
+                <Container className={classes.wpm}>
+                    <Tooltip placement="top" title={"WPM (Words Per Minute) = (Correct Characters / 5) / (Time in Seconds / 60)"}>
+                        <Box className={classes.wpmText}>Accuracy</Box>
+                    </Tooltip>
+                    <Box className={classes.wpmText}>{calculateCharAccuracy(correctCharsCount, totalCharsCount, correctWords)}</Box>
                 </Container>
             </Box>
             <Box sx={{ display: "flex", height: "40%" }}>
@@ -209,7 +214,13 @@ export const FinishCard = (props: FinishCardProps) => {
                         }}
                     >
                         <Box>
-                            <TestsTable limit={3} userID={user?.ID} />
+                            {user?.ID ? (
+                                <TestsTable limit={3} userID={user?.ID} />
+                            ) : (
+                                <Typography sx={{ px: "1rem", pt: "3rem", textAlign: "center", fontSize: "1.4rem" }}>
+                                    Please log in or create an account to see your stats!
+                                </Typography>
+                            )}
                         </Box>
                     </Container>
                 </Box>
