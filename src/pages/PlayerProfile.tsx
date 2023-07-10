@@ -247,7 +247,7 @@ export const ProfilePage = () => {
                             <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
                                 Recent Perfomances
                             </Typography>
-                            <TestsTable userID={playerID} />
+                            <TestsTable limit={20} userID={playerID} />
                         </Box>
                     </Box>
                 </Box>
