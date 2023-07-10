@@ -5,7 +5,6 @@ import { useGame } from "../containers/game"
 import { calculateCharAccuracy, calculateWPM, saveTest, useGetDuration } from "../db"
 import { COLOURS, useStyles } from "./CommonStyles"
 import { FinishCard } from "./Finish"
-import { genWords } from "./utils/words"
 
 import { useAuth } from "../containers/auth"
 import { useTestResults } from "../containers/tests"
@@ -20,76 +19,43 @@ export const Game = () => {
 
     // game state
     const GAME = useGame()
+    const { GAME_STATE, SET_GAME_STATE, resetState } = GAME
 
     // auth
     const { user } = useAuth()
 
-    const [words, setWords] = React.useState(genWords())
-
-    const [idx, setIdx] = React.useState(0)
-    const [charIdx, setCharIdx] = React.useState(0)
-
-    const [scrollHeight, setScrollHeight] = React.useState(0)
-
-    // value in the input - word being typed
-    const [word, setWord] = React.useState<string>("")
-
-    const duration = useGetDuration()
-    const [seconds, setSeconds] = React.useState(duration)
     React.useEffect(() => {
-        setSeconds(duration)
-    }, [duration])
+        SET_GAME_STATE((prevState) => ({ ...prevState, timeLeft: GAME_STATE.durationSeconds }))
+    }, [GAME_STATE.durationSeconds])
 
-    const [correctWords, setCorrectWords] = React.useState(0)
-    const [wrongWords, setWrongWords] = React.useState(0)
-
-    const [correctChars, setCorrectChars] = React.useState(0)
-    const [totalChars, setTotalChars] = React.useState(0)
-    const [incorrectChars, setIncorrectChars] = React.useState(0)
-
-    const [highlightedTextColour, setHighlightedTextColour] = React.useState<string>("#000")
-
-    const [testSaved, setTestSaved] = useState(false)
-
-    const dur = useGetDuration()
-    const wpm = calculateWPM(correctChars, dur, correctWords)
-    const accuracy = calculateCharAccuracy(correctChars, totalChars, correctWords)
     const { saveTestResultFn } = useTestResults()
+    const wpm = calculateWPM(GAME_STATE.correctCharacters, GAME_STATE.durationSeconds, GAME_STATE.correctWordsCount)
+    const accuracy = calculateCharAccuracy(GAME_STATE.correctCharacters, GAME_STATE.totalCharacters, GAME_STATE.correctWordsCount)
 
     React.useEffect(() => {
-        if (GAME.gameState.status !== "playing") return
+        if (GAME_STATE.status !== "playing") return
         let countDown: NodeJS.Timeout | null = null
-        if (seconds > 0) {
-            countDown = setTimeout(() => setSeconds(seconds - 1), 1000)
+        if (GAME_STATE.timeLeft > 0) {
+            countDown = setTimeout(() => SET_GAME_STATE((prevState) => ({ ...prevState, timeLeft: GAME_STATE.timeLeft - 1 })), 1000)
         } else {
-            if (testSaved) return
-            // saves to localstorage (for non logged in users)
-            const test = {
-                duration: dur,
-                correctWords: correctWords,
-                incorrectWords: wrongWords,
-                wpm,
-                currentTime: new Date(),
-            }
-
-            saveTest(test)
+            if (GAME_STATE.testSaved) return
 
             //  saves to db
             if (user) {
                 saveTestResultFn.mutate({
-                    correctWordsCount: correctWords,
-                    durationSecs: dur,
-                    incorrectWordsCount: wrongWords,
+                    correctWordsCount: GAME_STATE.correctWordsCount,
+                    incorrectWordsCount: GAME_STATE.incorrectWordsCount,
+                    durationSecs: GAME_STATE.durationSeconds,
                     accuracy,
                     wpm,
-                    correctCharsCount: correctChars,
-                    incorrectCharsCount: incorrectChars,
-                    totalCharsCount: totalChars,
+                    correctCharsCount: GAME_STATE.correctCharacters,
+                    incorrectCharsCount: GAME_STATE.incorrectCharacters,
+                    totalCharsCount: GAME_STATE.totalCharacters,
                 })
             }
 
-            setTestSaved(true)
-            GAME.setGameState((prev) => ({ ...prev, status: "finished" }))
+            SET_GAME_STATE((prevState) => ({ ...prevState, testSaved: true }))
+            SET_GAME_STATE((prev) => ({ ...prev, status: "finished" }))
         }
 
         //  Cleanup function
@@ -98,87 +64,87 @@ export const Game = () => {
                 clearTimeout(countDown)
             }
         }
-    }, [GAME.gameState.status, seconds])
+    }, [GAME_STATE.status, GAME_STATE.timeLeft])
 
     const handleStatus = (correct: boolean) => {
-        const newWords = [...words]
+        const newWords = [...GAME_STATE.words]
         if (correct) {
-            setCorrectWords((prev) => prev + 1)
-            newWords[idx] = {
-                ...newWords[idx],
+            SET_GAME_STATE((prevState) => ({ ...prevState, correctWordsCount: prevState.correctWordsCount + 1 }))
+
+            // setCorrectWords((prev) => prev + 1)
+            newWords[GAME_STATE.currentWordIndex] = {
+                ...newWords[GAME_STATE.currentWordIndex],
                 status: "correct",
             }
         } else {
-            setWrongWords((prev) => prev + 1)
-            newWords[idx] = {
-                ...newWords[idx],
+            SET_GAME_STATE((prevState) => ({ ...prevState, incorrectWordsCount: prevState.incorrectWordsCount + 1 }))
+
+            newWords[GAME_STATE.currentWordIndex] = {
+                ...newWords[GAME_STATE.currentWordIndex],
                 status: "incorrect",
             }
         }
-        setWords(newWords)
-    }
-
-    const handleRestart = () => {
-        window.location.reload()
+        SET_GAME_STATE((prevState) => ({ ...prevState, words: newWords }))
     }
 
     // This function is used to compare a typed string against a target word.
     const checkSubWord = () => {
-        const currWord = words[idx]
+        const currWord = GAME_STATE.words[GAME_STATE.currentWordIndex]
 
-        const subWord = currWord.word.substring(0, charIdx)
+        const subWord = currWord.word.substring(0, GAME_STATE.currentCharIndex)
 
-        const subWord2 = word.substring(0, charIdx + 1)
+        const subWord2 = GAME_STATE.currentWord.substring(0, GAME_STATE.currentCharIndex + 1)
 
-        if (word === "") {
-            setHighlightedTextColour("#000")
+        if (GAME_STATE.currentWord === "") {
+            SET_GAME_STATE((prevState) => ({ ...prevState, highligtedTextColour: "#000" }))
+
             return
         }
 
         if (subWord === subWord2) {
-            setHighlightedTextColour("#1d331f")
+            SET_GAME_STATE((prevState) => ({ ...prevState, highligtedTextColour: "#1d331f" }))
+
             return
         } else {
-            setHighlightedTextColour("#470c0a")
+            SET_GAME_STATE((prevState) => ({ ...prevState, highligtedTextColour: "#470c0a" }))
         }
     }
 
     React.useEffect(() => {
         checkSubWord()
-    }, [word])
+    }, [GAME_STATE.currentWord])
 
     const handleKeyPress = (key: any) => {
         // if pressing space when empty, do nothing
-        if (key.code === "Space" && word === "") {
+        if (key.code === "Space" && GAME_STATE.currentWord === "") {
             return
         }
 
-        const currWord = words[idx]
+        const currWord = GAME_STATE.words[GAME_STATE.currentWordIndex]
 
-        if (GAME.gameState.status !== "playing") {
-            GAME.setGameState((prev) => ({ ...prev, status: "playing" }))
+        if (GAME_STATE.status !== "playing") {
+            SET_GAME_STATE((prev) => ({ ...prev, status: "playing" }))
         }
 
         // Check if the typed character is correct and increment correctChars if it is
-        if (key.key === currWord.word[charIdx]) {
-            setCorrectChars(correctChars + 1)
+        if (key.key === currWord.word[GAME_STATE.currentCharIndex]) {
+            SET_GAME_STATE((prevState) => ({ ...prevState, correctCharacters: prevState.correctCharacters + 1 }))
         } else if (key.code !== "Space") {
-            setIncorrectChars(incorrectChars + 1) // Incorrect character count
+            SET_GAME_STATE((prevState) => ({ ...prevState, incorrectCharacters: prevState.incorrectCharacters + 1 }))
         }
 
-        setTotalChars(totalChars + 1) // Total character count
-
-        setCharIdx(charIdx + 1)
+        SET_GAME_STATE((prevState) => ({ ...prevState, totalCharacters: prevState.totalCharacters + 1 }))
+        SET_GAME_STATE((prevState) => ({ ...prevState, currentCharIndex: prevState.currentCharIndex + 1 }))
 
         if (key.code === "Space") {
-            if (idx === words.length) {
+            if (GAME_STATE.currentWordIndex === GAME_STATE.words.length) {
                 return
             }
-            if (word === "") return
-            setWord("")
-            setIdx(idx + 1)
-            setCharIdx(0)
-            if (currWord.word === word) {
+            if (GAME_STATE.currentWord === "") return
+            SET_GAME_STATE((prevState) => ({ ...prevState, currentWord: "" }))
+            SET_GAME_STATE((prevState) => ({ ...prevState, currentWordIndex: prevState.currentWordIndex + 1 }))
+            SET_GAME_STATE((prevState) => ({ ...prevState, currentCharIndex: 0 }))
+            if (currWord.word === GAME_STATE.currentWord) {
                 handleStatus(true)
             } else {
                 handleStatus(false)
@@ -189,10 +155,10 @@ export const Game = () => {
     }
 
     const handleBackSpace = (key: any) => {
-        if (word.length === 0) return
+        if (GAME_STATE.currentWord.length === 0) return
         if (key.code && key.code === "Backspace") {
-            if (charIdx === 0) return
-            setCharIdx(charIdx - 1)
+            if (GAME_STATE.currentCharIndex === 0) return
+            SET_GAME_STATE((prevState) => ({ ...prevState, currentCharIndex: prevState.currentCharIndex - 1 }))
         }
     }
 
@@ -207,50 +173,50 @@ export const Game = () => {
     }
 
     const onCurrWord = (currIdx: number) => {
-        return idx === currIdx
+        return GAME_STATE.currentWordIndex === currIdx
     }
 
     // useffect to handle scroll height of text display
     React.useEffect(() => {
         // if first word
-        if (idx === 0) return
+        if (GAME_STATE.currentWordIndex === 0) return
 
         // get prevous word
-        const prevWord = words[idx - 1]
+        const prevWord = GAME_STATE.words[GAME_STATE.currentWordIndex - 1]
 
         // get textDisplay div
         let textDisplay = document.getElementById(DISPLAY_ID)
 
         // handle scroll
         if (textDisplay && prevWord.cut) {
-            textDisplay.scrollTop = scrollHeight
-            setScrollHeight(scrollHeight + 61)
+            textDisplay.scrollTop = GAME_STATE.scrollHeight
+            SET_GAME_STATE((prevState) => ({ ...prevState, scrollHeight: prevState.scrollHeight + 61 }))
         }
-    }, [idx])
+    }, [GAME_STATE.currentWordIndex])
 
     return (
         <Container className={classes.CenterBox}>
-            {GAME.gameState.status !== "finished" ? (
+            {GAME_STATE.status !== "finished" ? (
                 <>
                     <div className={classes.timer}>
                         <Typography
                             sx={{
-                                color: seconds <= 3 ? "orange" : COLOURS.lightBrown,
+                                color: GAME_STATE.timeLeft <= 3 ? "orange" : COLOURS.lightBrown,
                                 fontSize: "4.3rem",
                             }}
                         >
-                            {seconds}
+                            {GAME_STATE.timeLeft}
                         </Typography>
                     </div>
 
                     <div className={classes.typingArea} id={DISPLAY_ID}>
                         <Typography variant="subtitle1">
-                            {words.map((w, i) => (
+                            {GAME_STATE.words.map((w, i) => (
                                 <React.Fragment key={i}>
                                     <span
                                         style={{
                                             padding: "5px",
-                                            backgroundColor: onCurrWord(i) ? highlightedTextColour : "",
+                                            backgroundColor: onCurrWord(i) ? GAME_STATE.highligtedTextColour : "",
                                             color: getColour(w.status),
                                             fontSize: "35px",
                                             fontWeight: onCurrWord(i) ? "bold" : "unset",
@@ -277,18 +243,20 @@ export const Game = () => {
                         autoFocus
                         onKeyPress={handleKeyPress}
                         onKeyDown={handleBackSpace}
-                        value={word}
-                        onChange={(e) => setWord(e.target.value.trim())}
-                        placeholder={idx === 0 ? "Start Typing!" : ""}
+                        value={GAME_STATE.currentWord}
+                        onChange={(e) => {
+                            SET_GAME_STATE((prevState) => ({ ...prevState, currentWord: e.target.value.trim() }))
+                        }}
+                        placeholder={GAME_STATE.currentWordIndex === 0 ? "Start Typing!" : ""}
                     />
                 </>
             ) : (
                 <FinishCard
-                    totalCharsCount={totalChars}
-                    correctWords={correctWords}
-                    incorrectWords={wrongWords}
-                    handleRestart={handleRestart}
-                    correctCharsCount={correctChars}
+                    totalCharsCount={GAME_STATE.totalCharacters}
+                    correctWords={GAME_STATE.correctWordsCount}
+                    incorrectWords={GAME_STATE.incorrectWordsCount}
+                    correctCharsCount={GAME_STATE.correctCharacters}
+                    handleRestart={resetState}
                 />
             )}
         </Container>

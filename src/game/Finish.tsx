@@ -16,6 +16,7 @@ import meh from "../icons/svg/032-neutral.svg"
 import { COLOURS } from "./CommonStyles"
 import TestsTable from "./RecentTestsTable"
 import Typography from "@mui/material/Typography"
+import { useGame } from "../containers/game"
 
 interface Result {
     rating: RatingType
@@ -152,7 +153,9 @@ export const finishStyles = makeStyles({
 
 export const FinishCard = (props: FinishCardProps) => {
     const { user } = useAuth()
-    const { correctWords, incorrectWords, handleRestart, correctCharsCount, totalCharsCount } = props
+    // const { resetState } = useGame()
+
+    const { correctWords, incorrectWords, correctCharsCount, totalCharsCount, handleRestart } = props
     const classes = finishStyles()
     return (
         <div className={classes.finishCard}>
