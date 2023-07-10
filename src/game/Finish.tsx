@@ -218,7 +218,7 @@ export const FinishCard = (props: FinishCardProps) => {
                     >
                         <Box>
                             {user?.ID ? (
-                                <TestsTable limit={3} userID={user?.ID} />
+                                <TestsTable limit={5} userID={user?.ID} />
                             ) : (
                                 <Typography sx={{ px: "1rem", pt: "3rem", textAlign: "center", fontSize: "1.4rem" }}>
                                     Please log in or create an account to see your stats!
