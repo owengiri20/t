@@ -112,8 +112,6 @@ export const ProfilePage = () => {
     const [stats, setStats] = useState<PlayerStatsGetResp | undefined>()
     const { playerStatsQuery } = usePlayer(playerID)
     useEffect(() => {
-        console.log("hello", playerStatsQuery.data)
-
         if (playerStatsQuery.data) {
             setStats(playerStatsQuery.data)
         }
