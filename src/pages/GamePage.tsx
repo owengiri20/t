@@ -18,17 +18,12 @@ export const GamePage = () => {
     const childRef = useRef<HTMLInputElement>(null)
 
     const handleTabKey = () => {
-        console.log("hello 1")
-
         if (childRef.current) {
-            console.log("hello 2")
-
             childRef.current.focus()
         }
     }
 
     useHotkeys("Tab", () => {
-        console.log("Some action")
         handleTabKey()
     })
 

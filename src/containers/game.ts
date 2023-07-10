@@ -61,13 +61,7 @@ export const useGame = () => {
     }, [location, SET_GAME_STATE])
 
     useEffect(() => {
-        SET_GAME_STATE((prevState) => ({
-            ...prevState,
-            correctWordsCount: 0,
-            incorrectWordsCount: 0,
-            durationSeconds: durationFromLs,
-            timeLeft: durationFromLs,
-        }))
+        resetState()
     }, [])
 
     const resetState = () => {
