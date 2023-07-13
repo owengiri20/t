@@ -191,7 +191,7 @@ export const Game = () => {
 
     return (
         <Container className={classes.CenterBox}>
-            {GAME_STATE.status !== "idle" ? (
+            {GAME_STATE.status !== "finished" ? (
                 <>
                     <div className={classes.timer}>
                         <Typography
