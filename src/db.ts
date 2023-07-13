@@ -98,5 +98,7 @@ export const calculateWPM = (correctCharacters: number, timeInSeconds: number, c
 export const calculateCharAccuracy = (correctChars: number, totalChars: number, correctWordsCount: number): number => {
     const accuracy = ((correctChars + correctWordsCount) / totalChars) * 100 // Calculate character accuracy as a percentage
 
+    if (isNaN(accuracy)) return 0
+
     return Number(accuracy.toFixed(1))
 }
