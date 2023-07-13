@@ -20,7 +20,7 @@ export const AuthButton = (props: AuthButtonProps) => {
                     fontSize: "15px",
                 }}
             >
-                Login
+                Login / Sign up
             </Box>
         </Box>
     )

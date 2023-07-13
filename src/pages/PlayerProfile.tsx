@@ -245,9 +245,9 @@ export const ProfilePage = () => {
                     <Box className={classes.bottomTable}>
                         <Box height={"100%"} width={"90%"}>
                             <Typography className={classes.sectionTitle} style={{ marginLeft: "1rem", marginBottom: "1rem", fontWeight: "bold" }}>
-                                Recent Perfomances
+                                Recent Perfomances.
                             </Typography>
-                            <TestsTable limit={20} userID={playerID} />
+                            <TestsTable limit={10} userID={playerID} />
                         </Box>
                     </Box>
                 </Box>

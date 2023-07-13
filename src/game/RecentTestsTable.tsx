@@ -62,7 +62,7 @@ export default function TestsTable({ userID, limit }: { userID?: string; limit?:
                             </Tooltip>
                         </TableCell>
                         <TableCell style={{ color: "white", fontSize: "17px", fontWeight: "bold" }}>
-                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Words Per Minute">
+                            <Tooltip placement="top-start" style={{ cursor: "default" }} title="Accuracy">
                                 <Box>ACC</Box>
                             </Tooltip>
                         </TableCell>

@@ -27,8 +27,6 @@ export interface User {
 export const useAuth = () => {
     // user state
     const [user, setUser] = useAtom(userAtom)
-    // const [user, setUser] = useState(null)
-
     const history = useHistory()
 
     // login func
@@ -86,7 +84,7 @@ export const useAuth = () => {
             })
             setTimeout(() => {
                 window.location.reload()
-            }, 2800)
+            }, 300)
         },
         onError: (error) => {
             console.error("Error:", error)
@@ -140,9 +138,9 @@ export const useAuth = () => {
             return data
         },
         onSuccess: (data) => {
-            enqueueSnackbar("Signed Up Successfully!", {
+            enqueueSnackbar("Signed Up Successfully!, Please check your email inbox/spam to verify your account.", {
                 variant: "success",
-                autoHideDuration: 3000,
+                autoHideDuration: 60000,
             })
             history.push("/auth?page=login")
         },

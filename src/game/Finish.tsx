@@ -17,6 +17,8 @@ import { COLOURS } from "./CommonStyles"
 import TestsTable from "./RecentTestsTable"
 import Typography from "@mui/material/Typography"
 import { useGame } from "../containers/game"
+import TTButton from "../common/TTButton"
+import { useHistory } from "react-router-dom"
 
 interface Result {
     rating: RatingType
@@ -153,6 +155,7 @@ export const finishStyles = makeStyles({
 
 export const FinishCard = (props: FinishCardProps) => {
     const { user } = useAuth()
+    const history = useHistory()
     // const { resetState } = useGame()
 
     const { correctWords, incorrectWords, correctCharsCount, totalCharsCount, handleRestart } = props
@@ -176,7 +179,7 @@ export const FinishCard = (props: FinishCardProps) => {
                     <Box className={classes.wpmText}>{calculateWPM(correctCharsCount, useGetDuration(), correctWords)}</Box>
                 </Container>
                 <Container className={classes.wpm}>
-                    <Tooltip placement="top" title={"WPM (Words Per Minute) = (Correct Characters / 5) / (Time in Seconds / 60)"}>
+                    <Tooltip placement="top" title={"Correct Characters / Total Characters * 100"}>
                         <Box className={classes.wpmText}>Accuracy</Box>
                     </Tooltip>
                     <Box className={classes.wpmText}>{calculateCharAccuracy(correctCharsCount, totalCharsCount, correctWords)}%</Box>
@@ -220,9 +223,21 @@ export const FinishCard = (props: FinishCardProps) => {
                             {user?.ID ? (
                                 <TestsTable limit={5} userID={user?.ID} />
                             ) : (
-                                <Typography sx={{ px: "1rem", pt: "3rem", textAlign: "center", fontSize: "1.4rem" }}>
-                                    Please log in or create an account to see your stats!
-                                </Typography>
+                                <Box
+                                    sx={{
+                                        px: "1rem",
+                                        pt: "3rem",
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    <Typography sx={{ fontSize: "1.4rem", marginBottom: "1rem" }}>
+                                        Please log in or create an account to see your stats!
+                                    </Typography>
+
+                                    <TTButton onClick={() => history.push("/auth?page=login")} sx={{ p: ".5rem" }}>
+                                        Login / Sign up
+                                    </TTButton>
+                                </Box>
                             )}
                         </Box>
                     </Container>

@@ -90,20 +90,15 @@ export const Game = () => {
     // This function is used to compare a typed string against a target word.
     const checkSubWord = () => {
         const currWord = GAME_STATE.words[GAME_STATE.currentWordIndex]
-
         const subWord = currWord.word.substring(0, GAME_STATE.currentCharIndex)
-
         const subWord2 = GAME_STATE.currentWord.substring(0, GAME_STATE.currentCharIndex + 1)
-
         if (GAME_STATE.currentWord === "") {
             SET_GAME_STATE((prevState) => ({ ...prevState, highligtedTextColour: "#000" }))
-
             return
         }
 
         if (subWord === subWord2) {
             SET_GAME_STATE((prevState) => ({ ...prevState, highligtedTextColour: "#1d331f" }))
-
             return
         } else {
             SET_GAME_STATE((prevState) => ({ ...prevState, highligtedTextColour: "#470c0a" }))
@@ -196,7 +191,7 @@ export const Game = () => {
 
     return (
         <Container className={classes.CenterBox}>
-            {GAME_STATE.status !== "finished" ? (
+            {GAME_STATE.status !== "idle" ? (
                 <>
                     <div className={classes.timer}>
                         <Typography

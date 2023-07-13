@@ -170,7 +170,7 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
                     }}
                     variant="contained"
                 >
-                    Dont have an account? Sign up
+                    Don't have an account? Sign up
                 </Button>
             </Box>
         </Box>
