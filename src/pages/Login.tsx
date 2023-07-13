@@ -143,6 +143,7 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
 
             <Box style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", position: "absolute", bottom: "1rem" }}>
                 <Button
+                    disabled={loginFn.isLoading}
                     style={{
                         marginTop: "1rem",
                         backgroundColor: COLOURS.darkishBrown,
@@ -159,6 +160,7 @@ export const Login = ({ togglePage }: { togglePage: (path: string) => void }) =>
                 </Button>
                 <Box style={{ height: ".1rem", width: "10rem", background: "white", marginTop: ".5rem", marginBottom: ".5rem" }} />
                 <Button
+                    disabled={loginFn.isLoading}
                     onClick={() => togglePage("signup")}
                     style={{
                         backgroundColor: COLOURS.darkishBrown,

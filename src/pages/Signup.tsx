@@ -194,6 +194,7 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
 
             <Box style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", position: "absolute", bottom: "1rem" }}>
                 <Button
+                    disabled={signUpFn.isLoading}
                     style={{
                         marginTop: "1rem",
                         backgroundColor: COLOURS.darkishBrown,
@@ -210,6 +211,7 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                 </Button>
                 <Box style={{ height: ".1rem", width: "10rem", background: "white", marginTop: ".5rem", marginBottom: ".5rem" }} />
                 <Button
+                    disabled={signUpFn.isLoading}
                     onClick={() => togglePage("login")}
                     style={{
                         backgroundColor: COLOURS.darkishBrown,
