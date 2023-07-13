@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { atom, useAtom } from "jotai"
 import { useHistory } from "react-router-dom"
 import { BASE_API_URL } from "../constants"
-import { enqueueSnackbar } from "notistack"
+import { closeSnackbar, enqueueSnackbar } from "notistack"
 import { useState } from "react"
 import { Avatar } from "./player"
 
@@ -55,6 +55,9 @@ export const useAuth = () => {
                 autoHideDuration: 3000,
             })
             setUser(data)
+            setTimeout(() => {
+                closeSnackbar()
+            }, 3000)
         },
         onError: (error: any) => {
             return error
