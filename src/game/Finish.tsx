@@ -217,11 +217,12 @@ export const FinishCard = (props: FinishCardProps) => {
                             margin: ".5rem",
                             borderRadius: "10px",
                             backgroundColor: COLOURS.darkishBrown,
+                            overflowY: "auto",
                         }}
                     >
                         <Box>
                             {user?.ID ? (
-                                <TestsTable limit={5} userID={user?.ID} />
+                                <TestsTable limit={6} userID={user?.ID} />
                             ) : (
                                 <Box
                                     sx={{

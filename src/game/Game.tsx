@@ -191,7 +191,7 @@ export const Game = () => {
 
     return (
         <Container className={classes.CenterBox}>
-            {GAME_STATE.status !== "finished" ? (
+            {GAME_STATE.status !== "idle" ? (
                 <>
                     <div className={classes.timer}>
                         <Typography
@@ -213,7 +213,7 @@ export const Game = () => {
                                             padding: "5px",
                                             backgroundColor: onCurrWord(i) ? GAME_STATE.highligtedTextColour : "",
                                             color: getColour(w.status),
-                                            fontSize: "35px",
+                                            fontSize: "2.8cqh",
                                             fontWeight: onCurrWord(i) ? "bold" : "unset",
                                         }}
                                         key={i}
