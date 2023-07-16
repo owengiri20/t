@@ -15,7 +15,6 @@ import { GamePage } from "./pages/GamePage"
 import { ProfilePage } from "./pages/PlayerProfile"
 import { AdminPage } from "./pages/AdminPage"
 import TTButton from "./common/TTButton"
-import { Leaderboard } from "@mui/icons-material"
 import GitHubIcon from "@mui/icons-material/GitHub"
 import { LeaderboardPage } from "./pages/LeaderboardPage"
 import { useGame } from "./containers/game"
@@ -73,6 +72,8 @@ function App() {
                             if (GAME.GAME_STATE.status !== "playing") {
                                 GAME.resetState()
                             }
+
+                            history.push("/")
                         }}
                         className={classes.logo}
                     >
