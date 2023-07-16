@@ -18,6 +18,7 @@ import TTButton from "./common/TTButton"
 import { Leaderboard } from "@mui/icons-material"
 import GitHubIcon from "@mui/icons-material/GitHub"
 import { LeaderboardPage } from "./pages/LeaderboardPage"
+import { useGame } from "./containers/game"
 
 export const useStyles = makeStyles({
     logo: {
@@ -47,6 +48,7 @@ export const useStyles = makeStyles({
 function App() {
     const classes = useStyles()
     const history = useHistory()
+    const GAME = useGame()
 
     // check me here
     const { user } = useAuth()
@@ -68,9 +70,9 @@ function App() {
                 >
                     <Box
                         onClick={() => {
-                            history.push("/")
-                            // temp solution
-                            window.location.reload()
+                            if (GAME.GAME_STATE.status !== "playing") {
+                                GAME.resetState()
+                            }
                         }}
                         className={classes.logo}
                     >

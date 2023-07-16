@@ -1,24 +1,20 @@
 import { Box, Button, Container, Tooltip, makeStyles } from "@material-ui/core"
-import React from "react"
-
-// icons
 import StarBorderRoundedIcon from "@material-ui/icons/StarBorderRounded"
 import StarRoundedIcon from "@material-ui/icons/StarRounded"
-
-// images
+import Typography from "@mui/material/Typography"
+import React from "react"
+import { useHistory } from "react-router-dom"
+import { calculateCharAccuracy, calculateWPM } from "../calculations"
+import TTButton from "../common/TTButton"
 import { useAuth } from "../containers/auth"
-import { calculateCharAccuracy, calculateWPM, useGetDuration } from "../db"
 import ninja from "../icons/png/ninja.png"
 import good from "../icons/svg/002-grin.svg"
 import pro from "../icons/svg/014-sunglasses.svg"
 import avarage from "../icons/svg/026-smile.svg"
 import meh from "../icons/svg/032-neutral.svg"
+import { useGetDuration } from "../localstorage"
 import { COLOURS } from "./CommonStyles"
 import TestsTable from "./RecentTestsTable"
-import Typography from "@mui/material/Typography"
-import { useGame } from "../containers/game"
-import TTButton from "../common/TTButton"
-import { useHistory } from "react-router-dom"
 
 interface Result {
     rating: RatingType
@@ -153,11 +149,9 @@ export const finishStyles = makeStyles({
     },
 })
 
-export const FinishCard = (props: FinishCardProps) => {
+export const Finish = (props: FinishCardProps) => {
     const { user } = useAuth()
     const history = useHistory()
-    // const { resetState } = useGame()
-
     const { correctWords, incorrectWords, correctCharsCount, totalCharsCount, handleRestart } = props
     const classes = finishStyles()
     return (

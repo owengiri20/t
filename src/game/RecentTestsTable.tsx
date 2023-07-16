@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query"
 import { enqueueSnackbar } from "notistack"
 import * as React from "react"
 import { TestResult } from "../containers/player"
-import { getTests } from "../db"
+import { getTests } from "../localstorage"
 import { fetchData, formatToDateTimeString } from "../utils"
 interface ListTestReq {
     limit: number

@@ -1,6 +1,6 @@
 import { Box, Button, Modal } from "@material-ui/core"
 import React, { useState } from "react"
-import { handleSaveSettings, useGetDuration } from "../db"
+import { handleSaveSettings, useGetDuration } from "../localstorage"
 import { COLOURS } from "../game/CommonStyles"
 
 interface MenuModalProps {

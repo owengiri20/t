@@ -2,11 +2,11 @@ import RefreshIcon from "@mui/icons-material/Refresh"
 import SettingsIcon from "@mui/icons-material/Settings"
 import React, { useRef, useState } from "react"
 import { COLOURS } from "../game/CommonStyles"
-import { Game } from "../game/Game"
 import { MenuModal } from "./MenuModal"
 import { Box, Tooltip } from "@material-ui/core"
 import { useGame } from "../containers/game"
 import useHotkeys from "@reecelucas/react-use-hotkeys"
+import { GameContainer } from "../game/GameContainer"
 
 const bs =
     "rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px"
@@ -56,7 +56,7 @@ export const GamePage = () => {
                     />
                 </Tooltip>
             </Box>
-            <Game />
+            <GameContainer />
             <MenuModal isOpen={optionsMenuOpen} setIsOpen={setOptionsMenuOpen} />
         </Box>
     )

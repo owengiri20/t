@@ -2,7 +2,7 @@ import { atom, useAtom } from "jotai"
 import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
 import { Word, genWords } from "../game/utils/words"
-import { useGetDuration } from "../db"
+import { useGetDuration } from "../localstorage"
 
 export interface GameState {
     timeLeft: number
