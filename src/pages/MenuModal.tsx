@@ -2,6 +2,7 @@ import { Box, Button, Modal } from "@material-ui/core"
 import React, { useState } from "react"
 import { handleSaveSettings, useGetDuration } from "../localstorage"
 import { COLOURS } from "../game/CommonStyles"
+import { useGame } from "../containers/game"
 
 interface MenuModalProps {
     isOpen: boolean
@@ -12,11 +13,10 @@ export const MenuModal = (props: MenuModalProps) => {
     const { isOpen, setIsOpen } = props
 
     const duration = useGetDuration()
+    const GAME = useGame()
 
     // settings
     const [selectedDuration, setSelectedDuration] = useState(duration)
-
-    // const [settings, setSettings] = useState<Settings>(getSettings())
 
     const onSave = () => {
         handleSaveSettings(selectedDuration)
@@ -57,7 +57,10 @@ export const MenuModal = (props: MenuModalProps) => {
                                             borderLeft: selectedDuration === d ? "2px solid " + COLOURS.lightBrown : "",
                                             cursor: "pointer",
                                         }}
-                                        onClick={() => setSelectedDuration(d)}
+                                        onClick={() => {
+                                            setSelectedDuration(d)
+                                            GAME.SET_GAME_STATE((prev) => ({ ...prev, timeLeft: d, durationSeconds: d }))
+                                        }}
                                     >
                                         {d}
                                     </Box>
