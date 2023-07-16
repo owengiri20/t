@@ -172,14 +172,19 @@ export const GameContainer = () => {
 
     // useffect to handle scroll height of text display
     React.useEffect(() => {
+        // get textDisplay div
+        let textDisplay = document.getElementById(DISPLAY_ID)
+
         // if first word
-        if (GAME_STATE.currentWordIndex === 0) return
+        if (GAME_STATE.currentWordIndex === 0 && textDisplay) {
+            textDisplay.scrollTop = 0
+            SET_GAME_STATE((prevState) => ({ ...prevState, scrollHeight: 0 }))
+
+            return
+        }
 
         // get prevous word
         const prevWord = GAME_STATE.words[GAME_STATE.currentWordIndex - 1]
-
-        // get textDisplay div
-        let textDisplay = document.getElementById(DISPLAY_ID)
 
         // handle scroll
         if (textDisplay && prevWord.cut) {
