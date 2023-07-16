@@ -32,6 +32,7 @@ export const Game: React.FC<Props> = ({ classes, GAME_STATE, handleKeyPress, han
                         <React.Fragment key={i}>
                             <span
                                 style={{
+                                    lineHeight: "45px",
                                     padding: "5px",
                                     backgroundColor: onCurrWord(i) ? GAME_STATE.highligtedTextColour : "",
                                     color: getColour(w.status),
