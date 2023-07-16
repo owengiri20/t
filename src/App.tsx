@@ -57,7 +57,7 @@ function App() {
             <Box className={classes.inDevelopment}>
                 <GitHubIcon sx={{ mr: ".2rem" }} />
                 <a href="https://github.com/owengiri20/tt" rel="noreferrer" target="_blank">
-                    IN DEVELOPMENT
+                    Github Repo
                 </a>
             </Box>
             <Container maxWidth={"xl"} style={{ width: "100%", maxWidth: "1400px", transform: "scale(.85)", height: "70vh" }}>
