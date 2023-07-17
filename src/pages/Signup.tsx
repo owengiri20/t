@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, InputAdornment, TextField, makeStyles } from "@material-ui/core"
+import { Box, Button, IconButton, InputAdornment, TextField, makeStyles, useMediaQuery } from "@material-ui/core"
 import { Visibility, VisibilityOff } from "@material-ui/icons"
 import { Alert } from "@mui/material"
 import React, { useEffect, useState } from "react"
@@ -55,6 +55,7 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
     const classes = useStyles()
     const [showPassword, setShowPassword] = useState(false)
     const { signUpFn } = useAuth()
+    const shorterScreen = useMediaQuery("(max-height:850px)")
 
     // form vals, may change to react-hook-forms in the future
     const [formVals, setFormVals] = useState<FormVals>({
@@ -192,24 +193,33 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
 
             {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-            <Box style={{ display: "flex", flexDirection: "column", width: "100%", alignItems: "center", position: "absolute", bottom: "1rem" }}>
+            <Box
+                style={{
+                    display: "flex",
+                    flexDirection: shorterScreen ? "row" : "column",
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "absolute",
+                    bottom: "1rem",
+                }}
+            >
                 <Button
                     disabled={signUpFn.isLoading}
                     style={{
-                        marginTop: "1rem",
                         backgroundColor: COLOURS.darkishBrown,
                         color: "white",
                         borderRadius: "10px",
                         width: "33%",
-                        height: "fit-content",
                         padding: "1rem",
+                        marginRight: shorterScreen ? "1rem" : "",
                     }}
                     variant="contained"
                     onClick={handleSignup}
                 >
                     Signup
                 </Button>
-                <Box style={{ height: ".1rem", width: "10rem", background: "white", marginTop: ".5rem", marginBottom: ".5rem" }} />
+                {!shorterScreen && <Box style={{ height: ".1rem", width: "10rem", background: "white", marginTop: ".5rem", marginBottom: ".5rem" }} />}
                 <Button
                     disabled={signUpFn.isLoading}
                     onClick={() => togglePage("login")}
@@ -217,7 +227,7 @@ export const Signup = ({ togglePage }: { togglePage: (path: string) => void }) =
                         backgroundColor: COLOURS.darkishBrown,
                         color: "white",
                         borderRadius: "10px",
-                        width: "43%",
+                        width: shorterScreen ? "fit-content" : "43%",
                         height: "fit-content",
                         padding: "1rem",
                     }}
