@@ -191,7 +191,7 @@ export const GameContainer = () => {
             textDisplay.scrollTop = GAME_STATE.scrollHeight
             SET_GAME_STATE((prevState) => ({
                 ...prevState,
-                scrollHeight: prevState.scrollHeight + 70,
+                scrollHeight: prevState.scrollHeight + 62,
             }))
         }
     }, [GAME_STATE.currentWordIndex])
