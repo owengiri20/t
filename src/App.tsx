@@ -123,7 +123,10 @@ function App() {
                     paddingBottom: "1rem",
                 }}
             >
-                <Box style={{ color: COLOURS.lightBrown, background: COLOURS.darkBrown, padding: ".5rem", borderRadius: "7px", cursor: "pointer" }}>
+                <Box
+                    className="owen"
+                    style={{ color: COLOURS.lightBrown, background: COLOURS.darkBrown, padding: ".5rem", borderRadius: "7px", cursor: "pointer" }}
+                >
                     <a tabIndex={-1} href="https://owengiri.dev/" rel="noreferrer" target="_blank">
                         © 2023 Owen Giri
                     </a>

@@ -54,3 +54,13 @@ a {
     background-color: #aa8270;
     border-radius: 30px;
 }
+
+.owen {
+}
+
+@media (max-height: 800px) {
+    /* CSS rules for large screens */
+    .owen > a {
+        font-size: 10px !important;
+    }
+}

@@ -2,7 +2,14 @@
     font-size: 15px;
 }
 
-@media (min-height: 990px) {
+@media (max-height: 800px) {
+    /* CSS rules for large screens */
+    .top-text {
+        font-size: 13px !important;
+    }
+}
+
+@media (min-height: 1000px) {
     /* CSS rules for large screens */
     .top-text {
         font-size: 20px !important;
