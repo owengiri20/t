@@ -1,5 +1,6 @@
 import Typography from "@mui/material/Typography"
 import React from "react"
+import { useLineHeight } from "../containers/textDisplay"
 
 type Props = {
     classes: any
@@ -12,6 +13,8 @@ type Props = {
 }
 
 export const Game: React.FC<Props> = ({ classes, GAME_STATE, handleKeyPress, handleBackSpace, SET_GAME_STATE, onCurrWord, getColour }) => {
+    const { lineHeight } = useLineHeight()
+
     const DISPLAY_ID = "textDisplay"
     return (
         <>
@@ -19,7 +22,7 @@ export const Game: React.FC<Props> = ({ classes, GAME_STATE, handleKeyPress, han
                 <Typography
                     sx={{
                         color: GAME_STATE.timeLeft <= 3 ? "orange" : "lightBrown",
-                        fontSize: "4.3rem",
+                        fontSize: "6cqh",
                     }}
                 >
                     {GAME_STATE.timeLeft}
@@ -32,7 +35,7 @@ export const Game: React.FC<Props> = ({ classes, GAME_STATE, handleKeyPress, han
                         <React.Fragment key={i}>
                             <span
                                 style={{
-                                    lineHeight: "62px",
+                                    lineHeight: lineHeight + "px",
                                     padding: "5px",
                                     backgroundColor: onCurrWord(i) ? GAME_STATE.highligtedTextColour : "",
                                     color: getColour(w.status),

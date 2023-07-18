@@ -1,12 +1,12 @@
-import Container from "@mui/material/Container"
-import Typography from "@mui/material/Typography"
+import { Box } from "@mui/material"
 import React from "react"
-import { useGame } from "../containers/game"
-import { COLOURS, useStyles } from "./CommonStyles"
-import { Finish } from "./Finish"
-import { useAuth } from "../containers/auth"
-import { useTestResults } from "../containers/tests"
 import { calculateCharAccuracy, calculateWPM } from "../calculations"
+import { useAuth } from "../containers/auth"
+import { useGame } from "../containers/game"
+import { useTestResults } from "../containers/tests"
+import { useLineHeight } from "../containers/textDisplay"
+import { useStyles } from "./CommonStyles"
+import { Finish } from "./Finish"
 import { Game } from "./Game"
 
 // id of text display
@@ -22,6 +22,9 @@ export const GameContainer = () => {
 
     // auth
     const { user } = useAuth()
+
+    // line height
+    const { lineHeight } = useLineHeight()
 
     React.useEffect(() => {
         SET_GAME_STATE((prevState) => ({ ...prevState, timeLeft: GAME_STATE.durationSeconds }))
@@ -191,13 +194,20 @@ export const GameContainer = () => {
             textDisplay.scrollTop = GAME_STATE.scrollHeight
             SET_GAME_STATE((prevState) => ({
                 ...prevState,
-                scrollHeight: prevState.scrollHeight + 62,
+                scrollHeight: prevState.scrollHeight + lineHeight,
             }))
         }
     }, [GAME_STATE.currentWordIndex])
 
     return (
-        <Container className={classes.CenterBox}>
+        <Box
+            style={{
+                overflowY: "auto",
+                justifyContent: GAME_STATE.status !== "finished" ? "center" : "unset",
+                margin: 0,
+            }}
+            className={classes.CenterBox}
+        >
             {GAME_STATE.status !== "finished" ? (
                 <Game
                     classes={classes}
@@ -217,6 +227,6 @@ export const GameContainer = () => {
                     handleRestart={resetState}
                 />
             )}
-        </Container>
+        </Box>
     )
 }

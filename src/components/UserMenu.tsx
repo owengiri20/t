@@ -1,4 +1,4 @@
-import { Box, Modal, useMediaQuery } from "@material-ui/core"
+import { Box, Modal } from "@material-ui/core"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import Button from "@mui/material/Button"
 import Menu from "@mui/material/Menu"
@@ -7,6 +7,7 @@ import * as React from "react"
 import { useHistory } from "react-router-dom"
 import { User, useAuth } from "../containers/auth"
 import { COLOURS } from "../game/CommonStyles"
+import "../assets/topText.css"
 
 export default function UserMenu({ user }: { user: User }) {
     const history = useHistory()
@@ -38,12 +39,12 @@ export default function UserMenu({ user }: { user: User }) {
                     color: COLOURS.lightBrown,
                     width: "fit-content",
                     cursor: "pointer",
-                    fontSize: "15px",
+                    textTransform: "none",
                 }}
+                className="top-text"
                 onClick={handleClick}
             >
                 {user.username}
-
                 {!user.avatar ? (
                     <AccountCircleIcon style={{ marginLeft: "1rem", color: COLOURS.lightBrown, fontSize: "35px" }} />
                 ) : (

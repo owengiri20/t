@@ -6,7 +6,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Box
             sx={{
                 margin: "auto",
-                marginTop: "3rem",
+                marginTop: "2rem",
                 height: "80vh",
                 maxWidth: "100%",
                 display: "flex",

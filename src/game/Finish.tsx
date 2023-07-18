@@ -71,7 +71,8 @@ interface FinishCardProps {
 
 export const finishStyles = makeStyles({
     finishCard: {
-        height: "100%",
+        height: "fit-content",
+        overflowY: "auto",
         width: "100%",
         display: "flex",
         flexDirection: "column",
@@ -160,7 +161,7 @@ export const Finish = (props: FinishCardProps) => {
                 sx={{
                     display: "flex",
                     width: "100%",
-                    height: "40%",
+                    height: "100%",
                 }}
             >
                 <Container className={classes.box}>
@@ -179,7 +180,8 @@ export const Finish = (props: FinishCardProps) => {
                     <Box className={classes.wpmText}>{calculateCharAccuracy(correctCharsCount, totalCharsCount, correctWords)}%</Box>
                 </Container>
             </Box>
-            <Box sx={{ display: "flex", height: "40%" }}>
+
+            <Box sx={{ display: "flex", height: "100%" }}>
                 <Box
                     sx={{
                         display: "flex",
@@ -205,7 +207,6 @@ export const Finish = (props: FinishCardProps) => {
                     }}
                 >
                     <Container
-                        id="hello"
                         style={{
                             padding: 0,
                             margin: ".5rem",
@@ -221,7 +222,7 @@ export const Finish = (props: FinishCardProps) => {
                                 <Box
                                     sx={{
                                         px: "1rem",
-                                        pt: "3rem",
+                                        py: "2rem",
                                         textAlign: "center",
                                     }}
                                 >
@@ -239,7 +240,7 @@ export const Finish = (props: FinishCardProps) => {
                 </Box>
             </Box>
 
-            <Box style={{ marginBottom: "2rem", display: "flex", flexGrow: 1, justifyContent: "center", height: "8rem", width: "100%", marginTop: "2rem" }}>
+            {/* <Box style={{ marginBottom: "2rem", display: "flex", flexGrow: 1, justifyContent: "center", height: "8rem", width: "100%", marginTop: "2rem" }}>
                 <Button
                     style={{
                         backgroundColor: COLOURS.darkishBrown,
@@ -254,7 +255,7 @@ export const Finish = (props: FinishCardProps) => {
                 >
                     Play Again
                 </Button>
-            </Box>
+            </Box> */}
         </div>
     )
 }

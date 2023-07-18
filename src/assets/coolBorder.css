@@ -1,0 +1,41 @@
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.cool-border {
+    font-size: 20px;
+    border: none;
+    padding: 10px 20px;
+    background: #1a1a1a;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.cool-border:hover {
+    border-color: white !important;
+}
+.cool-border::after {
+    content: "";
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.1) 20%,
+        rgba(255, 255, 255, 0.1) 40%,
+        rgba(255, 255, 255, 0.1) 60%,
+        rgba(255, 255, 255, 0) 80%
+    );
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: skewX(-0deg);
+    pointer-events: none;
+    animation: shimmer 13s infinite linear;
+}

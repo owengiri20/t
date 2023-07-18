@@ -1,23 +1,24 @@
-import { Box, makeStyles, useMediaQuery } from "@material-ui/core"
+import { Box, makeStyles } from "@material-ui/core"
 import Container from "@material-ui/core/Container"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { Route, Switch, useHistory } from "react-router-dom"
 import "./App.css"
 import Logo from "./assets/logo.png"
 import Moon from "./assets/moon.png"
+import "./assets/topText.css"
 
+import GitHubIcon from "@mui/icons-material/GitHub"
+import TTButton from "./common/TTButton"
 import { AuthButton } from "./components/AuthButton"
 import UserMenu from "./components/UserMenu"
 import { useAuth } from "./containers/auth"
+import { useGame } from "./containers/game"
 import { COLOURS } from "./game/CommonStyles"
+import { AdminPage } from "./pages/AdminPage"
 import { AuthPage } from "./pages/AuthPage"
 import { GamePage } from "./pages/GamePage"
-import { ProfilePage } from "./pages/PlayerProfile"
-import { AdminPage } from "./pages/AdminPage"
-import TTButton from "./common/TTButton"
-import GitHubIcon from "@mui/icons-material/GitHub"
 import { LeaderboardPage } from "./pages/LeaderboardPage"
-import { useGame } from "./containers/game"
+import { ProfilePage } from "./pages/PlayerProfile"
 
 export const useStyles = makeStyles({
     logo: {
@@ -78,16 +79,19 @@ function App() {
                         className={classes.logo}
                     >
                         <img src={Logo} alt="TrekTyper Logo" height={"60px"} />
-                        <Box sx={{ fontSize: "22px" }}>TrekTyper</Box>
+
+                        <Box className="top-text">TrekTyper</Box>
                     </Box>
 
                     <Box display={"flex"}>
                         <TTButton
+                            className="top-text"
                             onClick={() => {
                                 history.push("/leaderboard")
                             }}
                             sx={{
                                 marginRight: "1rem",
+                                textTransform: "none",
                                 padding: "1rem",
                             }}
                         >
