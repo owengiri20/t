@@ -17,7 +17,7 @@ interface MyStyledButtonProps extends Omit<React.ComponentProps<typeof Button>, 
 
 export default function MyStyledButton({ children, sx, ...props }: MyStyledButtonProps) {
     return (
-        <StyledButton {...props} sx={(sx as any) ?? {}}>
+        <StyledButton className={props.className} {...props} sx={(sx as any) ?? {}}>
             {children}
         </StyledButton>
     )

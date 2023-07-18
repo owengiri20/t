@@ -1,4 +1,4 @@
-import { Box, makeStyles } from "@material-ui/core"
+import { Box, Typography, makeStyles } from "@material-ui/core"
 import Container from "@material-ui/core/Container"
 import React from "react"
 import { Route, Switch, useHistory } from "react-router-dom"
@@ -85,7 +85,6 @@ function App() {
 
                     <Box display={"flex"}>
                         <TTButton
-                            className="top-text"
                             onClick={() => {
                                 history.push("/leaderboard")
                             }}
@@ -95,7 +94,7 @@ function App() {
                                 padding: "1rem",
                             }}
                         >
-                            Leaderboard
+                            <Typography className="top-text">Leaderboard</Typography>
                         </TTButton>
 
                         {user ? (
